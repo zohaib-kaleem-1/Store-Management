@@ -6,12 +6,12 @@ public class Cart {
     private int customerId;
     private int quantity;
 
-    Cart(int id, int itemId, int customerId, int quantity) {
+    public Cart(int id, int itemId, int customerId, int quantity) {
         this(itemId, customerId, quantity);
         this.id = id;
     }
 
-    Cart(int itemId, int customerId, int quantity) {
+    public Cart(int itemId, int customerId, int quantity) {
         this.itemId = itemId;
         this.customerId = customerId;
         this.quantity = quantity;

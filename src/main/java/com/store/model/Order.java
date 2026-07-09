@@ -3,12 +3,12 @@ package com.store.model;
 public class Order extends Cart {
     private int price;
 
-    Order(int id, int itemId, int customerId, int quantity, int price) {
+    public Order(int id, int itemId, int customerId, int quantity, int price) {
         super(id, itemId, customerId, quantity);
         this.price = price;
     }
 
-    Order(int itemId, int customerId, int quantity, int price) {
+    public Order(int itemId, int customerId, int quantity, int price) {
         super(itemId, customerId, quantity);
         this.price = price;
     }

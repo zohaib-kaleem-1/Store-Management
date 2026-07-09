@@ -4,20 +4,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.store.HelperFunction.Helper;
 import com.store.db.Database;
 import com.store.model.Item;
 
 public class ItemDAO {
     public List<Item> listItems() {
-        Connection conn = null;
         List<Item> itemList = new ArrayList<>();
 
-        try {
-            conn = Database.getConnection();
-
-            String sqlQuery = "Select * from Item;";
-
+        try (Connection conn = Database.getConnection()) {
+            String sqlQuery = "Select * from Items;";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sqlQuery);
 
@@ -25,33 +20,22 @@ public class ItemDAO {
                 Item item = new Item(
                         rs.getInt("itemid"),
                         rs.getString("itemname"),
-                        rs.getInt("itemprice"),
-                        rs.getInt("itemquantity"));
-
+                        rs.getInt("price"),
+                        rs.getInt("quantity"));
                 itemList.add(item);
             }
-
-            Database.closeConnection(conn);
-
-            return itemList;
         } catch (Exception e) {
 
-            Helper.printColored("Error: " + e.getMessage(), "red");
-            return null;
-        } finally {
-            Database.closeConnection(conn);
         }
+
+        return itemList;
     }
 
     public List<Item> listAvailableItems() {
-        Connection conn = null;
         List<Item> itemList = new ArrayList<>();
 
-        try {
-            conn = Database.getConnection();
-
-            String sqlQuery = "Select * from Item WHERE itemquantity>0;";
-
+        try (Connection conn = Database.getConnection()) {
+            String sqlQuery = "Select * from Items WHERE quantity>0;";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sqlQuery);
 
@@ -59,108 +43,64 @@ public class ItemDAO {
                 Item item = new Item(
                         rs.getInt("itemid"),
                         rs.getString("itemname"),
-                        rs.getInt("itemprice"),
-                        rs.getInt("itemquantity"));
-
+                        rs.getInt("price"),
+                        rs.getInt("quantity"));
                 itemList.add(item);
             }
-
-            Database.closeConnection(conn);
-
-            return itemList;
         } catch (Exception e) {
 
-            Helper.printColored("Error: " + e.getMessage(), "red");
-            return null;
-        } finally {
-            Database.closeConnection(conn);
         }
+        return itemList;
     }
 
     public boolean addItem(Item item) {
-        Connection conn = null;
-        try {
-            conn = Database.getConnection();
-
-            String sql = "INSERT INTO item (itemname, itemprice, itemquantity) VALUES (?,?,?);";
-
+        try (Connection conn = Database.getConnection()) {
+            String sql = "INSERT INTO items (itemname, price, quantity) VALUES (?,?,?);";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, item.getItemName());
-            stmt.setInt(2, item.getItemPrice());
+            stmt.setInt(2, item.getPrice());
             stmt.setInt(3, item.getQuantity());
 
-            stmt.executeUpdate();
-
-            return true;
+            return stmt.executeUpdate() < 1 ? false : true;
         } catch (Exception e) {
-
-            Helper.printColored("Error: " + e.getMessage(), "red");
-
             return false;
-        } finally {
-            Database.closeConnection(conn);
         }
     }
 
     public boolean removeItem(String itemName) {
-        Connection conn = null;
-        try {
-            conn = Database.getConnection();
-
-            String sql = "DELETE FROM item WHERE itemname=?;";
-
+        try (Connection conn = Database.getConnection()) {
+            String sql = "DELETE FROM items WHERE itemname=?;";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, itemName);
 
-            int rc = stmt.executeUpdate();
-            if (rc < 1)
-                return false;
-
-            Database.closeConnection(conn);
-            return true;
+            return stmt.executeUpdate() < 1 ? false : true;
         } catch (Exception e) {
 
-            Helper.printColored("Error: " + e.getMessage(), "red");
+            // Helper.printColored("Error: " + e.getMessage(), "red");
             return false;
-        } finally {
-            Database.closeConnection(conn);
         }
     }
 
     public boolean updateItem(Item item) {
-        Connection conn = null;
-        try {
-            conn = Database.getConnection();
-            String sql = "UPDATE item SET itemName = ?, itemPrice = ? , itemQuantity = ? WHERE itemid = ?;";
+        try (Connection conn = Database.getConnection()) {
+            String sql = "UPDATE items SET itemName = ?, price = ? , quantity = ? WHERE itemid = ?;";
 
             PreparedStatement stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, item.getItemName());
-            stmt.setInt(2, item.getItemPrice());
+            stmt.setInt(2, item.getPrice());
             stmt.setInt(3, item.getQuantity());
             stmt.setInt(4, item.getId());
 
-            int rc = stmt.executeUpdate();
-            if (rc < 1)
-                return false;
-
-            Database.closeConnection(conn);
-            return true;
+            return stmt.executeUpdate() < 1 ? false : true;
         } catch (Exception e) {
-
-            Helper.printColored("Error: " + e.getMessage(), "red");
             return false;
-        } finally {
-            Database.closeConnection(conn);
         }
     }
 
     public Item getItemByItemName(String itemName) {
-        Connection conn = null;
-        try {
-            conn = Database.getConnection();
-
-            String sql = "Select * from Item WHERE itemname = ?;";
+        try (Connection conn = Database.getConnection()) {
+            String sql = "Select * from Items WHERE itemname = ?;";
 
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, itemName);
@@ -172,16 +112,12 @@ public class ItemDAO {
                 return new Item(
                         rs.getInt("itemid"),
                         rs.getString("itemname"),
-                        rs.getInt("itemprice"),
-                        rs.getInt("itemquantity"));
-
-            return null;
+                        rs.getInt("price"),
+                        rs.getInt("quantity"));
         } catch (Exception e) {
 
-            Helper.printColored("Error: " + e.getMessage(), "red");
-            return null;
-        } finally {
-            Database.closeConnection(conn);
         }
+
+        return null;
     }
 }

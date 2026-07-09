@@ -2,64 +2,55 @@ package com.store.service;
 
 import java.util.List;
 
-import com.store.HelperFunction.Helper;
-import com.store.dao.AdminDAO;
+import com.store.dao.UserDAO;
 import com.store.model.Admin;
+import com.store.model.User;
 
 public class AdminService {
-    private AdminDAO adminDAO;
+    private UserDAO userDAO;
 
     public AdminService() {
-        this.adminDAO = new AdminDAO();
+        this.userDAO = new UserDAO();
     }
 
-    public void addAdmin(String username, String password) {
-        if (adminDAO.addAdmin(new Admin(username, password))) {
-            Helper.printColored("Admin Added Successfully.", "green");
+    public void addAdmin(String name, String email, String contact, String username, String password) {
+        if (userDAO.addUser(new Admin(name, email, contact, username, password), "admin")) {
         } else {
-            Helper.printColored("Error Creating new admin", "red");
         }
     }
 
     public void removeAdmin(String username) {
-        if (adminDAO.removeAdmin(username)) {
-            Helper.printColored("Admin Removed Successfully.", "green");
+        if (userDAO.removeUser(username, "admin")) {
         } else {
-            Helper.printColored("Error Removing Admin", "red");
         }
     }
 
     public boolean findAdminByUsername(String username) {
-        if (adminDAO.getAdminByUsername(username) != null)
+        if (userDAO.getUserByUsername(username, "admin") != null)
             return true;
         else
             return false;
     }
 
-    public Admin getAdminByUsername(String Username) {
-        return adminDAO.getAdminByUsername(Username);
+    public User getAdminByUsername(String Username) {
+        return userDAO.getUserByUsername(Username, "admin");
     }
 
     public void updateAdmin(Admin a) {
-        if (adminDAO.updateAdmin(a)) {
-            Helper.printColored("Admin Updated Successfully.", "green");
+        if (userDAO.updateUser(a)) {
         } else {
-            Helper.printColored("Error Updating Admin", "red");
         }
     }
 
     public void displayAllAdmin() {
-        List<Admin> admins = adminDAO.listAdmin();
+        List<User> admins = userDAO.listUser("admin");
 
         if (admins.isEmpty()) {
-            Helper.printColored("NO RECORD FOUND.", "red");
             return;
         }
-
-        Helper.printList(admins);
     }
 
     public boolean verifyAdminLogin(String username, String password) {
-        return adminDAO.verifyAdminLogin(username, password);
+        return userDAO.verifyLogin(username, password, "admin");
     }
 }
