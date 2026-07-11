@@ -8,17 +8,17 @@ import com.store.db.Database;
 import com.store.model.User;
 
 public class UserDAO {
-    public boolean addUser(User admin, String role) {
+    public boolean addUser(User user) {
         try (Connection conn = Database.getConnection()) {
             String sql = "INSERT INTO users (name, email, contact, username, password, role) VALUES (?,?,?,?,?,?);";
 
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, admin.getName());
-            stmt.setString(2, admin.getEmail());
-            stmt.setString(3, admin.getContact());
-            stmt.setString(4, admin.getUsername());
-            stmt.setString(5, admin.getPassword());
-            stmt.setString(6, role);
+            stmt.setString(1, user.getName());
+            stmt.setString(2, user.getEmail());
+            stmt.setString(3, user.getContact());
+            stmt.setString(4, user.getUsername());
+            stmt.setString(5, user.getPassword());
+            stmt.setString(6, user.getRole());
 
             int rc = stmt.executeUpdate();
 
@@ -74,7 +74,8 @@ public class UserDAO {
 
             while (rs.next()) {
                 list.add(new User(rs.getInt("userid"), rs.getString("name"), rs.getString("email"),
-                        rs.getString("contact"), rs.getString("username"), rs.getString("password")));
+                        rs.getString("contact"), rs.getString("username"), rs.getString("password"),
+                        rs.getString("role")));
             }
 
         } catch (Exception e) {
@@ -95,7 +96,8 @@ public class UserDAO {
 
             if (rs.next())
                 return new User(rs.getInt("userid"), rs.getString("name"), rs.getString("email"),
-                        rs.getString("contact"), rs.getString("username"), rs.getString("password"));
+                        rs.getString("contact"), rs.getString("username"), rs.getString("password"),
+                        rs.getString("role"));
             return null;
 
         } catch (Exception e) {
@@ -105,7 +107,7 @@ public class UserDAO {
 
     public boolean verifyLogin(String username, String password, String role) {
         try (Connection conn = Database.getConnection()) {
-            String sql = "SELECT * FROM admin WHERE username = ? and password = ? and role = ?;";
+            String sql = "SELECT * FROM users WHERE username = ? and password = ? and role = ?;";
 
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
