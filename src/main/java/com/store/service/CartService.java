@@ -1,9 +1,10 @@
 package com.store.service;
 
+import java.sql.Connection;
 import java.util.List;
 
 import com.store.dao.CartDAO;
-import com.store.model.Cart;
+import com.store.model.CartItem;
 
 public class CartService {
     CartDAO cartDAO;
@@ -12,51 +13,27 @@ public class CartService {
         this.cartDAO = new CartDAO();
     }
 
-    public void addToCart(Cart c) {
-        if (cartDAO.addCart(c)) {
-
-        } else {
-
-        }
+    public boolean addToCart(Connection conn, CartItem c) throws Exception {
+        return cartDAO.addCart(conn, c);
     }
 
-    public void updateCart(Cart c) {
-        if (cartDAO.updateCart(c)) {
-
-        } else {
-
-        }
+    public boolean updateCart(Connection conn, CartItem c) throws Exception {
+        return cartDAO.updateCart(conn, c);
     }
 
-    public void removeCart(int id) {
-        if (cartDAO.removeCart(id)) {
-
-        } else {
-
-        }
+    public boolean removeCart(Connection conn, int id) throws Exception {
+        return cartDAO.removeCart(conn, id);
     }
 
-    public void listFromCart() {
-        List<Cart> list = cartDAO.listFromCart();
-
-        if (list == null || list.isEmpty()) {
-
-        }
+    public List<CartItem> listFromCart() {
+        return cartDAO.listFromCart();
     }
 
-    public void listFromCartByCustomerId(int id) {
-        List<Cart> list = cartDAO.listFromCartByCustomerId(id);
-
-        if (list == null || list.isEmpty()) {
-
-        }
+    public List<CartItem> listFromCartByCustomerId(int id) {
+        return cartDAO.listFromCartByCustomerId(id);
     }
 
-    public void listFromCartByItemId(int id) {
-        List<Cart> list = cartDAO.listFromCartByItemId(id);
-
-        if (list == null || list.isEmpty()) {
-
-        }
+    public List<CartItem> listFromCartByItemId(int id) {
+        return cartDAO.listFromCartByItemId(id);
     }
 }

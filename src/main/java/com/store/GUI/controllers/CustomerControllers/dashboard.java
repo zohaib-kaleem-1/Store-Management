@@ -6,23 +6,23 @@ import com.store.Util.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class CustomerViewController {
+public class dashboard {
     @FXML
     public Label customerNameLabel;
 
     @FXML
     public void switchToBuyItem() {
-        SceneManager.switchScene("com.store.views.customerview.buyitemview.fxml", "Buy Items");
+        SceneManager.switchScene("/com/store/views/customerview/buyitemview.fxml", "Buy Items");
     }
 
     @FXML
     public void switchToManageAccount() {
-        SceneManager.switchScene("com.store.views.customerview.manageaccountview.fxmls", "Manage Account");
+        SceneManager.switchScene("com/store/views/customerview/manageaccountview.fxml", "Manage Account");
     }
 
     @FXML
     public void switchToViewCart() {
-        SceneManager.switchScene("com.store.views.customerviews.cartview.fxml", "Cart");
+        SceneManager.switchScene("/com/store/views/customerviews/cartview.fxml", "Cart");
     }
 
     @FXML
@@ -33,6 +33,6 @@ public class CustomerViewController {
 
     @FXML
     public void initialize() {
-        customerNameLabel.setText("Welcome " + SessionManager.getUsername().toUpperCase());
+        customerNameLabel.setText("Welcome " + SessionManager.getUser().getName().toUpperCase());
     }
 }

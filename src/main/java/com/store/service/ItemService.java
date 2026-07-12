@@ -1,5 +1,6 @@
 package com.store.service;
 
+import java.sql.Connection;
 import java.util.List;
 
 import com.store.dao.ItemDAO;
@@ -12,14 +13,14 @@ public class ItemService {
         this.itemDAO = new ItemDAO();
     }
 
-    public void addItem(String itemName, int itemPrice, int quantity) {
-        if (itemDAO.addItem(new Item(itemName, itemPrice, quantity))) {
+    public void addItem(Connection conn, String itemName, int itemPrice, int quantity) throws Exception {
+        if (itemDAO.addItem(conn, new Item(itemName, itemPrice, quantity))) {
         } else {
         }
     }
 
-    public void removeItem(String itemName) {
-        if (itemDAO.removeItem(itemName)) {
+    public void removeItem(Connection conn, String itemName) throws Exception {
+        if (itemDAO.removeItem(conn, itemName)) {
         } else {
         }
     }
@@ -35,8 +36,8 @@ public class ItemService {
         return itemDAO.getItemByItemName(itemName);
     }
 
-    public void updateItem(Item a) {
-        if (itemDAO.updateItem(a)) {
+    public void updateItem(Connection conn, Item a) throws Exception {
+        if (itemDAO.updateItem(conn, a)) {
         } else {
         }
     }

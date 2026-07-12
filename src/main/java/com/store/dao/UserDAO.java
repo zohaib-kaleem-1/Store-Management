@@ -8,11 +8,10 @@ import com.store.db.Database;
 import com.store.model.User;
 
 public class UserDAO {
-    public boolean addUser(User user) {
-        try (Connection conn = Database.getConnection()) {
-            String sql = "INSERT INTO users (name, email, contact, username, password, role) VALUES (?,?,?,?,?,?);";
+    public boolean addUser(Connection conn, User user) throws Exception {
+        String sql = "INSERT INTO users (name, email, contact, username, password, role) VALUES (?,?,?,?,?,?);";
 
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.getName());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getContact());
@@ -23,31 +22,26 @@ public class UserDAO {
             int rc = stmt.executeUpdate();
 
             return rc < 1 ? false : true;
-        } catch (Exception e) {
-            return false;
         }
     }
 
-    public boolean removeUser(String username, String role) {
-        try (Connection conn = Database.getConnection()) {
-            String sql = "DELETE FROM users WHERE username = ? and role = ?;";
+    public boolean removeUser(Connection conn, String username, String role) throws Exception {
+        String sql = "DELETE FROM users WHERE username = ? and role = ?;";
 
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             stmt.setString(2, role);
             int rc = stmt.executeUpdate();
 
             return rc < 1 ? false : true;
-        } catch (Exception e) {
-            return false;
         }
     }
 
-    public boolean updateUser(User user) {
-        try (Connection conn = Database.getConnection()) {
-            String sql = "UPDATE users SET name = ?, email = ?, contact = ?, password = ? WHERE userid = ?;";
+    public boolean updateUser(Connection conn, User user) throws Exception {
+        String sql = "UPDATE users SET name = ?, email = ?, contact = ?, password = ? WHERE userid = ?;";
 
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.getName());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getContact());
@@ -57,16 +51,14 @@ public class UserDAO {
             int rc = stmt.executeUpdate();
 
             return rc < 1 ? false : true;
-        } catch (Exception e) {
-            return false;
         }
     }
 
     public List<User> listUser(String role) {
         List<User> list = new ArrayList<>();
 
+        String sql = "SELECT * FROM users WHERE role = ?;";
         try (Connection conn = Database.getConnection()) {
-            String sql = "SELECT * FROM users WHERE role = ?;";
             PreparedStatement stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, role);

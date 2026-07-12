@@ -53,39 +53,32 @@ public class ItemDAO {
         return itemList;
     }
 
-    public boolean addItem(Item item) {
-        try (Connection conn = Database.getConnection()) {
-            String sql = "INSERT INTO items (itemname, price, quantity) VALUES (?,?,?);";
-            PreparedStatement stmt = conn.prepareStatement(sql);
+    public boolean addItem(Connection conn, Item item) throws Exception {
+        String sql = "INSERT INTO items (itemname, price, quantity) VALUES (?,?,?);";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setString(1, item.getItemName());
             stmt.setInt(2, item.getPrice());
             stmt.setInt(3, item.getQuantity());
 
             return stmt.executeUpdate() < 1 ? false : true;
-        } catch (Exception e) {
-            return false;
         }
     }
 
-    public boolean removeItem(String itemName) {
-        try (Connection conn = Database.getConnection()) {
-            String sql = "DELETE FROM items WHERE itemname=?;";
-            PreparedStatement stmt = conn.prepareStatement(sql);
+    public boolean removeItem(Connection conn, String itemName) throws Exception {
+        String sql = "DELETE FROM items WHERE itemname=?;";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, itemName);
 
             return stmt.executeUpdate() < 1 ? false : true;
-        } catch (Exception e) {
-
-            // Helper.printColored("Error: " + e.getMessage(), "red");
-            return false;
         }
     }
 
-    public boolean updateItem(Item item) {
-        try (Connection conn = Database.getConnection()) {
-            String sql = "UPDATE items SET itemName = ?, price = ? , quantity = ? WHERE itemid = ?;";
+    public boolean updateItem(Connection conn, Item item) throws Exception {
+        String sql = "UPDATE items SET itemName = ?, price = ? , quantity = ? WHERE itemid = ?;";
 
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, item.getItemName());
             stmt.setInt(2, item.getPrice());
@@ -93,8 +86,6 @@ public class ItemDAO {
             stmt.setInt(4, item.getId());
 
             return stmt.executeUpdate() < 1 ? false : true;
-        } catch (Exception e) {
-            return false;
         }
     }
 
@@ -119,5 +110,9 @@ public class ItemDAO {
         }
 
         return null;
+    }
+
+    public boolean increasePrice() throws Exception {
+
     }
 }
