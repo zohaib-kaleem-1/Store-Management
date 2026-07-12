@@ -1,6 +1,7 @@
 package com.store.Util;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -39,18 +40,6 @@ public class SceneManager {
     }
 
     public static void goToManageAccount() {
-        SceneManager.switchScene("/com/store/views/customerviews/manageaccountview.fxml", "Manage Account");
-    }
-
-    public static void goToCartView() {
-        SceneManager.switchScene("/com/store/views/customerviews/cartview.fxml", "Cart View");
-    }
-
-    public static void goToBuyItemMenu() {
-        SceneManager.switchScene("/com/store/views/customerviews/buyitemview.fxml", "Buy Items");
-    }
-
-    public static void goTo() {
-        SceneManager.switchScene("/com/store/views/customerviews/", "");
+        switchScene("/com/store/views/manageaccountview.fxml", "Manage Account");
     }
 }

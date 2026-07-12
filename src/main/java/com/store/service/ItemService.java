@@ -42,21 +42,12 @@ public class ItemService {
         }
     }
 
-    public void display() {
-        List<Item> itemList = itemDAO.listItems();
-
-        if (itemList.isEmpty()) {
-            return;
-        }
+    public List<Item> display() {
+        return itemDAO.listItems();
     }
 
-    public boolean displayAvailableItems() {
-        List<Item> itemList = itemDAO.listAvailableItems();
-
-        if (itemList == null || itemList.isEmpty()) {
-            return false;
-        }
-        return true;
+    public List<Item> displayAvailableItems() {
+        return itemDAO.listAvailableItems();
     }
 
     public boolean increasePrice(Connection conn, int itemId, int price) throws Exception {

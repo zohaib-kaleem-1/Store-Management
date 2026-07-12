@@ -2,7 +2,7 @@ package com.store.model;
 
 public class Item {
     private int id;
-    private String itemName;
+    private String name;
     private int price;
     private int quantity;
 
@@ -12,7 +12,7 @@ public class Item {
     }
 
     public Item(String itemName, int price, int quantity) {
-        this.itemName = itemName;
+        this.name = itemName;
         this.price = price;
         this.quantity = quantity;
     }
@@ -21,8 +21,8 @@ public class Item {
         return id;
     }
 
-    public String getItemName() {
-        return itemName;
+    public String getName() {
+        return name;
     }
 
     public int getPrice() {
@@ -37,8 +37,8 @@ public class Item {
         this.id = id;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public void setName(String itemName) {
+        this.name = itemName;
     }
 
     public void setPrice(int price) {

@@ -57,7 +57,7 @@ public class ItemDAO {
         String sql = "INSERT INTO items (itemname, price, quantity) VALUES (?,?,?);";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, item.getItemName());
+            stmt.setString(1, item.getName());
             stmt.setInt(2, item.getPrice());
             stmt.setInt(3, item.getQuantity());
 
@@ -80,7 +80,7 @@ public class ItemDAO {
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, item.getItemName());
+            stmt.setString(1, item.getName());
             stmt.setInt(2, item.getPrice());
             stmt.setInt(3, item.getQuantity());
             stmt.setInt(4, item.getId());

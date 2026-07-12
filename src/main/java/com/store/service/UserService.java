@@ -53,12 +53,8 @@ public class UserService {
         }
     }
 
-    public void getAllUserByRole(String role) {
-        List<User> userList = userDAO.listUser(role);
-
-        if (userList.isEmpty()) {
-            return;
-        }
+    public List<User> getAllUserByRole(String role) {
+        return userDAO.listUser(role);
     }
 
 }

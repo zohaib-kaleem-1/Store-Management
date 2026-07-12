@@ -15,7 +15,7 @@ public class Main extends Application {
 
             UserService userService = new UserService();
             SessionManager.logUser(userService.getUserByUsername("zohaib", "admin"));
-            SceneManager.goToDashboard();
+            SceneManager.switchScene("/com/store/views/manageaccountview.fxml", "Manage Account");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -23,5 +23,6 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+
     }
 }

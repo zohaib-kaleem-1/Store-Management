@@ -17,7 +17,7 @@ public class dashboard {
 
     @FXML
     public void switchToManageAccount() {
-        SceneManager.switchScene("com/store/views/customerview/manageaccountview.fxml", "Manage Account");
+        SceneManager.switchScene("com/store/views/manageaccountview.fxml", "Manage Account");
     }
 
     @FXML
