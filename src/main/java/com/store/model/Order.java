@@ -10,12 +10,12 @@ public class Order {
     private int quantity;
     private int totalPrice;
 
-    Order(int id, int itemId, String itemName, int customerId, String customerName, int price, int quantity) {
+    public Order(int id, int itemId, String itemName, int customerId, String customerName, int price, int quantity) {
         this(itemId, itemName, customerId, customerName, price, quantity);
         this.id = id;
     }
 
-    Order(int itemId, String itemName, int customerId, String customerName, int price, int quantity) {
+    public Order(int itemId, String itemName, int customerId, String customerName, int price, int quantity) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.customerId = customerId;

@@ -39,9 +39,9 @@ public class CartDAO {
         String sql = "DELETE from cart WHERE id = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
-
             return stmt.executeUpdate() == 1 ? true : false;
         }
+
     }
 
     public List<CartItem> listFromCart() {
@@ -65,7 +65,7 @@ public class CartDAO {
     public List<CartItem> listFromCartByCustomerId(int id) {
         List<CartItem> list = new ArrayList<>();
         try (Connection conn = Database.getConnection()) {
-            String sql = "SELECT c.id, c.itemid, c.customerid , c.quantity, i.itemname, i.price, i.quantity AS quantityInStore FROM cart c JOIN items i ON i.itemid = c.id JOIN users u ON u.userid = c.customerid WHERE u.userid = ?; ";
+            String sql = "SELECT c.id, c.itemid, c.customerid , c.quantity, i.itemname, i.price, i.quantity AS quantityInStore FROM cart c JOIN items i ON i.itemid = c.itemid JOIN users u ON u.userid = c.customerid WHERE u.userid = ?; ";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -84,7 +84,7 @@ public class CartDAO {
     public List<CartItem> listFromCartByItemId(int id) {
         List<CartItem> list = new ArrayList<>();
         try (Connection conn = Database.getConnection()) {
-            String sql = "SELECT c.id, c.itemid, c.customerid , c.quantity, i.itemname, i.price, i.quantity AS quantityInStore, u.name  FROM cart c JOIN items i ON i.itemid = c.id JOIN users u ON u.userid = c.customerid WHERE i.itemid = ?;";
+            String sql = "SELECT c.id, c.itemid, c.customerid , c.quantity, i.itemname, i.price, i.quantity AS quantityInStore, u.name  FROM cart c JOIN items i ON i.itemid = c.itemid JOIN users u ON u.userid = c.customerid WHERE i.itemid = ?;";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();

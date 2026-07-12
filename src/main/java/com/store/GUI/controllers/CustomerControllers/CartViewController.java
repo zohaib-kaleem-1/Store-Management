@@ -1,5 +1,8 @@
 package com.store.GUI.controllers.CustomerControllers;
 
+import com.store.Transaction.Transaction;
+import com.store.Util.MessageUtil;
+import com.store.Util.SceneManager;
 import com.store.Util.SessionManager;
 import com.store.model.CartItem;
 import com.store.service.CartService;
@@ -73,7 +76,18 @@ public class CartViewController {
         totalPriceOfAllItems.setText("Total Price: " + String.valueOf(totalPrice));
     }
 
+    @FXML
     public void buyItems() {
+        if (Transaction.buyItems()) {
+            MessageUtil.showMessage("Success", "Items Bought Successfully.");
+            cartList.clear();
+        } else {
+            MessageUtil.showError("Error", "Could not buy items");
+        }
+    }
 
+    @FXML
+    public void goToDashboard() {
+        SceneManager.goToDashboard();
     }
 }

@@ -27,7 +27,7 @@ public class dashboard {
 
     @FXML
     public void logOut() {
-        System.out.println("log out");
+        SceneManager.goToLogin();
 
     }
 

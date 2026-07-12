@@ -24,7 +24,7 @@
                 <TableColumn fx:id="UpdateRemoveColumn" prefWidth="138.0" text="Remove" />
             </columns>
         </TableView>
-        <Label fx:id="totalPriceOfAllItems" layoutX="530.0" layoutY="470.0" prefHeight="40.0" prefWidth="152.0" text="Total Price: 0 ">
+        <Label fx:id="totalPriceOfAllItems" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="379.0" layoutY="470.0" prefHeight="40.0" prefWidth="303.0" text="Total Price: 0 " textAlignment="RIGHT">
             <font>
                 <Font size="20.0" />
             </font>
@@ -34,5 +34,10 @@
                 <Font size="20.0" />
             </font>
         </Button>
+      <Button layoutX="42.0" layoutY="30.0" mnemonicParsing="false" onAction="#goToDashboard" text="Back">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>

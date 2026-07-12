@@ -26,4 +26,31 @@ public class SceneManager {
             e.printStackTrace();
         }
     }
+
+    public static void goToLogin() {
+        SessionManager.clear();
+        switchScene("/com/store/views/login.fxml", "Login");
+    }
+
+    public static void goToDashboard() {
+        String role = SessionManager.getUser().getRole();
+        SceneManager.switchScene("/com/store/views/" + role + "views/dashboard.fxml",
+                (role + " Menu").toUpperCase());
+    }
+
+    public static void goToManageAccount() {
+        SceneManager.switchScene("/com/store/views/customerviews/manageaccountview.fxml", "Manage Account");
+    }
+
+    public static void goToCartView() {
+        SceneManager.switchScene("/com/store/views/customerviews/cartview.fxml", "Cart View");
+    }
+
+    public static void goToBuyItemMenu() {
+        SceneManager.switchScene("/com/store/views/customerviews/buyitemview.fxml", "Buy Items");
+    }
+
+    public static void goTo() {
+        SceneManager.switchScene("/com/store/views/customerviews/", "");
+    }
 }

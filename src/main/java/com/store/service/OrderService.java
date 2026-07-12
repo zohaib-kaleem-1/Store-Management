@@ -13,35 +13,27 @@ public class OrderService {
         this.ordersDAO = new OrdersDAO();
     }
 
-    public void addOrder(Connection conn, int itemId, int customerId, int price, int quantity) throws Exception {
-        // if (ordersDAO.addOrder(new Order(itemId, customerId, quantity, price))) {
-
-        // } else {
-
-        // }
+    public boolean addOrder(Connection conn, int itemId, int customerId, int price, int quantity) throws Exception {
+        return ordersDAO.addOrder(conn, itemId, customerId, price, quantity);
     }
 
-    public void removeOrder(Connection conn, int id) throws Exception {
-        if (ordersDAO.removeOrder(conn, id)) {
-
-        } else {
-
-        }
+    public boolean removeOrder(Connection conn, int id) throws Exception {
+        return ordersDAO.removeOrder(conn, id);
     }
 
-    public void updateOrder(Connection conn, Order o) throws Exception {
-        if (ordersDAO.updateOrder(conn, o)) {
-
-        } else {
-
-        }
+    public boolean updateOrder(Connection conn, Order o) throws Exception {
+        return ordersDAO.updateOrder(conn, o);
     }
 
-    public void listOrder() {
-        List<Order> list = ordersDAO.listFromOrder();
+    public List<Order> listOrder() {
+        return ordersDAO.listFromOrder();
+    }
 
-        if (list == null || list.isEmpty()) {
+    public List<Order> listOrderByItemId(int itemid) {
+        return ordersDAO.listFromOrderByItemId(itemid);
+    }
 
-        }
+    public List<Order> listOrderByCustomerId(int itemid) {
+        return ordersDAO.listFromOrderByCustomerId(itemid);
     }
 }

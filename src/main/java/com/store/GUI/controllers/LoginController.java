@@ -1,5 +1,6 @@
 package com.store.GUI.controllers;
 
+import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
 import com.store.Util.SessionManager;
 import com.store.service.UserService;
@@ -43,15 +44,16 @@ public class LoginController {
         String role = roleComboBox.getValue();
 
         if (role == null || role.trim().isEmpty()) {
-            error.setText("Role can't be empty");
+            MessageUtil.showError("Invalid Choice", "Please choose a role first");
+
             return;
         }
         if (username == null || username.trim().isEmpty()) {
-            error.setText("Username can't be empty");
+            MessageUtil.showError("Invalid Choice", "Please enter a valid username");
             return;
         }
         if (password == null || password.trim().isEmpty()) {
-            error.setText("Password can't be empty");
+            MessageUtil.showError("Invalid Choice", "Please enter a valid password");
             return;
         }
 
@@ -59,10 +61,9 @@ public class LoginController {
 
         if (userService.verifyLogin(username, password, role.toLowerCase())) {
             SessionManager.logUser(userService.getUserByUsername(username, role));
-            SceneManager.switchScene("/com/store/views/" + role + "views/dashboard.fxml",
-                    (role + " Menu").toUpperCase());
+            SceneManager.goToDashboard();
         } else {
-            error.setText("Could not verify credentials");
+            MessageUtil.showError("", "Could not verify credentials");
         }
 
     }

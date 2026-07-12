@@ -112,7 +112,39 @@ public class ItemDAO {
         return null;
     }
 
-    public boolean increasePrice() throws Exception {
+    public boolean updatePrice(Connection conn, int itemid, int updatePrice) throws Exception {
+        String sql = "UPDATE items SET price = price + ? WHERE itemid = ?;";
 
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, updatePrice);
+            stmt.setInt(2, itemid);
+
+            return stmt.executeUpdate() < 1 ? false : true;
+        }
+    }
+
+    public boolean updateName(Connection conn, int itemid, String newName) throws Exception {
+        String sql = "UPDATE items SET itemname =  ? WHERE itemid = ?;";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, newName);
+            stmt.setInt(2, itemid);
+
+            return stmt.executeUpdate() < 1 ? false : true;
+        }
+    }
+
+    public boolean updateQuantity(Connection conn, int itemid, int updatedQuantity) throws Exception {
+        String sql = "UPDATE items SET quantity = quantity + ? WHERE itemid = ?;";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, updatedQuantity);
+            stmt.setInt(2, itemid);
+
+            return stmt.executeUpdate() < 1 ? false : true;
+        }
     }
 }

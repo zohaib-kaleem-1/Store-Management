@@ -58,4 +58,24 @@ public class ItemService {
         }
         return true;
     }
+
+    public boolean increasePrice(Connection conn, int itemId, int price) throws Exception {
+        return itemDAO.updatePrice(conn, itemId, price);
+    }
+
+    public boolean decreasePrice(Connection conn, int itemId, int price) throws Exception {
+        return itemDAO.updatePrice(conn, itemId, -1 * price);
+    }
+
+    public boolean increaseQuantity(Connection conn, int itemId, int quantity) throws Exception {
+        return itemDAO.updateQuantity(conn, itemId, quantity);
+    }
+
+    public boolean decreaseQuantity(Connection conn, int itemId, int quantity) throws Exception {
+        return itemDAO.updateQuantity(conn, itemId, -1 * quantity);
+    }
+
+    public boolean updateName(Connection conn, int itemId, String name) throws Exception {
+        return itemDAO.updateName(conn, itemId, name);
+    }
 }
