@@ -8,10 +8,11 @@ import com.store.db.Database;
 import com.store.model.User;
 
 public class UserDAO {
-    public boolean addUser(Connection conn, User user) throws Exception {
+    public boolean addUser(User user) throws Exception {
         String sql = "INSERT INTO users (name, email, contact, username, password, role) VALUES (?,?,?,?,?,?);";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.getName());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getContact());
@@ -25,10 +26,10 @@ public class UserDAO {
         }
     }
 
-    public boolean removeUser(Connection conn, String username, String role) throws Exception {
+    public boolean removeUser(String username, String role) throws Exception {
         String sql = "DELETE FROM users WHERE username = ? and role = ?;";
-
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             stmt.setString(2, role);
             int rc = stmt.executeUpdate();
@@ -37,10 +38,10 @@ public class UserDAO {
         }
     }
 
-    public boolean updateUser(Connection conn, User user) throws Exception {
+    public boolean updateUser(User user) throws Exception {
         String sql = "UPDATE users SET name = ?, email = ?, contact = ?, password = ? WHERE userid = ?;";
 
-        try (
+        try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.getName());
             stmt.setString(2, user.getEmail());

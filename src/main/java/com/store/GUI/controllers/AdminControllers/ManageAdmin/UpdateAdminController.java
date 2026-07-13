@@ -1,17 +1,15 @@
-package com.store.GUI.controllers;
+package com.store.GUI.controllers.AdminControllers.ManageAdmin;
 
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
-import com.store.Util.SessionManager;
 import com.store.Util.ValidationUtil;
-import com.store.db.Database;
 import com.store.model.User;
 import com.store.service.UserService;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
-public class ManageAccount {
+public class UpdateAdminController implements SceneManager.DataReceiver<User> {
     @FXML
     private TextField nameField;
 
@@ -27,9 +25,11 @@ public class ManageAccount {
     @FXML
     private TextField emailField;
 
+    private User userToUpdate;
+
     @FXML
-    public void goToDashboard() {
-        SceneManager.goToDashboard();
+    public void goBack() {
+        SceneManager.switchScene("/com/store/views/adminviews/manageadmin/manageadminview.fxml", "Manage Admin");
     }
 
     @FXML
@@ -45,15 +45,11 @@ public class ManageAccount {
             ValidationUtil.validateMail(email);
             ValidationUtil.validatePassword(password);
 
-            SessionManager.getUser().setName(name);
-            SessionManager.getUser().setPassword(password);
-            SessionManager.getUser().setContact(contact);
-            SessionManager.getUser().setEmail(email);
-
             UserService userService = new UserService();
-            userService.updateUser(Database.getConnection(), SessionManager.getUser());
+            userService.updateUser(userToUpdate);
 
             MessageUtil.showMessage("Store", "User updated successfully.");
+            goBack();
         } catch (Exception e) {
             MessageUtil.showError("Invalid Input", e.getMessage());
             return;
@@ -61,15 +57,31 @@ public class ManageAccount {
     }
 
     @FXML
-    public void initialize() {
-        User user = SessionManager.getUser();
-
-        nameField.setText(user.getName());
-        usernameField.setText(user.getUsername());
+    public void updateFields() {
+        nameField.setText(userToUpdate.getName());
+        usernameField.setText(userToUpdate.getUsername());
         usernameField.setDisable(true);
-        passwordField.setText(user.getPassword());
-        emailField.setText(user.getEmail());
-        contactField.setText(user.getContact());
+        passwordField.setText(userToUpdate.getPassword());
+        emailField.setText(userToUpdate.getEmail());
+        contactField.setText(userToUpdate.getContact());
+    }
 
+    @FXML
+    public void delete() {
+        UserService userService = new UserService();
+        try {
+            userService.removeUser(userToUpdate.getUsername(), "admin");
+            MessageUtil.showMessage("Delete User", "Admin Deleted Successfully.");
+            goBack();
+        } catch (Exception e) {
+            MessageUtil.showError("Update Admin", e.getMessage());
+        }
+    }
+
+    @Override
+    public void setData(User data) {
+        this.userToUpdate = data;
+        userToUpdate.setRole("admin");
+        updateFields();
     }
 }

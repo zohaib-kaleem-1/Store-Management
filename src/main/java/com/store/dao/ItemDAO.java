@@ -53,9 +53,10 @@ public class ItemDAO {
         return itemList;
     }
 
-    public boolean addItem(Connection conn, Item item) throws Exception {
+    public boolean addItem(Item item) throws Exception {
         String sql = "INSERT INTO items (itemname, price, quantity) VALUES (?,?,?);";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, item.getName());
             stmt.setInt(2, item.getPrice());

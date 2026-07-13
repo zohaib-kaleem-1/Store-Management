@@ -63,7 +63,7 @@ public class LoginController {
             SessionManager.logUser(userService.getUserByUsername(username, role));
             SceneManager.goToDashboard();
         } else {
-            MessageUtil.showError("", "Could not verify credentials");
+            MessageUtil.showError("Login", "Could not verify credentials");
         }
 
     }

@@ -1,7 +1,6 @@
 package com.store.Util;
 
 import java.io.IOException;
-import java.net.URL;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,16 +29,40 @@ public class SceneManager {
 
     public static void goToLogin() {
         SessionManager.clear();
-        switchScene("/com/store/views/login.fxml", "Login");
+        switchScene("/com/store/views/loginview.fxml", "Login");
     }
 
     public static void goToDashboard() {
         String role = SessionManager.getUser().getRole();
-        SceneManager.switchScene("/com/store/views/" + role + "views/dashboard.fxml",
+        SceneManager.switchScene("/com/store/views/" + role + "views/dashboardview.fxml",
                 (role + " Menu").toUpperCase());
     }
 
     public static void goToManageAccount() {
         switchScene("/com/store/views/manageaccountview.fxml", "Manage Account");
+    }
+
+    public static <T> void switchScene(String fxmlPath, String title, T data) {
+        try {
+            FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
+            Parent root = loader.load();
+
+            // If the controller implements a DataReceiver interface, pass the data
+            Object controller = loader.getController();
+            if (controller instanceof DataReceiver) {
+                ((DataReceiver<T>) controller).setData(data);
+            }
+
+            primaryStage.setScene(new Scene(root));
+            primaryStage.setTitle(title);
+            primaryStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public interface DataReceiver<T> {
+        void setData(T data);
     }
 }

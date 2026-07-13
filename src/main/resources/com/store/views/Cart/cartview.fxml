@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="569.0" prefWidth="727.0" scaleShape="false" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.GUI.controllers.CustomerControllers.CartViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="569.0" prefWidth="727.0" scaleShape="false" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.GUI.controllers.Cart.CartViewController">
     <children>
         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="-1.0" layoutY="14.0" mouseTransparent="true" prefHeight="57.0" prefWidth="727.0" text="Cart" textAlignment="CENTER">
             <font>
@@ -21,23 +19,23 @@
                 <TableColumn fx:id="quantityInStoreColumn" minWidth="5.0" prefWidth="126.0" resizable="false" text="Quantity In Store" />
                 <TableColumn fx:id="priceColumn" prefWidth="89.0" text="Price" />
                 <TableColumn fx:id="totalPriceColumn" prefWidth="108.0" text="Total Price" />
-                <TableColumn fx:id="UpdateRemoveColumn" prefWidth="138.0" text="Remove" />
+                <TableColumn fx:id="UpdateRemoveColumn" prefWidth="138.0" text="Update" />
             </columns>
         </TableView>
-        <Label fx:id="totalPriceOfAllItems" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="379.0" layoutY="470.0" prefHeight="40.0" prefWidth="303.0" text="Total Price: 0 " textAlignment="RIGHT">
+        <Label fx:id="totalPriceOfAllItems" layoutX="42.0" layoutY="490.0" prefHeight="40.0" prefWidth="303.0" text="Total Price: 0 ">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
-        <Button fx:id="buyItemsButton" layoutX="530.0" layoutY="510.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="123.0" text="Buy Item">
+        <Button fx:id="buyItemsButton" layoutX="567.0" layoutY="489.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="123.0" text="Buy Item">
             <font>
                 <Font size="20.0" />
             </font>
         </Button>
-      <Button layoutX="42.0" layoutY="30.0" mnemonicParsing="false" onAction="#goToDashboard" text="Back">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
+        <Button layoutX="42.0" layoutY="24.0" mnemonicParsing="false" onAction="#goToDashboard" prefHeight="20.0" prefWidth="71.0" text="Back">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Button>
     </children>
 </AnchorPane>

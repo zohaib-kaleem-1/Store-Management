@@ -3,16 +3,16 @@ package com.store.Util;
 import com.store.service.UserService;
 
 public class ValidationUtil {
-    public static boolean validateString(String input) throws Exception {
+    public static boolean validateString(String input, String nameOfField) throws Exception {
         if (input == null || input.trim().isEmpty()) {
-            throw new Exception("Empty String");
+            throw new Exception(nameOfField + " Field Can't be empty.");
         }
 
         return true;
     }
 
     public static boolean validateName(String name) throws Exception {
-        validateString(name);
+        validateString(name, "Name");
 
         if (!name.matches("^[A-Za-z- ]+{3,30}$"))
             throw new Exception("Name contains invalid characters");
@@ -24,7 +24,7 @@ public class ValidationUtil {
     }
 
     public static boolean validateMail(String email) throws Exception {
-        validateString(email);
+        validateString(email, "Email");
 
         if (email.trim().length() < 13)
             throw new Exception("Gmail Name must be of at least 13 characters");
@@ -37,7 +37,7 @@ public class ValidationUtil {
     }
 
     public static boolean validateUsername(String username, String role) throws Exception {
-        validateString(username);
+        validateString(username, "Username");
 
         UserService userService = new UserService();
 
@@ -55,28 +55,38 @@ public class ValidationUtil {
     }
 
     public static boolean validateContact(String contact) throws Exception {
-        validateString(contact);
+        validateString(contact, "Contact");
 
         if (!(contact.trim().length() == 11))
             throw new Exception("Contact must be of 11 digits");
-        if (!contact.trim().matches("^[0-9]$"))
+
+        if (!(contact.trim().matches("^[0-9]+$")))
             throw new Exception("Invalid character used for contact.\nUse only digits.");
 
         return true;
     }
 
     public static int validateIntInput(String value) throws Exception {
-        if (!value.matches("^[0-9.,]+$"))
+        if (!value.matches("^[0-9,]+$"))
             throw new Exception("Invalid int Input");
 
-        return Integer.parseInt(value.replaceAll(".", "").replaceAll(",", ""));
+        return Integer.parseInt(value.replaceAll(",", ""));
     }
 
     public static boolean validatePassword(String password) throws Exception {
-        validateString(password);
+        validateString(password, "Password");
 
-        if (!password.matches("^[a-zA-Z0-9.-`~!@#$%^&*]+{8,20}$"))
+        if (!password.matches("^[a-zA-Z0-9.`~!@#$%^&*]+{8,20}$"))
             throw new Exception("Illegal Characters in password");
+
+        if (!password.matches(".*[0-9].*"))
+            throw new Exception("Password must have at least 1 number.");
+        if (!password.matches(".*[a-z].*"))
+            throw new Exception("Password must have at least 1 small alphabet.");
+        if (!password.matches(".*[A-Z].*"))
+            throw new Exception("Password must have at least 1 large alphabet.");
+        if (!password.matches(".*[.`~!@#$%^&*].*"))
+            throw new Exception("Password must have at least 1 symbol.");
 
         return true;
     }

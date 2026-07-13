@@ -13,10 +13,8 @@ public class ItemService {
         this.itemDAO = new ItemDAO();
     }
 
-    public void addItem(Connection conn, String itemName, int itemPrice, int quantity) throws Exception {
-        if (itemDAO.addItem(conn, new Item(itemName, itemPrice, quantity))) {
-        } else {
-        }
+    public boolean addItem(String itemName, int itemPrice, int quantity) throws Exception {
+        return itemDAO.addItem(new Item(itemName, itemPrice, quantity));
     }
 
     public void removeItem(Connection conn, String itemName) throws Exception {

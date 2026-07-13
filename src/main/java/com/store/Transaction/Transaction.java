@@ -59,4 +59,8 @@ public class Transaction {
 
         return true;
     }
+
+    public static boolean adminBuysItem() {
+        return true;
+    }
 }

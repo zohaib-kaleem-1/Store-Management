@@ -1,4 +1,4 @@
-package com.store.GUI.controllers.CustomerControllers;
+package com.store.GUI.controllers.Cart;
 
 import com.store.Transaction.Transaction;
 import com.store.Util.MessageUtil;
@@ -72,15 +72,22 @@ public class CartViewController {
         for (CartItem i : cartList) {
             totalPrice += (i.getQuantity() * i.getPrice());
         }
-
         totalPriceOfAllItems.setText("Total Price: " + String.valueOf(totalPrice));
     }
 
     @FXML
     public void buyItems() {
+        if (SessionManager.getUser().getRole().equals("admin")) {
+            if (Transaction.adminBuysItem()) {
+                MessageUtil.showMessage("Success", "Items Bought Successfully.");
+                SceneManager.switchScene("/com/store/views/customerviews/cartview.fxml", "My Cart");
+            } else {
+                MessageUtil.showError("Error", "Could not buy items");
+            }
+        }
         if (Transaction.buyItems()) {
             MessageUtil.showMessage("Success", "Items Bought Successfully.");
-            cartList.clear();
+            SceneManager.switchScene("/com/store/views/customerviews/cartview.fxml", "My Cart");
         } else {
             MessageUtil.showError("Error", "Could not buy items");
         }
