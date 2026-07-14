@@ -78,7 +78,7 @@ public class ManageItemController {
 
     @FXML
     public void goToBuyItemView() {
-        SceneManager.switchScene("/com/store/view/adminview/buyitem/buyitemview.fxml", null);
+        SceneManager.switchScene("/com/store/views/buyitem/buyitemview.fxml", null);
     }
 
 }

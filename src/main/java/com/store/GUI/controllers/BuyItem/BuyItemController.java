@@ -39,11 +39,11 @@ public class BuyItemController {
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
         buyColumn.setCellFactory(event -> new TableCell<>() {
-            private final Button editButton = new Button("Buy Item");
+            private final Button editButton = new Button("Add To Cart");
             {
                 editButton.setOnAction(event -> {
-                    SceneManager.switchScene("/com/store/views/buyitem/buyitemdialogue.fxml",
-                            "Update Item", getTableView().getItems().get(getIndex()));
+                    SceneManager.switchScene("/com/store/views/buyitem/addtocartdialogue.fxml",
+                            "Add to Cart", getTableView().getItems().get(getIndex()));
                 });
             }
 
@@ -74,16 +74,6 @@ public class BuyItemController {
     @FXML
     public void goToDashboard() {
         SceneManager.goToDashboard();
-    }
-
-    @FXML
-    public void addItem() {
-        SceneManager.switchScene("/com/store/views/adminviews/manageitem/additemview.fxml", "Add Item");
-    }
-
-    @FXML
-    public void goToBuyItemView() {
-        SceneManager.switchScene("/com/store/view/adminview/buyitem/buyitemview.fxml", null);
     }
 
 }

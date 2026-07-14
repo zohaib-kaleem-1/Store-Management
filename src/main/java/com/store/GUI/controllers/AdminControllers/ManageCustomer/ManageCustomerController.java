@@ -78,7 +78,7 @@ public class ManageCustomerController {
 
     @FXML
     public void addCustomer() {
-        SceneManager.switchScene("/com/store/views/adminviews/managecustomer/addcustomerview.fxml", "Add Admin");
+        SceneManager.switchScene("/com/store/views/adminviews/managecustomer/addcustomerview.fxml", "Add Customer");
     }
 
 }

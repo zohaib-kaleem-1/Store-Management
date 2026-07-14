@@ -1,13 +1,20 @@
 package com.store.GUI.controllers.BuyItem;
 
+import java.sql.Connection;
+
+import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
+import com.store.Util.SessionManager;
+import com.store.Util.ValidationUtil;
+import com.store.db.Database;
 import com.store.model.CartItem;
+import com.store.model.Item;
+import com.store.service.CartService;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 
-public class AddToCartController implements SceneManager.DataReceiver<Cart> {
+public class AddToCartController implements SceneManager.DataReceiver<Item> {
     @FXML
     private TextField itemNameField;
 
@@ -23,7 +30,7 @@ public class AddToCartController implements SceneManager.DataReceiver<Cart> {
     @FXML
     private TextField quantityInStoreField;
 
-    private CartItem dataToUpdate;
+    private CartItem cartItem;
 
     @FXML
     public void initialize() {
@@ -35,25 +42,47 @@ public class AddToCartController implements SceneManager.DataReceiver<Cart> {
 
     @FXML
     public void save() {
+        calculateTotalPrice();
 
-    }
+        try (Connection conn = Database.getConnection()) {
+            int quantity = ValidationUtil.validateIntInput(quantityField.getText());
 
-    @FXML
-    public void delete() {
+            if (SessionManager.getUser().getRole().toLowerCase().equals("customer"))
+                if (cartItem.getQuantityInStore() < quantity)
+                    throw new Exception("Quantity must be less than available quantity.");
 
+            cartItem.setQuantity(quantity);
+            CartService cartService = new CartService();
+            cartItem.setQuantity(quantity);
+            cartService.addToCart(conn, cartItem);
+
+            MessageUtil.showMessage("Success", "Item added to cart successfully.");
+            goBack();
+        } catch (Exception e) {
+            MessageUtil.showError("Error", e.getMessage());
+            goBack();
+        }
     }
 
     @Override
-    public void setData(CartItem data) {
-        dataToUpdate = data;
+    public void setData(Item data) {
+        cartItem = new CartItem(data.getId(), data.getName(), SessionManager.getUser().getId(),
+                SessionManager.getUser().getName(), data.getPrice(), 0, data.getQuantity());
 
+        updateFields();
     };
 
     public void updateFields() {
-        itemNameField.setText(dataToUpdate.getItemName());
-        priceField.setText(String.valueOf(dataToUpdate.getPrice()));
-        quantityField.setText(String.valueOf(dataToUpdate.getQuantity()));
-        quantityInStoreField.setText(String.valueOf(dataToUpdate.getQuantityInStore()));
-        totalPriceField.setText(String.valueOf(dataToUpdate.getTotalPrice()));
+        itemNameField.setText(cartItem.getItemName());
+        priceField.setText(String.valueOf(cartItem.getPrice()));
+        quantityInStoreField.setText(String.valueOf(cartItem.getQuantityInStore()));
+    }
+
+    public void goBack() {
+        SceneManager.switchScene("/com/store/views/buyitem/buyitemview.fxml", "Buy Item");
+    }
+
+    public void calculateTotalPrice() {
+        totalPriceField.setText(String.valueOf(cartItem.getPrice() * Integer.parseInt(quantityField.getText())));
     }
 }

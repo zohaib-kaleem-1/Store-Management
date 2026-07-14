@@ -1,100 +1,115 @@
 package com.store.GUI.controllers.Cart;
 
+import com.store.model.CartItem;
 import com.store.Transaction.Transaction;
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
 import com.store.Util.SessionManager;
-import com.store.model.CartItem;
 import com.store.service.CartService;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class CartViewController {
     @FXML
-    private TableView<CartItem> cartTable;
+    private TableView<CartItem> itemTable;
 
     @FXML
-    private TableColumn<CartItem, String> itemNameColumn;
-
+    private TableColumn<CartItem, Integer> idColumn;
     @FXML
-    private TableColumn<CartItem, Integer> quantityColumn;
-
-    @FXML
-    private TableColumn<CartItem, Integer> quantityInStoreColumn;
-
+    private TableColumn<CartItem, String> nameColumn;
     @FXML
     private TableColumn<CartItem, Integer> priceColumn;
-
+    @FXML
+    private TableColumn<CartItem, Integer> quantityColumn;
+    @FXML
+    private TableColumn<CartItem, Integer> quantityInStoreColumn;
     @FXML
     private TableColumn<CartItem, Integer> totalPriceColumn;
+    @FXML
+    private Label totalPriceLabel;
 
     @FXML
-    private TableColumn<CartItem, Void> UpdateRemoveColumn;
+    private TableColumn<CartItem, Void> updateColumn;
 
-    @FXML
-    private Label totalPriceOfAllItems;
-
-    @FXML
-    private Button buyItemsButton;
-
-    ObservableList<CartItem> cartList = FXCollections.observableArrayList();
+    ObservableList<CartItem> itemList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         quantityInStoreColumn.setCellValueFactory(new PropertyValueFactory<>("quantityInStore"));
-        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
 
-        cartList.addListener((ListChangeListener<CartItem>) change -> updateTotalPrice());
+        updateColumn.setCellFactory(event -> new TableCell<>() {
+            private final Button editButton = new Button("Update");
+            {
+                editButton.setOnAction(event -> {
+                    SceneManager.switchScene("/com/store/views/cart/editCartDialogue.fxml",
+                            "Update Cart", getTableView().getItems().get(getIndex()));
+                });
+            }
 
-        cartList.clear();
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(editButton);
+                }
+            }
+        });
 
+        itemList.clear();
         CartService cartService = new CartService();
-        cartList.addAll(cartService.listFromCartByCustomerId(SessionManager.getUser().getId()));
-        cartTable.setItems(cartList);
+        itemList.addAll(cartService.listFromCartByCustomerId(SessionManager.getUser().getId()));
+        itemTable.setItems(itemList);
 
-        buyItemsButton.setOnAction(event -> buyItems());
+        calculateTotalPrice();
     }
 
-    public void updateTotalPrice() {
+    @FXML
+    public void buyItem() {
+        String role = SessionManager.getUser().getRole().toLowerCase();
+
+        try {
+            if (role.matches("admin")) {
+                if (!Transaction.adminBuysItem())
+                    throw new Exception("Error buying items");
+            } else if (role.matches("customer")) {
+                if (!Transaction.customerBuyItems())
+                    throw new Exception("Error buying items");
+            }
+
+            MessageUtil.showMessage("Buy Item", "Items bought successfully.");
+            goBack();
+        } catch (Exception e) {
+            MessageUtil.showError("Error", e.getMessage());
+        }
+    }
+
+    @FXML
+    public void goBack() {
+        SceneManager.switchScene("/com/store/views/buyitem/buyitemview.fxml", "Buy Item");
+    }
+
+    public void calculateTotalPrice() {
         int totalPrice = 0;
 
-        for (CartItem i : cartList) {
-            totalPrice += (i.getQuantity() * i.getPrice());
+        for (CartItem i : itemList) {
+            totalPrice += i.getTotalPrice();
         }
-        totalPriceOfAllItems.setText("Total Price: " + String.valueOf(totalPrice));
-    }
 
-    @FXML
-    public void buyItems() {
-        if (SessionManager.getUser().getRole().equals("admin")) {
-            if (Transaction.adminBuysItem()) {
-                MessageUtil.showMessage("Success", "Items Bought Successfully.");
-                SceneManager.switchScene("/com/store/views/customerviews/cartview.fxml", "My Cart");
-            } else {
-                MessageUtil.showError("Error", "Could not buy items");
-            }
-        }
-        if (Transaction.buyItems()) {
-            MessageUtil.showMessage("Success", "Items Bought Successfully.");
-            SceneManager.switchScene("/com/store/views/customerviews/cartview.fxml", "My Cart");
-        } else {
-            MessageUtil.showError("Error", "Could not buy items");
-        }
-    }
-
-    @FXML
-    public void goToDashboard() {
-        SceneManager.goToDashboard();
+        totalPriceLabel.setText("Total Price: " + String.valueOf(totalPrice));
     }
 }

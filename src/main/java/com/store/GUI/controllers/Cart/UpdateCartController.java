@@ -1,13 +1,19 @@
 package com.store.GUI.controllers.Cart;
 
+import java.sql.Connection;
+
+import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
+import com.store.Util.SessionManager;
+import com.store.Util.ValidationUtil;
+import com.store.db.Database;
 import com.store.model.CartItem;
+import com.store.service.CartService;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 
-public class UpdateCartController implements SceneManager.DataReceiver<Cart> {
+public class UpdateCartController implements SceneManager.DataReceiver<CartItem> {
     @FXML
     private TextField itemNameField;
 
@@ -23,7 +29,7 @@ public class UpdateCartController implements SceneManager.DataReceiver<Cart> {
     @FXML
     private TextField quantityInStoreField;
 
-    private CartItem dataToUpdate;
+    private CartItem cartItem;
 
     @FXML
     public void initialize() {
@@ -35,25 +41,58 @@ public class UpdateCartController implements SceneManager.DataReceiver<Cart> {
 
     @FXML
     public void save() {
+        calculateTotalPrice();
 
-    }
+        try (Connection conn = Database.getConnection()) {
+            int quantity = ValidationUtil.validateIntInput(quantityField.getText());
+            if (quantity < 1)
+                throw new Exception("Quantity must be at least 1");
 
-    @FXML
-    public void delete() {
+            if (SessionManager.getUser().getRole().toLowerCase() == "customer")
+                if (cartItem.getQuantityInStore() < quantity)
+                    throw new Exception("Quantity must be less than available quantity.");
 
+            cartItem.setQuantity(quantity);
+            CartService cartService = new CartService();
+            cartItem.setQuantity(quantity);
+            cartService.updateCart(conn, cartItem);
+
+            MessageUtil.showMessage("Success", "Cart Updated successfully.");
+            goBack();
+        } catch (Exception e) {
+            MessageUtil.showError("Error", e.getMessage());
+        }
     }
 
     @Override
     public void setData(CartItem data) {
-        dataToUpdate = data;
-
+        cartItem = data;
+        updateFields();
     };
 
     public void updateFields() {
-        itemNameField.setText(dataToUpdate.getItemName());
-        priceField.setText(String.valueOf(dataToUpdate.getPrice()));
-        quantityField.setText(String.valueOf(dataToUpdate.getQuantity()));
-        quantityInStoreField.setText(String.valueOf(dataToUpdate.getQuantityInStore()));
-        totalPriceField.setText(String.valueOf(dataToUpdate.getTotalPrice()));
+        itemNameField.setText(cartItem.getItemName());
+        priceField.setText(String.valueOf(cartItem.getPrice()));
+        quantityInStoreField.setText(String.valueOf(cartItem.getQuantityInStore()));
+    }
+
+    public void goBack() {
+        SceneManager.switchScene("/com/store/views/cart/cartview.fxml", "My Cart");
+    }
+
+    public void calculateTotalPrice() {
+        totalPriceField.setText(String.valueOf(cartItem.getPrice() * Integer.parseInt(quantityField.getText())));
+    }
+
+    @FXML
+    public void delete() {
+        CartService cartService = new CartService();
+        try (Connection conn = Database.getConnection()) {
+            cartService.removeCart(conn, cartItem.getId());
+            MessageUtil.showMessage("Remove Cart Item", "Item removed successfully from cart.");
+            goBack();
+        } catch (Exception e) {
+            MessageUtil.showError("Update Cart", e.getMessage());
+        }
     }
 }

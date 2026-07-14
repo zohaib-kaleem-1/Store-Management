@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.GUI.controllers.Cart.UpdateCartController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="5.0" prefHeight="47.0" prefWidth="586.0" text="Update Cart" textAlignment="CENTER">
          <font>
@@ -39,18 +38,18 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField layoutX="320.0" layoutY="85.0" prefHeight="26.0" prefWidth="223.0" />
-      <TextField layoutX="320.0" layoutY="134.0" prefHeight="26.0" prefWidth="223.0" />
-      <TextField layoutX="320.0" layoutY="183.0" prefHeight="26.0" prefWidth="223.0" />
-      <TextField layoutX="320.0" layoutY="229.0" prefHeight="26.0" prefWidth="223.0" />
-      <TextField layoutX="320.0" layoutY="270.0" prefHeight="26.0" prefWidth="223.0" />
-      <Button layoutX="57.0" layoutY="16.0" mnemonicParsing="false" text="Go Back" />
-      <Button layoutX="441.0" layoutY="327.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="102.0" text="Save">
+      <TextField fx:id="itemNameField" layoutX="320.0" layoutY="85.0" prefHeight="26.0" prefWidth="223.0" />
+      <TextField fx:id="quantityField" layoutX="320.0" layoutY="134.0" prefHeight="26.0" prefWidth="223.0" />
+      <TextField fx:id="quantityInStoreField" layoutX="320.0" layoutY="183.0" prefHeight="26.0" prefWidth="223.0" />
+      <TextField fx:id="priceField" layoutX="320.0" layoutY="229.0" prefHeight="26.0" prefWidth="223.0" />
+      <TextField fx:id="totalPriceField" layoutX="320.0" layoutY="270.0" prefHeight="26.0" prefWidth="223.0" />
+      <Button layoutX="57.0" layoutY="16.0" mnemonicParsing="false" onAction="#goBack" text="Go Back" />
+      <Button layoutX="441.0" layoutY="327.0" mnemonicParsing="false" onAction="#save" prefHeight="40.0" prefWidth="102.0" text="Save">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
-      <Button layoutX="57.0" layoutY="327.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="102.0" text="Delete">
+      <Button layoutX="57.0" layoutY="327.0" mnemonicParsing="false" onAction="#delete" prefHeight="40.0" prefWidth="102.0" text="Delete">
          <font>
             <Font size="20.0" />
          </font>

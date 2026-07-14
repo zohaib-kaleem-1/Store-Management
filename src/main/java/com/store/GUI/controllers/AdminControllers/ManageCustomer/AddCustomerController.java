@@ -23,7 +23,8 @@ public class AddCustomerController {
 
     @FXML
     public void goBack() {
-        SceneManager.switchScene("/com/store/views/adminviews/managecustomer/managecustomerview.fxml", "Manage Admin");
+        SceneManager.switchScene("/com/store/views/adminviews/managecustomer/managecustomerview.fxml",
+                "Manage Customer");
     }
 
     @FXML
@@ -44,10 +45,10 @@ public class AddCustomerController {
             UserService userService = new UserService();
             userService.addUser(new User(name, email, contact, username, password, "customer"));
 
-            MessageUtil.showMessage("Add Admin", "Admin Added Successfully.");
+            MessageUtil.showMessage("Add Customer", "Customer Added Successfully.");
             goBack();
         } catch (Exception e) {
-            MessageUtil.showError("Add Admin", e.getMessage());
+            MessageUtil.showError("Add Customer", e.getMessage());
             return;
         }
     }

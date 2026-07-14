@@ -1,6 +1,8 @@
 package com.store.GUI.controllers.AdminControllers;
 
+import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
+import com.store.service.BalanceService;
 
 import javafx.fxml.FXML;
 
@@ -20,7 +22,7 @@ public class DashboardController {
 
     @FXML
     public void goToBuyItemView() {
-        SceneManager.switchScene("/com/store/views/buyitemview.fxml", "Buy Item");
+        SceneManager.switchScene("/com/store/views/buyitem/buyitemview.fxml", "Buy Item");
     }
 
     @FXML
@@ -38,5 +40,17 @@ public class DashboardController {
     @FXML
     public void logOut() {
         SceneManager.goToLogin();
+    }
+
+    @FXML
+    public void goToOrderView() {
+        SceneManager.switchScene("/com/store/views/adminviews/orderview.fxml", "Order");
+    }
+
+    @FXML
+    public void viewBalance() {
+        try (BalanceService balanceService = new BalanceService()) {
+            MessageUtil.showMessage("Balance", "Current Balance: " + balanceService.getBalance());
+        }
     }
 }

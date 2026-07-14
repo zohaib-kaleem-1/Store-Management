@@ -12,7 +12,7 @@ public class DashboardController {
 
     @FXML
     public void switchToBuyItem() {
-        SceneManager.switchScene("/com/store/views/buyitemview.fxml", "Buy Items");
+        SceneManager.switchScene("/com/store/views/buyitem/buyitemview.fxml", "Buy Items");
     }
 
     @FXML
@@ -22,17 +22,21 @@ public class DashboardController {
 
     @FXML
     public void switchToViewCart() {
-        SceneManager.switchScene("/com/store/views/cartview.fxml", "Cart");
+        SceneManager.switchScene("/com/store/views/cart/cartview.fxml", "Cart");
     }
 
     @FXML
     public void logOut() {
         SceneManager.goToLogin();
-
     }
 
     @FXML
     public void initialize() {
         customerNameLabel.setText("Welcome " + SessionManager.getUser().getName().toUpperCase());
+    }
+
+    @FXML
+    public void switchToViewOrder() {
+        SceneManager.switchScene("/com/store/views/customerviews/orderview.fxml", "Order");
     }
 }

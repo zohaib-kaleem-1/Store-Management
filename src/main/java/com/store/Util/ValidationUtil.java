@@ -67,10 +67,15 @@ public class ValidationUtil {
     }
 
     public static int validateIntInput(String value) throws Exception {
-        if (!value.matches("^[0-9,]+$"))
+        if (!value.matches("^[0-9]+$"))
             throw new Exception("Invalid int Input");
 
-        return Integer.parseInt(value.replaceAll(",", ""));
+        int intValue = Integer.parseInt(value);
+
+        if (intValue < 1)
+            throw new Exception("Value must be greater then 1");
+
+        return intValue;
     }
 
     public static boolean validatePassword(String password) throws Exception {
