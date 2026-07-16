@@ -55,7 +55,7 @@ public class UpdateCartController implements SceneManager.DataReceiver<CartItem>
             cartItem.setQuantity(quantity);
             CartService cartService = new CartService();
             cartItem.setQuantity(quantity);
-            cartService.updateCart(conn, cartItem);
+            cartService.updateCart(cartItem);
 
             MessageUtil.showMessage("Success", "Cart Updated successfully.");
             goBack();
@@ -77,7 +77,7 @@ public class UpdateCartController implements SceneManager.DataReceiver<CartItem>
     }
 
     public void goBack() {
-        SceneManager.switchScene("/com/store/views/cart/cartview.fxml", "My Cart");
+        SceneManager.goBack();
     }
 
     public void calculateTotalPrice() {
@@ -88,7 +88,7 @@ public class UpdateCartController implements SceneManager.DataReceiver<CartItem>
     public void delete() {
         CartService cartService = new CartService();
         try (Connection conn = Database.getConnection()) {
-            cartService.removeCart(conn, cartItem.getId());
+            cartService.removeCart(cartItem.getId());
             MessageUtil.showMessage("Remove Cart Item", "Item removed successfully from cart.");
             goBack();
         } catch (Exception e) {

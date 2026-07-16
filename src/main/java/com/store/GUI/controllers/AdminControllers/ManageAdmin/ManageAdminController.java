@@ -1,6 +1,10 @@
 package com.store.GUI.controllers.AdminControllers.ManageAdmin;
 
 import com.store.model.User;
+
+import java.sql.SQLException;
+
+import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
 import com.store.service.UserService;
 
@@ -24,8 +28,6 @@ public class ManageAdminController {
     @FXML
     private TableColumn<User, String> usernameColumn;
     @FXML
-    private TableColumn<User, String> passwordColumn;
-    @FXML
     private TableColumn<User, String> contactColumn;
     @FXML
     private TableColumn<User, String> emailColumn;
@@ -40,7 +42,6 @@ public class ManageAdminController {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
-        passwordColumn.setCellValueFactory(new PropertyValueFactory<>("password"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         contactColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
         editColumn.setCellFactory(event -> new TableCell<>() {
@@ -66,16 +67,20 @@ public class ManageAdminController {
         });
 
         adminList.clear();
-        UserService adminService = new UserService();
+        try {
 
-        adminList.addAll(adminService.getAllUserByRole("admin"));
+            UserService adminService = new UserService();
+            adminList.addAll(adminService.getAllUserByRole("admin"));
+        } catch (SQLException e) {
+            MessageUtil.showError("User Data Reading error", e.getMessage());
+        }
 
         adminTable.setItems(adminList);
     }
 
     @FXML
-    public void goToDashboard() {
-        SceneManager.goToDashboard();
+    public void goBack() {
+        SceneManager.goBack();
     }
 
     @FXML

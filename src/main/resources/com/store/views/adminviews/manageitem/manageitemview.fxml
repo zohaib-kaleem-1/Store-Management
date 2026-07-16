@@ -26,7 +26,7 @@
                 <TableColumn fx:id="editColumn" prefWidth="84.0" text="Edit" />
             </columns>
         </TableView>
-        <Button layoutX="38.0" layoutY="24.0" mnemonicParsing="false" onAction="#goToDashboard" prefHeight="22.0" prefWidth="93.0" text="Go Back">
+        <Button layoutX="38.0" layoutY="24.0" mnemonicParsing="false" onAction="#goBack" prefHeight="22.0" prefWidth="93.0" text="Go Back">
             <font>
                 <Font size="18.0" />
             </font>

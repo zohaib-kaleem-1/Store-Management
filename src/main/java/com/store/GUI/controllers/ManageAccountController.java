@@ -27,8 +27,8 @@ public class ManageAccountController {
     private TextField emailField;
 
     @FXML
-    public void goToDashboard() {
-        SceneManager.goToDashboard();
+    public void goBack() {
+        SceneManager.goBack();
     }
 
     @FXML

@@ -26,7 +26,7 @@ public class UpdateItemController implements SceneManager.DataReceiver<Item> {
 
     @FXML
     public void goBack() {
-        SceneManager.switchScene("/com/store/views/adminviews/manageitem/manageitemview.fxml", "Manage Admin");
+        SceneManager.goBack();
     }
 
     @FXML
@@ -45,7 +45,7 @@ public class UpdateItemController implements SceneManager.DataReceiver<Item> {
             itemToUpdate.setQuantity(quantity);
 
             ItemService itemService = new ItemService();
-            itemService.updateItem(conn, itemToUpdate);
+            itemService.updateItem(itemToUpdate);
 
             MessageUtil.showMessage("Store", "Item updated successfully.");
             goBack();
@@ -66,7 +66,7 @@ public class UpdateItemController implements SceneManager.DataReceiver<Item> {
     public void delete() {
         ItemService itemService = new ItemService();
         try (Connection conn = Database.getConnection()) {
-            itemService.removeItem(conn, itemToUpdate.getName());
+            itemService.removeItem(itemToUpdate.getId());
             MessageUtil.showMessage("Delete Item", "Item deleted Successfully.");
             goBack();
         } catch (Exception e) {

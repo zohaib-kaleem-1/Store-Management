@@ -2,7 +2,8 @@ package com.store.GUI.controllers.AdminControllers;
 
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
-import com.store.service.BalanceService;
+import com.store.Util.SessionManager;
+import com.store.service.StoreService;
 
 import javafx.fxml.FXML;
 
@@ -39,7 +40,8 @@ public class DashboardController {
 
     @FXML
     public void logOut() {
-        SceneManager.goToLogin();
+        SessionManager.clear();
+        SceneManager.goBack();
     }
 
     @FXML
@@ -49,8 +51,11 @@ public class DashboardController {
 
     @FXML
     public void viewBalance() {
-        try (BalanceService balanceService = new BalanceService()) {
-            MessageUtil.showMessage("Balance", "Current Balance: " + balanceService.getBalance());
+        try {
+            StoreService storeService = new StoreService();
+            MessageUtil.showMessage("Balance", "Current Balance: " + storeService.getBalance());
+        } catch (Exception e) {
+            MessageUtil.showMessage("Error", e.getMessage());
         }
     }
 }

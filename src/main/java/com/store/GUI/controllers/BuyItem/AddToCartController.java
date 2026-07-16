@@ -54,7 +54,7 @@ public class AddToCartController implements SceneManager.DataReceiver<Item> {
             cartItem.setQuantity(quantity);
             CartService cartService = new CartService();
             cartItem.setQuantity(quantity);
-            cartService.addToCart(conn, cartItem);
+            cartService.addToCart(cartItem);
 
             MessageUtil.showMessage("Success", "Item added to cart successfully.");
             goBack();
@@ -79,7 +79,7 @@ public class AddToCartController implements SceneManager.DataReceiver<Item> {
     }
 
     public void goBack() {
-        SceneManager.switchScene("/com/store/views/buyitem/buyitemview.fxml", "Buy Item");
+        SceneManager.goBack();
     }
 
     public void calculateTotalPrice() {

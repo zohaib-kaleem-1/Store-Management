@@ -19,7 +19,7 @@ public class AddItemController {
 
     @FXML
     public void goBack() {
-        SceneManager.switchScene("/com/store/views/adminviews/manageitem/manageitemview.fxml", "Manage Item");
+        SceneManager.goBack();
     }
 
     @FXML

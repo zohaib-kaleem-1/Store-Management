@@ -7,6 +7,7 @@ import com.store.model.User;
 import com.store.service.UserService;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 public class AddCustomerController {
@@ -15,7 +16,7 @@ public class AddCustomerController {
     @FXML
     private TextField usernameField;
     @FXML
-    private TextField passwordField;
+    private PasswordField passwordField;
     @FXML
     private TextField emailField;
     @FXML
@@ -23,8 +24,7 @@ public class AddCustomerController {
 
     @FXML
     public void goBack() {
-        SceneManager.switchScene("/com/store/views/adminviews/managecustomer/managecustomerview.fxml",
-                "Manage Customer");
+        SceneManager.goBack();
     }
 
     @FXML

@@ -1,5 +1,9 @@
 package com.store.GUI.controllers.CustomerControllers;
 
+import java.security.Timestamp;
+import java.sql.SQLException;
+
+import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
 import com.store.Util.SessionManager;
 import com.store.model.Order;
@@ -30,6 +34,9 @@ public class OrderController {
     private TableColumn<Order, Integer> totalPriceColumn;
 
     @FXML
+    private TableColumn<Order, Timestamp> boughtAtColumn;
+
+    @FXML
     private Label totalPriceLabel;
 
     @FXML
@@ -41,18 +48,22 @@ public class OrderController {
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
+        boughtAtColumn.setCellValueFactory(new PropertyValueFactory<>("boughtAt"));
 
         orderList.clear();
-        OrderService orderService = new OrderService();
-
-        orderList.addAll(orderService.listOrderByCustomerId(SessionManager.getUser().getId()));
+        try {
+            OrderService orderService = new OrderService();
+            orderList.addAll(orderService.listOrderByCustomerId(SessionManager.getUser().getId()));
+        } catch (SQLException e) {
+            MessageUtil.showError("Order Reader", e.getMessage());
+        }
 
         orderTable.setItems(orderList);
         calculateTotalPrice();
     }
 
     public void goBack() {
-        SceneManager.goToDashboard();
+        SceneManager.goBack();
     }
 
     public void calculateTotalPrice() {
@@ -62,6 +73,6 @@ public class OrderController {
             totalPrice += i.getTotalPrice();
         }
 
-        totalPriceLabel.setText(String.valueOf(totalPrice));
+        totalPriceLabel.setText("Total Price: " + String.valueOf(totalPrice));
     }
 }

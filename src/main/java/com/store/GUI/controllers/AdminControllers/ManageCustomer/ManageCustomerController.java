@@ -1,6 +1,7 @@
 package com.store.GUI.controllers.AdminControllers.ManageCustomer;
 
 import com.store.model.User;
+import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
 import com.store.service.UserService;
 
@@ -40,7 +41,6 @@ public class ManageCustomerController {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
-        passwordColumn.setCellValueFactory(new PropertyValueFactory<>("password"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         contactColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
         editColumn.setCellFactory(event -> new TableCell<>() {
@@ -64,16 +64,20 @@ public class ManageCustomerController {
         });
 
         customerList.clear();
-        UserService customerService = new UserService();
+        try {
+            UserService customerService = new UserService();
+            customerList.addAll(customerService.getAllUserByRole("customer"));
+            customerTable.setItems(customerList);
+        } catch (Exception e) {
+            MessageUtil.showError("Error Customer Data", e.getMessage());
+            goBack();
+        }
 
-        customerList.addAll(customerService.getAllUserByRole("customer"));
-
-        customerTable.setItems(customerList);
     }
 
     @FXML
-    public void goToDashboard() {
-        SceneManager.goToDashboard();
+    public void goBack() {
+        SceneManager.goBack();
     }
 
     @FXML

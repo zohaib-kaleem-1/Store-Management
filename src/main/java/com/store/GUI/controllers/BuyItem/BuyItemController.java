@@ -1,6 +1,10 @@
 package com.store.GUI.controllers.BuyItem;
 
 import com.store.model.Item;
+
+import java.sql.SQLException;
+
+import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
 import com.store.service.ItemService;
 
@@ -59,9 +63,12 @@ public class BuyItemController {
         });
 
         itemList.clear();
-        ItemService itemService = new ItemService();
-
-        itemList.addAll(itemService.display());
+        try {
+            ItemService itemService = new ItemService();
+            itemList.addAll(itemService.display());
+        } catch (SQLException e) {
+            MessageUtil.showError("Item Data Reader", e.getMessage());
+        }
 
         itemTable.setItems(itemList);
     }
@@ -72,8 +79,7 @@ public class BuyItemController {
     }
 
     @FXML
-    public void goToDashboard() {
-        SceneManager.goToDashboard();
+    public void goBack() {
+        SceneManager.goBack();
     }
-
 }

@@ -1,6 +1,9 @@
 package com.store.GUI.controllers.Cart;
 
 import com.store.model.CartItem;
+
+import java.sql.SQLException;
+
 import com.store.Transaction.Transaction;
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
@@ -71,8 +74,14 @@ public class CartViewController {
         });
 
         itemList.clear();
-        CartService cartService = new CartService();
-        itemList.addAll(cartService.listFromCartByCustomerId(SessionManager.getUser().getId()));
+
+        try {
+
+            CartService cartService = new CartService();
+            itemList.addAll(cartService.listFromCartByCustomerId(SessionManager.getUser().getId()));
+        } catch (SQLException e) {
+            MessageUtil.showError("Cart Reader", e.getMessage());
+        }
         itemTable.setItems(itemList);
 
         calculateTotalPrice();
@@ -100,7 +109,7 @@ public class CartViewController {
 
     @FXML
     public void goBack() {
-        SceneManager.switchScene("/com/store/views/buyitem/buyitemview.fxml", "Buy Item");
+        SceneManager.goBack();
     }
 
     public void calculateTotalPrice() {

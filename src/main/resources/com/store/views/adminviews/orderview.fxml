@@ -16,10 +16,11 @@
             <columns>
                 <TableColumn fx:id="idColumn" prefWidth="55.0" text="Id" />
                 <TableColumn fx:id="nameColumn" minWidth="8.0" prefWidth="157.0" text="Item Name" />
-                <TableColumn fx:id="customerNameColumn" minWidth="8.0" prefWidth="187.0" text="Customer Name" />
-                <TableColumn fx:id="quantityColumn" minWidth="0.0" prefWidth="125.0" text="Item Quantity" />
-                <TableColumn fx:id="priceColumn" minWidth="0.0" prefWidth="113.0" text="Item Price" />
-                <TableColumn fx:id="totalPriceColumn" prefWidth="132.0" text="Total Price" />
+                <TableColumn fx:id="customerNameColumn" minWidth="8.0" prefWidth="124.0" text="Customer Name" />
+                <TableColumn fx:id="quantityColumn" minWidth="0.0" prefWidth="120.0" text="Item Quantity" />
+                <TableColumn fx:id="priceColumn" minWidth="0.0" prefWidth="90.0" text="Item Price" />
+                <TableColumn fx:id="totalPriceColumn" prefWidth="90.0" text="Total Price" />
+                <TableColumn fx:id="boughtAtColumn" prefWidth="134.0" text="Bought at" />
             </columns>
         </TableView>
         <Button layoutX="38.0" layoutY="24.0" mnemonicParsing="false" onAction="#goBack" prefHeight="22.0" prefWidth="93.0" text="Go Back">

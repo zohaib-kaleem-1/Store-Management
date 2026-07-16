@@ -2,6 +2,12 @@ package com.store.db;
 
 import java.sql.*;
 
+/**
+ * 
+ * Database
+ * 
+ * Connects to database using credentials
+ */
 public class Database {
     private static final String URL = "jdbc:postgresql://localhost:5432/store";
     private static final String USER = "postgres";
@@ -16,7 +22,7 @@ public class Database {
             try {
                 conn.close();
             } catch (SQLException e) {
-                System.err.println("Error closing connection: " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }

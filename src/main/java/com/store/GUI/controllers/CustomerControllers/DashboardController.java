@@ -27,7 +27,8 @@ public class DashboardController {
 
     @FXML
     public void logOut() {
-        SceneManager.goToLogin();
+        SessionManager.clear();
+        SceneManager.goBack();
     }
 
     @FXML

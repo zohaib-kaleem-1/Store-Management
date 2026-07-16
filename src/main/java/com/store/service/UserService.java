@@ -1,5 +1,6 @@
 package com.store.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.store.dao.UserDAO;
@@ -12,47 +13,35 @@ public class UserService {
         this.userDAO = new UserDAO();
     }
 
-    public boolean verifyLogin(String username, String password, String role) {
+    public boolean verifyLogin(String username, String password, String role) throws SQLException {
         return userDAO.verifyLogin(username, password, role);
     }
 
-    public User getUserByUsername(String username, String role) {
+    public User getUserByUsername(String username, String role) throws SQLException {
         return userDAO.getUserByUsername(username, role);
     }
 
-    public void addUser(String name, String email, String contact, String username, String password,
-            String role) throws Exception {
-        if (userDAO.addUser(new User(name, email, contact, username, password, role))) {
-        } else {
-        }
+    public boolean addUser(User u) throws SQLException {
+        return userDAO.addUser(u);
     }
 
-    public void addUser(User u) throws Exception {
-        if (userDAO.addUser(u)) {
-        } else {
-        }
+    public boolean removeUser(String username, String role) throws SQLException {
+        return userDAO.removeUser(username, role);
     }
 
-    public void removeUser(String username, String role) throws Exception {
-        if (userDAO.removeUser(username, role)) {
-        } else {
-        }
-    }
-
-    public boolean findUserByUsername(String username, String role) {
+    // SEE if username exists
+    public boolean findUserByUsername(String username, String role) throws SQLException {
         if (userDAO.getUserByUsername(username, role) != null)
             return true;
         else
             return false;
     }
 
-    public void updateUser(User a) throws Exception {
-        if (userDAO.updateUser(a)) {
-        } else {
-        }
+    public boolean updateUser(User a) throws SQLException {
+        return userDAO.updateUser(a);
     }
 
-    public List<User> getAllUserByRole(String role) {
+    public List<User> getAllUserByRole(String role) throws SQLException {
         return userDAO.listUser(role);
     }
 

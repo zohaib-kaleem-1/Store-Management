@@ -61,7 +61,7 @@
             <Font size="20.0" />
          </font>
       </TextField>
-      <Button layoutX="64.0" layoutY="26.0" mnemonicParsing="false" onAction="#goToDashboard" text="Go Back" />
+      <Button layoutX="64.0" layoutY="26.0" mnemonicParsing="false" onAction="#goBack" text="Go Back" />
       <Button layoutX="495.0" layoutY="429.0" mnemonicParsing="false" onAction="#save" prefHeight="43.0" prefWidth="126.0" text="Save" />
    </children>
 </AnchorPane>

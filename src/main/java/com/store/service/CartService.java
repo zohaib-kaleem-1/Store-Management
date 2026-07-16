@@ -1,6 +1,6 @@
 package com.store.service;
 
-import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.store.dao.CartDAO;
@@ -13,27 +13,19 @@ public class CartService {
         this.cartDAO = new CartDAO();
     }
 
-    public boolean addToCart(Connection conn, CartItem c) throws Exception {
-        return cartDAO.addCart(conn, c);
+    public boolean addToCart(CartItem c) throws SQLException {
+        return cartDAO.addCart(c);
     }
 
-    public boolean updateCart(Connection conn, CartItem c) throws Exception {
-        return cartDAO.updateCart(conn, c);
+    public boolean updateCart(CartItem c) throws SQLException {
+        return cartDAO.updateQuantity(c.getId(), c.getQuantity());
     }
 
-    public boolean removeCart(Connection conn, int id) throws Exception {
-        return cartDAO.removeCart(conn, id);
+    public boolean removeCart(int id) throws SQLException {
+        return cartDAO.removeCart(id);
     }
 
-    public List<CartItem> listFromCart() {
-        return cartDAO.listFromCart();
-    }
-
-    public List<CartItem> listFromCartByCustomerId(int id) {
+    public List<CartItem> listFromCartByCustomerId(int id) throws SQLException {
         return cartDAO.listFromCartByCustomerId(id);
-    }
-
-    public List<CartItem> listFromCartByItemId(int id) {
-        return cartDAO.listFromCartByItemId(id);
     }
 }

@@ -7,6 +7,7 @@ import com.store.model.User;
 import com.store.service.UserService;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 public class UpdateAdminController implements SceneManager.DataReceiver<User> {
@@ -17,7 +18,7 @@ public class UpdateAdminController implements SceneManager.DataReceiver<User> {
     private TextField usernameField;
 
     @FXML
-    private TextField passwordField;
+    private PasswordField passwordField;
 
     @FXML
     private TextField contactField;
@@ -29,7 +30,7 @@ public class UpdateAdminController implements SceneManager.DataReceiver<User> {
 
     @FXML
     public void goBack() {
-        SceneManager.switchScene("/com/store/views/adminviews/manageadmin/manageadminview.fxml", "Manage Admin");
+        SceneManager.goBack();
     }
 
     @FXML
