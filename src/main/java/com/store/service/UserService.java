@@ -45,4 +45,7 @@ public class UserService {
         return userDAO.listUser(role);
     }
 
+    public boolean buyItem(int id, String role) throws SQLException {
+        return userDAO.buyItem(id, role);
+    }
 }

@@ -67,7 +67,7 @@ public class UserDAO {
             stmt.setString(1, user.getName());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getContact());
-            stmt.setString(4, user.getPassword());
+            stmt.setString(4, PasswordAuthUtil.encoder(user.getPassword()));
             stmt.setInt(5, user.getId());
 
             return stmt.executeUpdate() == 1 ? true : false;
@@ -150,6 +150,23 @@ public class UserDAO {
             }
 
             return rs.next();
+        }
+    }
+
+    public boolean buyItem(int userid, String role) throws SQLException {
+        String sql = "";
+        if (role.matches("admin"))
+            sql = "call adminBuyItem(?)";
+        else if (role.matches("customer"))
+            sql = "call customerBuyItem(?)";
+        else
+            throw new IllegalArgumentException("Role is not valid");
+
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userid);
+
+            return stmt.executeUpdate() == 1 ? true : false;
         }
     }
 }

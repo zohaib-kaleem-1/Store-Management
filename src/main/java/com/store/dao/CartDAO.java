@@ -125,4 +125,19 @@ public class CartDAO {
 
         return list;
     }
+
+    /**
+     * When user buys, clear his cart in one command
+     * 
+     * @param customerId id of user whose cart is to be cleared
+     * @throws SQLException
+     */
+    public boolean removeCartByUserId(int customerId) throws SQLException {
+        String sql = "DELETE from cart WHERE userid = ?;";
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, customerId);
+            return stmt.executeUpdate() == 1 ? true : false;
+        }
+    }
 }

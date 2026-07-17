@@ -39,7 +39,7 @@ public class ValidationUtil {
     public static boolean validateName(String name) throws Exception {
         validateString(name, "Name");
 
-        if (!name.matches("^[A-Za-z\\- ]{3,30}$"))
+        if (!name.matches("^[A-Za-z\\- ]+{3,30}$"))
             throw new IllegalFormatException("Name contains invalid characters");
 
         if (name.trim().replaceAll("-", "").length() < 3)
@@ -72,7 +72,7 @@ public class ValidationUtil {
         // must have only allowed character
         // small letter, capital letter, .
         // length of name must be 3-20 resulting a max email length of 30
-        if (!email.replace("@gmail.com", "").matches("^[a-zA-Z0-9.]{3,20}$"))
+        if (!email.replace("@gmail.com", "").matches("^[a-zA-Z0-9.]+{3,20}$"))
             throw new IllegalFormatException("Gmail contains invalid characters.");
 
         return true;
@@ -143,7 +143,7 @@ public class ValidationUtil {
     public static int validateIntInput(String value) throws Exception {
 
         // Must only have digits
-        if (!value.matches("^[0-9]$"))
+        if (!value.matches("^[0-9]+$"))
             throw new Exception("Invalid int Input.\nMust have only digits.");
 
         int intValue = Integer.parseInt(value);

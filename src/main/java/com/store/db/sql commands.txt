@@ -33,3 +33,173 @@ CREATE TABLE IF NOT EXISTS store(
     id SERIAL PRIMARY KEY,
     name VARCHAR(30) NOT NULL,
     balance INTEGER NOT NULL);
+
+
+-------------------------------------------------------------
+PROCEDURES
+
+ADMIN PROCEDURES
+
+CREATE OR REPLACE PROCEDURE adminBuyItem(
+    p_adminid INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    cart_item RECORD;
+    v_total_cost INTEGER := 0;
+    v_current_balance INTEGER;
+    v_cart_count INTEGER;
+BEGIN
+    -- Check if cart is empty
+    SELECT COUNT(*) INTO v_cart_count
+    FROM cart
+    WHERE userid = p_adminid;
+    
+    IF v_cart_count = 0 THEN
+        RAISE EXCEPTION 'Cart is empty. Add items before restocking.';
+    END IF;
+
+    -- Calculate total cost first
+    SELECT SUM(c.quantity * i.price) INTO v_total_cost
+    FROM cart c
+    JOIN items i ON c.itemid = i.itemid
+    WHERE c.userid = p_adminid;
+
+    -- Check store balance
+    SELECT balance INTO v_current_balance
+    FROM store
+    WHERE id = 1;
+
+    IF v_current_balance < v_total_cost THEN
+        RAISE EXCEPTION 'Insufficient store balance. Available: %, Required: %',
+            v_current_balance, v_total_cost;
+    END IF;
+
+    -- Loop through cart items
+    FOR cart_item IN (
+        SELECT 
+            c.itemid,
+            c.quantity,
+            i.price
+        FROM cart c
+        JOIN items i ON c.itemid = i.itemid
+        WHERE c.userid = p_adminid
+        FOR UPDATE OF i
+    ) LOOP
+        
+        -- Increase item quantity (restock)
+        UPDATE items
+        SET quantity = quantity + cart_item.quantity
+        WHERE itemid = cart_item.itemid;
+
+        -- Add to orders
+        INSERT INTO orders (itemid, userid, quantity, price)
+        VALUES (
+            cart_item.itemid,
+            p_adminid,
+            cart_item.quantity,
+            cart_item.price
+        );
+
+        -- Decrease store balance
+        UPDATE store
+        SET balance = balance - (cart_item.price * cart_item.quantity)
+        WHERE id = 1;
+
+    END LOOP;
+
+    -- Delete cart
+    DELETE FROM cart
+    WHERE userid = p_adminid;
+
+    -- Success message
+    RAISE NOTICE 'Restock complete! Total spent: %, Items restocked: %',
+        v_total_cost, v_cart_count;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE WARNING 'Restock failed: %', SQLERRM;
+        ROLLBACK;
+        RAISE;
+END;
+$$;
+
+----------------------------------
+CUSTOMER PROCEDURE
+CREATE OR REPLACE PROCEDURE CUSTOMER_CHECKOUT (P_USERID INTEGER) LANGUAGE PLPGSQL AS '
+DECLARE
+    cart_item RECORD;
+    v_item_price INTEGER;
+    v_total_cost INTEGER := 0;
+    v_cart_count INTEGER;
+BEGIN
+    -- Check if cart is empty
+    SELECT COUNT(*) INTO v_cart_count
+    FROM cart
+    WHERE userid = p_userid;
+    
+    IF v_cart_count = 0 THEN
+        RAISE EXCEPTION ''Cart is empty. Add items before checkout.'';
+    END IF;
+
+    -- Loop through each cart item
+    FOR cart_item IN (
+        SELECT 
+            c.itemid,
+            c.quantity,
+            i.price,
+            i.quantity AS stock_available
+        FROM cart c
+        JOIN items i ON c.itemid = i.itemid
+        WHERE c.userid = p_userid
+        FOR UPDATE OF i
+    ) LOOP
+        
+        -- Check stock
+        IF cart_item.stock_available < cart_item.quantity THEN
+            RAISE EXCEPTION ''Insufficient stock for item ID %. Available: %, Requested: %'',
+                cart_item.itemid,
+                cart_item.stock_available,
+                cart_item.quantity;
+        END IF;
+
+        -- Decrease item quantity
+        UPDATE items
+        SET quantity = quantity - cart_item.quantity
+        WHERE itemid = cart_item.itemid;
+
+        -- Add to orders
+        INSERT INTO orders (itemid, userid, quantity, price)
+        VALUES (
+            cart_item.itemid,
+            p_userid,
+            cart_item.quantity,
+            cart_item.price
+        );
+
+        -- Increase store balance
+        UPDATE store
+        SET balance = balance + (cart_item.price * cart_item.quantity)
+        WHERE id = 1;
+
+        -- Track total
+        v_total_cost := v_total_cost + (cart_item.price * cart_item.quantity);
+
+    END LOOP;
+
+    -- Delete cart
+    DELETE FROM cart
+    WHERE userid = p_userid;
+
+    -- Success message
+    RAISE NOTICE ''Checkout complete! Total spent: %, Items purchased: %'',
+        v_total_cost, v_cart_count;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE WARNING ''Checkout failed: %'', SQLERRM;
+        ROLLBACK;
+        RAISE;
+END;
+';

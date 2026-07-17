@@ -41,6 +41,7 @@ public class LoginController {
      */
     public void initialize() {
         roleComboBox.getItems().addAll("Admin", "Customer");
+        roleComboBox.setValue("Admin");
 
         submitButton.setOnAction(event -> loginVerify());
         usernameField.setOnAction(event -> loginVerify());
@@ -53,7 +54,7 @@ public class LoginController {
     public void loginVerify() {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        String role = roleComboBox.getValue().toLowerCase();
+        String role = roleComboBox.getValue();
 
         // Checks if any credentail is empty
         if (role == null || role.trim().isEmpty()) {
@@ -77,7 +78,7 @@ public class LoginController {
 
                 MessageUtil.showMessage("Password Authentication", "User logged in successfully.");
                 // Store user data in session manager for other screen
-                SessionManager.logUser(userService.getUserByUsername(username, role));
+                SessionManager.logUser(userService.getUserByUsername(username, role.toLowerCase()));
 
                 // Go to dashboard by role
                 SceneManager.goToDashboard();

@@ -4,11 +4,11 @@ import com.store.model.CartItem;
 
 import java.sql.SQLException;
 
-import com.store.Transaction.Transaction;
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
 import com.store.Util.SessionManager;
 import com.store.service.CartService;
+import com.store.service.UserService;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -90,15 +90,11 @@ public class CartViewController {
     @FXML
     public void buyItem() {
         String role = SessionManager.getUser().getRole().toLowerCase();
+        int id = SessionManager.getUser().getId();
 
         try {
-            if (role.matches("admin")) {
-                if (!Transaction.adminBuysItem())
-                    throw new Exception("Error buying items");
-            } else if (role.matches("customer")) {
-                if (!Transaction.customerBuyItems())
-                    throw new Exception("Error buying items");
-            }
+            UserService userService = new UserService();
+            userService.buyItem(id, role);
 
             MessageUtil.showMessage("Buy Item", "Items bought successfully.");
             goBack();
