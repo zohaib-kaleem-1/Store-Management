@@ -80,14 +80,37 @@ public class UserDAO {
      * @param role
      * @return
      */
-    public List<User> listUser(String role) throws SQLException {
+    public List<User> listUser(String username, String role, int limit, int pageIndex) throws SQLException {
         List<User> list = new ArrayList<>();
 
-        String sql = "SELECT userid, name, email, contact, username FROM users WHERE role = ?;";
+        String sql = """
+                SELECT
+                	USERID,
+                	NAME,
+                	USERNAME,
+                	EMAIL,
+                	CONTACT
+                FROM
+                	USERS
+                WHERE
+                	USERNAME ILIKE '?%'
+                	AND ROLE = '?'
+                ORDER BY
+                	USERID
+                LIMIT
+                	?
+                OFFSET
+                	? * (? - 1);
+                                """;
+        ;
         try (Connection conn = Database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
 
-            stmt.setString(1, role);
+            stmt.setString(1, username);
+            stmt.setString(2, role);
+            stmt.setInt(3, limit);
+            stmt.setInt(4, limit);
+            stmt.setInt(5, pageIndex);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -120,8 +143,8 @@ public class UserDAO {
 
             if (rs.next())
                 return new User(rs.getInt("userid"), rs.getString("name"), rs.getString("email"),
-                        rs.getString("contact"), rs.getString("username"), rs.getString("password"),
-                        rs.getString("role"));
+                        rs.getString("contact"), username, rs.getString("password"),
+                        role);
             return null;
         }
     }
@@ -153,20 +176,24 @@ public class UserDAO {
         }
     }
 
-    public boolean buyItem(int userid, String role) throws SQLException {
-        String sql = "";
-        if (role.matches("admin"))
-            sql = "call adminBuyItem(?)";
-        else if (role.matches("customer"))
-            sql = "call customerBuyItem(?)";
-        else
-            throw new IllegalArgumentException("Role is not valid");
+    public int getRowCount(String role) throws SQLException {
+        String sql = """
+                SELECT
+                	COUNT(USERID)
+                FROM
+                	USERS
+                WHERE
+                	ROLE = 'admin';
+                                """;
 
         try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, userid);
+            stmt.setString(1, role);
+            ResultSet rs = stmt.executeQuery();
 
-            return stmt.executeUpdate() == 1 ? true : false;
+            if (rs.next())
+                return rs.getInt("count");
+            return 0;
         }
     }
 }

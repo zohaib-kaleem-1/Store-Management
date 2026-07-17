@@ -41,11 +41,11 @@ public class UserService {
         return userDAO.updateUser(a);
     }
 
-    public List<User> getAllUserByRole(String role) throws SQLException {
-        return userDAO.listUser(role);
+    public List<User> getAllUserByRole(String username, String role, int limit, int pageIndex) throws SQLException {
+        return userDAO.listUser(username, role, limit, pageIndex);
     }
 
-    public boolean buyItem(int id, String role) throws SQLException {
-        return userDAO.buyItem(id, role);
+    public int getRowCount(String role) throws SQLException {
+        return userDAO.getRowCount(role);
     }
 }

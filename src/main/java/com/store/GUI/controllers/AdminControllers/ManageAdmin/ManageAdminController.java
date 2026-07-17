@@ -12,9 +12,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Pagination;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ManageAdminController {
@@ -35,10 +38,25 @@ public class ManageAdminController {
     @FXML
     private TableColumn<User, Void> editColumn;
 
+    @FXML
+    private Pagination pagination;
+
+    @FXML
+    private TextField searchUsernameField;
+
+    @FXML
+    private ComboBox<Integer> rowCountComboBox;
+
     ObservableList<User> adminList = FXCollections.observableArrayList();
+    UserService userService = new UserService();
 
     @FXML
     public void initialize() {
+        rowCountComboBox.getItems().addAll(10, 20, 30, 50, 100);
+        rowCountComboBox.setValue(20);
+
+        pagination.setMaxPageIndicatorCount(userService.getRowCount("admin"));
+
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
