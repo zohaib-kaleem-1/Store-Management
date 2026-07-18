@@ -11,19 +11,15 @@ public class DashboardController {
 
     @FXML
     public void goToManageAdminView() {
-        SceneManager.switchScene("/com/store/views/adminviews/manageadmin/manageadminview.fxml", "Manage Admins");
+        SceneManager.switchScene("/com/store/views/adminviews/manageuser/manageuserview.fxml", "Manage Admins",
+                "admin");
     }
 
     @FXML
     public void goToManageCustomerView() {
-        SceneManager.switchScene("/com/store/views/adminviews/managecustomer/managecustomerview.fxml",
-                "Manage Customer");
+        SceneManager.switchScene("/com/store/views/adminviews/manageuser/manageuserview.fxml",
+                "Manage Customer", "customer");
 
-    }
-
-    @FXML
-    public void goToBuyItemView() {
-        SceneManager.switchScene("/com/store/views/buyitem/buyitemview.fxml", "Buy Item");
     }
 
     @FXML
@@ -57,5 +53,10 @@ public class DashboardController {
         } catch (Exception e) {
             MessageUtil.showMessage("Error", e.getMessage());
         }
+    }
+
+    @FXML
+    public void goToChangePasswordView() {
+        SceneManager.switchScene("/com/store/views/changepasswordview.fxml", "Change Password");
     }
 }

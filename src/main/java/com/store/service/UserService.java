@@ -45,7 +45,11 @@ public class UserService {
         return userDAO.listUser(username, role, limit, pageIndex);
     }
 
-    public int getRowCount(String role) throws SQLException {
-        return userDAO.getRowCount(role);
+    public int getRowCount(String username, String role) throws SQLException {
+        return userDAO.getRowCount(username, role);
+    }
+
+    public boolean changePassword(String newPassword, int userId) throws SQLException {
+        return userDAO.changePassword(userId, newPassword);
     }
 }

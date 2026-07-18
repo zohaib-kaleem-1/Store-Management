@@ -27,7 +27,7 @@
             <Font size="20.0" />
          </font>
       </Button>
-      <Button layoutX="423.0" layoutY="260.0" mnemonicParsing="false" onAction="#goToManageAccountView" prefHeight="33.0" prefWidth="227.0" text="Manage Account">
+      <Button layoutX="423.0" layoutY="191.0" mnemonicParsing="false" onAction="#goToManageAccountView" prefHeight="33.0" prefWidth="227.0" text="Manage Account">
          <font>
             <Font size="20.0" />
          </font>
@@ -37,17 +37,17 @@
             <Font size="20.0" />
          </font>
       </Button>
-      <Button layoutX="423.0" layoutY="191.0" mnemonicParsing="false" onAction="#goToOrderView" prefHeight="33.0" prefWidth="227.0" text="View Order">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
-      <Button layoutX="423.0" layoutY="126.0" mnemonicParsing="false" onAction="#goToBuyItemView" prefHeight="33.0" prefWidth="227.0" text="Buy Item">
+      <Button layoutX="423.0" layoutY="126.0" mnemonicParsing="false" onAction="#goToOrderView" prefHeight="33.0" prefWidth="227.0" text="View Order">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
       <Button layoutX="61.0" layoutY="324.0" mnemonicParsing="false" onAction="#viewBalance" prefHeight="33.0" prefWidth="227.0" text="View Balance">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button layoutX="423.0" layoutY="260.0" mnemonicParsing="false" onAction="#goToChangePasswordView" prefHeight="33.0" prefWidth="227.0" text="Change Password">
          <font>
             <Font size="20.0" />
          </font>

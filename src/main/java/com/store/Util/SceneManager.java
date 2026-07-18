@@ -44,8 +44,8 @@ public class SceneManager {
 
             // Add to scene history
             node.add(new SceneHistoryNode(fxmlPath, title));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            MessageUtil.showError("Scene Manager", e.getMessage());
         }
     }
 
@@ -77,14 +77,20 @@ public class SceneManager {
      */
     public static void goBack() {
         try {
+            if (node == null || node.isEmpty())
+                throw new Exception("Nowhere to go ");
 
             // remove current scene from node history
             node.removeLast();
 
+            if (node == null || node.isEmpty())
+                throw new Exception("Nowhere to go ");
+            else
+                loadScene(node.getLast().getFxmlPath(), node.getLast().getTitle());
+
             // loading previous scene
-            loadScene(node.getLast().getFxmlPath(), node.getLast().getTitle());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            MessageUtil.showError("Scene Manager", e.getMessage());
         }
     }
 
@@ -98,11 +104,6 @@ public class SceneManager {
         String role = SessionManager.getUser().getRole();
         SceneManager.switchScene("/com/store/views/" + role + "views/dashboardview.fxml",
                 (role + " Menu").toUpperCase());
-    }
-
-    // Go to manage account view according to role
-    public static void goToManageAccount() {
-        switchScene("/com/store/views/manageaccountview.fxml", "Manage Account");
     }
 
     /**
@@ -128,8 +129,9 @@ public class SceneManager {
             primaryStage.setTitle(title);
             primaryStage.show();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            node.add(new SceneHistoryNode(fxmlPath, title));
+        } catch (Exception e) {
+            MessageUtil.showError("Scene Manager", e.getMessage());
         }
     }
 

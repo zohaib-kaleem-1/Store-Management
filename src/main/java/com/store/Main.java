@@ -1,6 +1,8 @@
 package com.store;
 
 import com.store.Util.SceneManager;
+import com.store.Util.SessionManager;
+import com.store.service.UserService;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -13,7 +15,8 @@ public class Main extends Application {
             SceneManager.setStage(primaryStage);
 
             // switch to login view
-            SceneManager.goToLogin();
+            SessionManager.logUser(new UserService().getUserByUsername("temp", "admin"));
+            SceneManager.goToDashboard();
         } catch (Exception e) {
             e.printStackTrace();
         }

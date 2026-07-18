@@ -26,8 +26,8 @@ public class ItemService {
         return itemDAO.updateItem(a);
     }
 
-    public List<Item> display() throws SQLException {
-        return itemDAO.listItems();
+    public List<Item> display(String itemName, int limit, int pageIndex) throws SQLException {
+        return itemDAO.listItems(itemName, limit, pageIndex);
     }
 
     public List<Item> displayAvailableItems() throws SQLException {
@@ -40,5 +40,9 @@ public class ItemService {
 
     public boolean decreaseQuantity(Connection conn, int id, int quantity) throws SQLException {
         return itemDAO.increaseQuantity(conn, id, quantity);
+    }
+
+    public int getRowCount(String itemName) throws SQLException {
+        return itemDAO.getRowCount(itemName);
     }
 }

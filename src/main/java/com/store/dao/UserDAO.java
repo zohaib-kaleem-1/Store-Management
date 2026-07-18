@@ -60,15 +60,14 @@ public class UserDAO {
      */
 
     public boolean updateUser(User user) throws SQLException {
-        String sql = "UPDATE users SET name = ?, email = ?, contact = ?, password = ? WHERE userid = ?;";
+        String sql = "UPDATE users SET name = ?, email = ?, contact = ? WHERE userid = ?;";
 
         try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.getName());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getContact());
-            stmt.setString(4, PasswordAuthUtil.encoder(user.getPassword()));
-            stmt.setInt(5, user.getId());
+            stmt.setInt(4, user.getId());
 
             return stmt.executeUpdate() == 1 ? true : false;
         }
@@ -93,24 +92,24 @@ public class UserDAO {
                 FROM
                 	USERS
                 WHERE
-                	USERNAME ILIKE '?%'
-                	AND ROLE = '?'
+                	USERNAME ILIKE ?
+                	AND ROLE = ?
                 ORDER BY
                 	USERID
                 LIMIT
                 	?
                 OFFSET
-                	? * (? - 1);
+                	(? * ?);
                                 """;
-        ;
         try (Connection conn = Database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
 
-            stmt.setString(1, username);
-            stmt.setString(2, role);
+            stmt.setString(1, username + "%");
+            stmt.setString(2, role.toLowerCase());
             stmt.setInt(3, limit);
             stmt.setInt(4, limit);
             stmt.setInt(5, pageIndex);
+
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -133,8 +132,16 @@ public class UserDAO {
      */
     public User getUserByUsername(String username, String role) throws SQLException {
         try (Connection conn = Database.getConnection()) {
-            String sql = "SELECT * FROM users WHERE username = ? and role = ?;";
-
+            String sql = """
+                    SELECT
+                        name,
+                        contact,
+                        email,
+                        userid
+                    FROM
+                        users
+                    WHERE
+                        username = ? and role = ?;""";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             stmt.setString(2, role);
@@ -143,7 +150,7 @@ public class UserDAO {
 
             if (rs.next())
                 return new User(rs.getInt("userid"), rs.getString("name"), rs.getString("email"),
-                        rs.getString("contact"), username, rs.getString("password"),
+                        rs.getString("contact"), username, "",
                         role);
             return null;
         }
@@ -176,24 +183,42 @@ public class UserDAO {
         }
     }
 
-    public int getRowCount(String role) throws SQLException {
+    public int getRowCount(String username, String role) throws SQLException {
         String sql = """
                 SELECT
                 	COUNT(USERID)
                 FROM
                 	USERS
                 WHERE
-                	ROLE = 'admin';
+                	ROLE = ? and username ILIKE ?;
                                 """;
 
         try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, role);
+            stmt.setString(1, role.toLowerCase());
+            stmt.setString(2, username + "%");
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next())
                 return rs.getInt("count");
             return 0;
+        }
+    }
+
+    public boolean changePassword(int userId, String newPassword) throws SQLException {
+        String sql = """
+                Update users
+                SET password = ?
+                WHERE
+                userid = ?
+                """;
+
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, PasswordAuthUtil.encoder(newPassword));
+            stmt.setInt(2, userId);
+
+            return stmt.executeUpdate() == 1 ? true : false;
         }
     }
 }

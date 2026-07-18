@@ -27,13 +27,33 @@ public class ItemDAO {
      * @return List of Items
      */
 
-    public List<Item> listItems() throws SQLException {
+    public List<Item> listItems(String itemName, int limit, int pageIndex) throws SQLException {
         List<Item> itemList = new ArrayList<>();
-        String sqlQuery = "Select * from Items;";
+        String sql = """
+                SELECT
+                	itemid,
+                	itemname,
+                	price,
+                	quantity
+                FROM
+                	items
+                WHERE
+                	itemname ILIKE ?
+                ORDER BY
+                	itemid
+                LIMIT
+                	?
+                OFFSET
+                	(? * ?);
+                            """;
 
         try (Connection conn = Database.getConnection();
-                Statement stmt = conn.createStatement()) {
-            ResultSet rs = stmt.executeQuery(sqlQuery);
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, itemName + "%");
+            stmt.setInt(2, limit);
+            stmt.setInt(3, limit);
+            stmt.setInt(4, pageIndex);
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Item item = new Item(
@@ -173,6 +193,27 @@ public class ItemDAO {
             stmt.setInt(2, id);
 
             return stmt.executeUpdate() == 1 ? true : false;
+        }
+    }
+
+    public int getRowCount(String itemName) throws SQLException {
+        String sql = """
+                SELECT
+                	COUNT(itemid)
+                FROM
+                	ITEMS
+                WHERE
+                	itemName ILIKE ?;
+                                """;
+
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, itemName + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next())
+                return rs.getInt("count");
+            return 0;
         }
     }
 }
