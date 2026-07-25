@@ -49,12 +49,12 @@ public class CartDAO {
             /**
              * Insert values into query preventing the SQL Injection
              */
-            stmt.setInt(1, c.getItemId());
+            stmt.setInt(1, c.getId());
             stmt.setInt(2, c.getCustomerId());
             stmt.setInt(3, c.getQuantity());
             stmt.setInt(4, c.getQuantity());
             stmt.setInt(5, c.getCustomerId());
-            stmt.setInt(6, c.getItemId());
+            stmt.setInt(6, c.getId());
 
             return stmt.executeUpdate() == 1 ? true : false;
         }
@@ -109,7 +109,7 @@ public class CartDAO {
         List<CartItem> list = new ArrayList<>();
 
         // Select data from item and cart table using join query to show to customer
-        String sql = "SELECT c.cartid, c.itemid, c.userid , c.quantity, i.itemname, i.price, i.quantity AS quantityInStore FROM cart c JOIN items i ON i.itemid = c.itemid JOIN users u ON u.userid = c.userid WHERE u.userid = ?; ";
+        String sql = "SELECT c.cartid, c.itemid, c.userid ,u.name, c.quantity, i.itemname, i.price, i.quantity AS quantityInStore FROM cart c JOIN items i ON i.itemid = c.itemid JOIN users u ON u.userid = c.userid WHERE u.userid = ?; ";
 
         try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -117,9 +117,16 @@ public class CartDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                list.add(new CartItem(rs.getInt("cartid"), rs.getInt("itemid"), rs.getString("itemname"),
-                        rs.getInt("userid"), "", rs.getInt("price"), rs.getInt("quantity"),
-                        rs.getInt("quantityInStore")));
+                list.add(new CartItem(
+                    rs.getInt("cartid"),
+                    rs.getString("itemname"),
+                    rs.getInt("itemid"),
+                    rs.getString("name"),
+                    rs.getInt("userid"),
+                    rs.getInt("quantity"),
+                    rs.getInt("quantityInStore"),
+                    rs.getInt("price")
+                ));
             }
         }
 

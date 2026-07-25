@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ComboBox?>
@@ -9,7 +10,8 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="727.0" prefWidth="848.0" scaleShape="false" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.GUI.controllers.AdminControllers.ManageItem.ManageItemController">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="727.0" prefWidth="848.0" scaleShape="false" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.GUI.controllers.AdminControllers.ManageItem.ManageItemController">
     <children>
         <Label layoutX="-1.0" layoutY="14.0" prefHeight="57.0" prefWidth="848.0" style="-fx-alignment: center;" text="Manage Item" textAlignment="CENTER">
             <font>
@@ -32,7 +34,8 @@
         <ButtonBar layoutX="33.0" layoutY="93.0" prefHeight="40.0" prefWidth="775.0">
             <buttons>
                 <TextField fx:id="searchItemNameField" promptText="Search By Item Name" />
-                <Button fx:id="addItemButton" mnemonicParsing="false" onAction="#addItem" text="Add Item" />
+                <Button  mnemonicParsing="false" onAction="#goToUpdateItem" prefHeight="26.0" text="Update Item" />
+            <Button mnemonicParsing="false" onAction="#goToAddItem" text="Add Item" />
             </buttons>
         </ButtonBar>
         <ComboBox fx:id="rowCountComboBox" layoutX="734.0" layoutY="676.0" prefHeight="26.0" prefWidth="74.0" />

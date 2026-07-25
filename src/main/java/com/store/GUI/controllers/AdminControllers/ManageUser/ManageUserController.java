@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -40,6 +41,9 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
 
     @FXML
     private Pagination pagination;
+
+    @FXML
+    private Button updateUserButton;
 
     @FXML
     private Button addUserButton;
@@ -85,6 +89,8 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
         pagination.currentPageIndexProperty().addListener(event -> {
             fetchData();
         });
+
+        userTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
 
     private void fetchData() {
@@ -119,8 +125,23 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
     }
 
     @FXML
-    public void addAdmin() {
-        SceneManager.switchScene("/com/store/views/adminviews/manageadmin/addadminview.fxml", "Add Admin");
+    public void addUser() {
+        SceneManager.switchScene("/com/store/views/adminviews/manageuser/addupdateuserview.fxml", "Add " + role,
+                new User("", "", "", "", "", role));
+    }
+
+    @FXML
+    public void updateUser() {
+        ObservableList<User> userToUpdate = userTable.getSelectionModel().getSelectedItems();
+        
+        if(userToUpdate == null || userToUpdate.isEmpty()){
+            MessageUtil.showError("User Manager", "No Item Selected");
+            return;
+        }
+        
+        SceneManager.switchScene("/com/store/views/adminviews/manageuser/addupdateuserview.fxml", "Update " + role,
+                userToUpdate.get(0));
+
     }
 
     @Override
@@ -129,6 +150,7 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
         this.role = data;
         pageTitleLabel.setText("Manage " + role);
         addUserButton.setText("Add " + role);
+        updateUserButton.setText("Update " + role);
 
         updatePageCount();
         fetchData();

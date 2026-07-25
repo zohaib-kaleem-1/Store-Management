@@ -6,15 +6,16 @@ public class Item {
     private int price;
     private int quantity;
 
-    public Item(int id, String itemName, int price, int quantity) {
-        this(itemName, price, quantity);
-        this.id = id;
-    }
-
-    public Item(String itemName, int price, int quantity) {
+    public Item(String itemName, int price, int quantity){
         this.name = itemName;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    public Item(int id, String itemName, int price, int quantity)
+    {
+        this(itemName, price, quantity);
+        this.id = id;
     }
 
     public int getId() {
@@ -33,12 +34,12 @@ public class Item {
         return quantity;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int itemId) {
+        this.id = itemId;
     }
 
-    public void setName(String itemName) {
-        this.name = itemName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setPrice(int price) {

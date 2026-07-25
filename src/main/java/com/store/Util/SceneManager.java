@@ -1,148 +1,96 @@
 package com.store.Util;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- * 
- * SceneManager
- * 
- * Scene manager util is to handle switching windows and stage controller
- */
 public class SceneManager {
     private static Stage primaryStage;
+    private static Stack<SceneHistoryNode> history;
 
-    private static List<SceneHistoryNode> node;
-
-    /**
-     * Setting up stage for later window switching
-     * 
-     * @param stage the stage on which we will setup scenes
-     */
     public static void setStage(Stage stage) {
         primaryStage = stage;
-        node = new ArrayList<SceneHistoryNode>();
+        history = new Stack<>();
     }
 
-    /**
-     * Switching scene between function
-     * add current scene to history
-     * 
-     * @param fxmlPath
-     * @param title
-     */
     public static void switchScene(String fxmlPath, String title) {
         try {
-            // Load Scene
             loadScene(fxmlPath, title);
-
-            // Add to scene history
-            node.add(new SceneHistoryNode(fxmlPath, title));
+            history.push(new SceneHistoryNode(fxmlPath, title));
         } catch (Exception e) {
             MessageUtil.showError("Scene Manager", e.getMessage());
         }
     }
 
-    /**
-     * Switching scenes between windows
-     * 
-     * @param fxmlPath the path to view file
-     * @param title    title of the window
-     */
-    public static void loadScene(String fxmlPath, String title) throws IOException {
+    public static <T> void switchScene(String fxmlPath, String title, T data) {
         try {
-            // Loading the fxml file
-            FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
-
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            primaryStage.setTitle(title);
-
-            // adding scene to the stage
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } finally {
-
+            loadScene(fxmlPath, title, data);
+            history.push(new SceneHistoryNode(fxmlPath, title, data));
+        } catch (Exception e) {
+            MessageUtil.showError("Scene Manager", e.getMessage());
         }
     }
 
-    /**
-     * Going back to last scene
-     */
+    private static void loadScene(String fxmlPath, String title) throws IOException {
+        FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        primaryStage.setTitle(title);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private static <T> void loadScene(String fxmlPath, String title, T data) throws IOException {
+        FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
+        Parent root = loader.load();
+        
+        Object controller = loader.getController();
+        if (controller instanceof DataReceiver) {
+            ((DataReceiver<T>) controller).setData(data);
+        }
+        
+        Scene scene = new Scene(root);
+        primaryStage.setTitle(title);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
     public static void goBack() {
         try {
-            if (node == null || node.isEmpty())
-                throw new Exception("Nowhere to go ");
+            if (history == null || history.isEmpty()) {
+                throw new Exception("No previous scene to go back to");
+            }
 
-            // remove current scene from node history
-            node.removeLast();
+            history.pop();
 
-            if (node == null || node.isEmpty())
-                throw new Exception("Nowhere to go ");
-            else
-                loadScene(node.getLast().getFxmlPath(), node.getLast().getTitle());
+            if (history == null || history.isEmpty()) {
+                throw new Exception("No previous scene to go back to");
+            }
 
-            // loading previous scene
+            SceneHistoryNode previousNode = history.peek();
+            if (previousNode.getData() == null) {
+                loadScene(previousNode.getFxmlPath(), previousNode.getTitle());
+            } else {
+                loadScene(previousNode.getFxmlPath(), previousNode.getTitle(), previousNode.getData());
+            }
         } catch (Exception e) {
             MessageUtil.showError("Scene Manager", e.getMessage());
         }
     }
 
-    // Go to login menu
     public static void goToLogin() {
         switchScene("/com/store/views/loginview.fxml", "Login");
     }
 
-    // Go to dashboard according to current user role
     public static void goToDashboard() {
         String role = SessionManager.getUser().getRole();
-        SceneManager.switchScene("/com/store/views/" + role + "views/dashboardview.fxml",
-                (role + " Menu").toUpperCase());
+        switchScene("/com/store/views/" + role + "views/dashboardview.fxml", (role + " Menu").toUpperCase());
     }
 
-    /**
-     * Switching scene with transmitting data using template
-     * 
-     * @param <T>      The template of which the data will be transferred
-     * @param fxmlPath The path to the file
-     * @param title    Title of the window
-     * @param data     The data
-     */
-    public static <T> void switchScene(String fxmlPath, String title, T data) {
-        try {
-            FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
-            Parent root = loader.load();
-
-            // If the controller implements a DataReceiver interface, pass the data
-            Object controller = loader.getController();
-            if (controller instanceof DataReceiver) {
-                ((DataReceiver<T>) controller).setData(data);
-            }
-
-            primaryStage.setScene(new Scene(root));
-            primaryStage.setTitle(title);
-            primaryStage.show();
-
-            node.add(new SceneHistoryNode(fxmlPath, title));
-        } catch (Exception e) {
-            MessageUtil.showError("Scene Manager", e.getMessage());
-        }
-    }
-
-    /**
-     * 
-     * DataReceiver
-     * 
-     * Receiver must implement the interface and override this function
-     * 
-     * @param <T>
-     */
     public interface DataReceiver<T> {
         void setData(T data);
     }
@@ -151,25 +99,41 @@ public class SceneManager {
 class SceneHistoryNode {
     private String fxmlPath;
     private String title;
+    private Object data;
 
     public SceneHistoryNode(String path, String title) {
         this.fxmlPath = path;
         this.title = title;
+        this.data = null;
+    }
+
+    public SceneHistoryNode(String path, String title, Object data) {
+        this.fxmlPath = path;
+        this.title = title;
+        this.data = data;
     }
 
     public String getFxmlPath() {
         return fxmlPath;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
     public void setFxmlPath(String fxmlPath) {
         this.fxmlPath = fxmlPath;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
     }
 }

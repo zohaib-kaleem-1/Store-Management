@@ -7,15 +7,13 @@ import java.sql.SQLException;
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
 import com.store.service.ItemService;
-import com.store.service.UserService;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -36,9 +34,6 @@ public class ManageItemController {
 
     @FXML
     private Pagination pagination;
-
-    @FXML
-    private Button addItemButton;
 
     @FXML
     private TextField searchItemNameField;
@@ -67,7 +62,7 @@ public class ManageItemController {
             fetchData();
         });
 
-        searchItemNameField.textProperty().addListener(event -> {
+        searchItemNameField.setOnAction(event -> {
             updatePageCount();
             fetchData();
         });
@@ -78,6 +73,8 @@ public class ManageItemController {
 
         updatePageCount();
         fetchData();
+
+        itemTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
 
     private void fetchData() {
@@ -87,7 +84,7 @@ public class ManageItemController {
                     searchItemNameField.getText() != null ? searchItemNameField.getText().trim() : "",
                     rowCountComboBox.getValue(), pagination.getCurrentPageIndex()));
         } catch (SQLException e) {
-            MessageUtil.showError("User Data Reading error", e.getMessage());
+            MessageUtil.showError("Item Data Reading error", e.getMessage());
         }
 
         itemTable.setItems(itemList);
@@ -111,7 +108,17 @@ public class ManageItemController {
     }
 
     @FXML
-    public void addItem() {
-        SceneManager.switchScene("/com/store/views/adminviews/manageitem/additemview.fxml", "Add Admin");
+    public void goToAddItem() {
+        SceneManager.switchScene("/com/store/views/adminviews/manageitem/addupdateitemview.fxml", "Add Item", null);
+    }
+
+    @FXML
+    private void goToUpdateItem(){
+        ObservableList<Item> selectedItem = itemTable.getSelectionModel().getSelectedItems();
+
+        if(selectedItem == null || selectedItem.isEmpty())
+            MessageUtil.showError("Item Update Manager", "No item selected yet");
+
+        SceneManager.switchScene("/com/store/views/adminviews/manageitem/addupdateitemview.fxml", "Update Item", selectedItem.get(0));
     }
 }

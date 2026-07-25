@@ -15,7 +15,9 @@ public class Main extends Application {
             SceneManager.setStage(primaryStage);
 
             // switch to login view
-            SessionManager.logUser(new UserService().getUserByUsername("temp", "admin"));
+            // SceneManager.goToLogin();
+
+            SessionManager.logUser(new UserService().getUserByUsername("tempp", "customer"));
             SceneManager.goToDashboard();
         } catch (Exception e) {
             e.printStackTrace();

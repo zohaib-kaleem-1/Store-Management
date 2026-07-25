@@ -39,11 +39,31 @@ public class ValidationUtil {
     public static boolean validateName(String name) throws Exception {
         validateString(name, "Name");
 
-        if (!name.matches("^[A-Za-z\\- ]+{3,30}$"))
+        if (!name.matches("^[A-Za-z\\- ]{3,30}$"))
             throw new IllegalFormatException("Name contains invalid characters");
 
         if (name.trim().replaceAll("-", "").length() < 3)
             throw new Exception("Name must be of at least 3 alphabets");
+
+        return true;
+    }
+
+    /**
+     * Validate name like
+     * can't contain symbol, digits etc
+     * 
+     * @param name the input string to validate
+     * @return true if follows all conditions
+     * @throws Exception
+     */
+    public static boolean validateItemName(String itemName) throws Exception {
+        validateString(itemName, "Item Name");
+
+        if (!itemName.matches("^[A-Za-z\\- 1-9\\.]{3,30}$"))
+            throw new IllegalFormatException("Item Name contains invalid characters");
+
+        if (itemName.trim().replaceAll("-", "").length() < 3)
+            throw new Exception("Item Name Name must be of at least 3 alphabets");
 
         return true;
     }
