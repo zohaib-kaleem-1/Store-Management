@@ -25,7 +25,12 @@ public class CartService {
         return cartDAO.removeCart(id);
     }
 
-    public List<CartItem> listFromCartByCustomerId(int id) throws SQLException {
-        return cartDAO.listFromCartByCustomerId(id);
+    public List<CartItem> listFromCartByCustomerId(int customerId, String itemName, int limit, int pageIndex)
+            throws SQLException {
+        return cartDAO.listFromCartByCustomerId(customerId, itemName, limit, pageIndex);
+    }
+
+    public int getRowCount(int customerId, String itemName) throws SQLException {
+        return cartDAO.getRowCount(customerId, itemName);
     }
 }

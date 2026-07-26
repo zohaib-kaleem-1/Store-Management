@@ -98,38 +98,74 @@ public class CartDAO {
         }
     }
 
-    /**
-     * List all items of specific customer that are in cart
-     * 
-     * @param id ID of customer of whom data is to be fetched
-     * @return Returns list of items in cart or null if error is thrown
-     * @throws SQLException Sends exception to where it is called
-     */
-    public List<CartItem> listFromCartByCustomerId(int id) throws SQLException {
-        List<CartItem> list = new ArrayList<>();
-
-        // Select data from item and cart table using join query to show to customer
-        String sql = "SELECT c.cartid, c.itemid, c.userid ,u.name, c.quantity, i.itemname, i.price, i.quantity AS quantityInStore FROM cart c JOIN items i ON i.itemid = c.itemid JOIN users u ON u.userid = c.userid WHERE u.userid = ?; ";
+    public int getRowCount(int customerId, String itemName) throws SQLException {
+        String sql = """
+                SELECT
+                	COUNT(C.CARTID)
+                FROM
+                	CART C
+                	JOIN ITEMS I ON I.ITEMID = C.ITEMID
+                WHERE
+                	C.USERID = ?
+                	AND I.ITEMNAME LIKE ?;
+                                                """;
 
         try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
+            stmt.setInt(1, customerId);
+            stmt.setString(2, "%" + itemName + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next())
+                return rs.getInt("count");
+            return 0;
+        }
+    }
+
+    public List<CartItem> listFromCartByCustomerId(int customerId, String itemName, int limit, int pageIndex)
+            throws SQLException {
+        List<CartItem> cartList = new ArrayList<>();
+
+        // Select data from item and cart table using join query to show to customer
+        String sql = """
+                SELECT
+                    c.cartId,
+                    c.quantity,
+                    c.itemId,
+                    i.itemName,
+                    i.price,
+                    i.quantity AS quantityAvailable
+                FROM
+                    cart c
+                JOIN
+                    items i
+                ON
+                    i.itemid = c.itemid
+                WHERE
+                    c.userid = ?
+                AND
+                    i.itemName ILIKE ?
+                ORDER BY c.cartid
+                LIMIT ?
+                OFFSET ? ;
+                """;
+
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, customerId);
+            stmt.setString(2, "%" + itemName + "%");
+            stmt.setInt(3, limit);
+            stmt.setInt(4, limit * pageIndex);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                list.add(new CartItem(
-                        rs.getInt("cartid"),
-                        rs.getString("itemname"),
-                        rs.getInt("itemid"),
-                        rs.getString("name"),
-                        rs.getInt("userid"),
-                        rs.getInt("quantity"),
-                        rs.getInt("quantityInStore"),
-                        rs.getInt("price")));
+                cartList.add(new CartItem(
+                        rs.getInt("cartid"), rs.getString("itemName"), rs.getInt("itemid"), rs.getInt("quantity"),
+                        rs.getInt("quantityAvailable"), rs.getInt("price")));
             }
         }
 
-        return list;
+        return cartList;
     }
 
     /**

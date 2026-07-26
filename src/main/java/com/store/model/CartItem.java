@@ -6,22 +6,17 @@ public class CartItem {
     private String itemName;
     private int itemId;
 
-    private String customerName;
-    private int customerId;
-
     private int quantity;
     private int quantityInStore;
 
     private int priceOfEachItem;
     private int totalPrice;
 
-    public CartItem(String itemName, int itemId, String customerName, int customerId, int quantity, int quantityInStore,
+    public CartItem(String itemName, int itemId, int quantity, int quantityInStore,
             int priceOfEachItem) {
 
         this.itemName = itemName;
         this.itemId = itemId;
-        this.customerId = customerId;
-        this.customerName = customerName;
         this.quantity = quantity;
         this.quantityInStore = quantityInStore;
         this.priceOfEachItem = priceOfEachItem;
@@ -29,19 +24,11 @@ public class CartItem {
         this.totalPrice = quantity * priceOfEachItem;
     }
 
-    public CartItem(int id, String itemName, int itemId, String customerName, int customerId, int quantity,
+    public CartItem(int id, String itemName, int itemId, int quantity,
             int quantityInStore,
             int priceOfEachItem) {
-        this(itemName, itemId, customerName, customerId, quantity, quantityInStore, priceOfEachItem);
+        this(itemName, itemId, quantity, quantityInStore, priceOfEachItem);
         this.id = id;
-    }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public String getCustomerName() {
-        return customerName;
     }
 
     public int getId() {
@@ -70,14 +57,6 @@ public class CartItem {
 
     public int getTotalPrice() {
         return totalPrice;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
     }
 
     public void setId(int id) {

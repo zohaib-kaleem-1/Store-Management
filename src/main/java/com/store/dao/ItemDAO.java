@@ -68,33 +68,6 @@ public class ItemDAO {
     }
 
     /**
-     * List all items from database which are available (quantity greater then 0)
-     * 
-     * @return List of Items
-     */
-    public List<Item> listAvailableItems() throws SQLException {
-        List<Item> itemList = new ArrayList<>();
-
-        try (Connection conn = Database.getConnection();
-                Statement stmt = conn.createStatement();) {
-
-            String sqlQuery = "Select * from Items WHERE quantity>0;";
-            ResultSet rs = stmt.executeQuery(sqlQuery);
-
-            while (rs.next()) {
-                Item item = new Item(
-                        rs.getInt("itemid"),
-                        rs.getString("itemname"),
-                        rs.getInt("price"),
-                        rs.getInt("quantity"));
-                itemList.add(item);
-            }
-        }
-
-        return itemList;
-    }
-
-    /**
      * Add new item to database
      * 
      * @param item the item to be added
@@ -208,7 +181,7 @@ public class ItemDAO {
 
         try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, itemName + "%");
+            stmt.setString(1, "%" + itemName + "%");
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next())

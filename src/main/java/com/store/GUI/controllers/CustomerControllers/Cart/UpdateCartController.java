@@ -1,16 +1,17 @@
-package com.store.GUI.controllers.CustomerControllers.BuyItem;
+package com.store.GUI.controllers.CustomerControllers.Cart;
 
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
 import com.store.Util.SessionManager;
 import com.store.Util.ValidationUtil;
+import com.store.model.CartItem;
 import com.store.model.Item;
 import com.store.service.CartService;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
-public class BuyItemDialogueController implements SceneManager.DataReceiver<Item> {
+public class UpdateCartController implements SceneManager.DataReceiver<CartItem> {
     @FXML
     private TextField itemNameField;
     @FXML
@@ -22,7 +23,7 @@ public class BuyItemDialogueController implements SceneManager.DataReceiver<Item
     @FXML
     private TextField totalPriceField;
 
-    private Item currentItemToCart;
+    private CartItem itemToUpdate;
 
     @FXML
     public void goBack() {
@@ -41,30 +42,8 @@ public class BuyItemDialogueController implements SceneManager.DataReceiver<Item
         });
     }
 
-    @FXML
-    public void addToCart() {
-        try {
-            int quantityToBuy = ValidationUtil.validateIntInput(quantityField.getText());
-            int quantityInStore = currentItemToCart.getQuantity();
-
-            if (quantityInStore < quantityToBuy)
-                throw new Exception("Quantity must be less than quantity in store.");
-
-            if (new CartService().addToCart(currentItemToCart.getId(), SessionManager.getUser().getId(),
-                    quantityToBuy)) {
-                MessageUtil.showMessage("Buy Item Manager", "Item added to cart");
-                goBack();
-            } else
-                MessageUtil.showError("Buy Item Manager", "Failed to add item to cart");
-
-        } catch (Exception e) {
-            MessageUtil.showError("Buy Item Manager", e.getMessage());
-
-        }
-    }
-
     @Override
-    public void setData(Item data) {
+    public void setData(CartItem data) {
         try {
             if (data == null)
                 MessageUtil.showError("Buy Item Manager", "Could Not Load Item Data");
