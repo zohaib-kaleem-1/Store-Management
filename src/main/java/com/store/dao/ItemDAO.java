@@ -49,7 +49,7 @@ public class ItemDAO {
 
         try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, itemName + "%");
+            stmt.setString(1, "%" + itemName + "%");
             stmt.setInt(2, limit);
             stmt.setInt(3, limit);
             stmt.setInt(4, pageIndex);

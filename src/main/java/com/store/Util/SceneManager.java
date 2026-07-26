@@ -47,12 +47,12 @@ public class SceneManager {
     private static <T> void loadScene(String fxmlPath, String title, T data) throws IOException {
         FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
         Parent root = loader.load();
-        
+
         Object controller = loader.getController();
         if (controller instanceof DataReceiver) {
             ((DataReceiver<T>) controller).setData(data);
         }
-        
+
         Scene scene = new Scene(root);
         primaryStage.setTitle(title);
         primaryStage.setScene(scene);
@@ -84,6 +84,7 @@ public class SceneManager {
 
     public static void logOut() {
         SessionManager.clear();
+        goBack();
         goBack();
     }
 

@@ -26,7 +26,7 @@ public class CartDAO {
      *                      will
      *                      be printed
      */
-    public boolean addCart(CartItem c) throws SQLException {
+    public boolean addCart(int itemId, int customerId, int quantity) throws SQLException {
 
         /**
          * Used on conflict clause to handle already present same cart item by same user
@@ -49,12 +49,12 @@ public class CartDAO {
             /**
              * Insert values into query preventing the SQL Injection
              */
-            stmt.setInt(1, c.getId());
-            stmt.setInt(2, c.getCustomerId());
-            stmt.setInt(3, c.getQuantity());
-            stmt.setInt(4, c.getQuantity());
-            stmt.setInt(5, c.getCustomerId());
-            stmt.setInt(6, c.getId());
+            stmt.setInt(1, itemId);
+            stmt.setInt(2, customerId);
+            stmt.setInt(3, quantity);
+            stmt.setInt(4, quantity);
+            stmt.setInt(5, customerId);
+            stmt.setInt(6, itemId);
 
             return stmt.executeUpdate() == 1 ? true : false;
         }
@@ -118,15 +118,14 @@ public class CartDAO {
 
             while (rs.next()) {
                 list.add(new CartItem(
-                    rs.getInt("cartid"),
-                    rs.getString("itemname"),
-                    rs.getInt("itemid"),
-                    rs.getString("name"),
-                    rs.getInt("userid"),
-                    rs.getInt("quantity"),
-                    rs.getInt("quantityInStore"),
-                    rs.getInt("price")
-                ));
+                        rs.getInt("cartid"),
+                        rs.getString("itemname"),
+                        rs.getInt("itemid"),
+                        rs.getString("name"),
+                        rs.getInt("userid"),
+                        rs.getInt("quantity"),
+                        rs.getInt("quantityInStore"),
+                        rs.getInt("price")));
             }
         }
 

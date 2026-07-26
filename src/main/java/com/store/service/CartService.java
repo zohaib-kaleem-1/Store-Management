@@ -13,8 +13,8 @@ public class CartService {
         this.cartDAO = new CartDAO();
     }
 
-    public boolean addToCart(CartItem c) throws SQLException {
-        return cartDAO.addCart(c);
+    public boolean addToCart(int itemId, int customerId, int quantity) throws SQLException {
+        return cartDAO.addCart(itemId, customerId, quantity);
     }
 
     public boolean updateCart(CartItem c) throws SQLException {

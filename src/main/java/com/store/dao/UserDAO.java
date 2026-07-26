@@ -104,7 +104,7 @@ public class UserDAO {
         try (Connection conn = Database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
 
-            stmt.setString(1, username + "%");
+            stmt.setString(1, "%" + username + "%");
             stmt.setString(2, role.toLowerCase());
             stmt.setInt(3, limit);
             stmt.setInt(4, limit);
@@ -196,7 +196,7 @@ public class UserDAO {
         try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, role.toLowerCase());
-            stmt.setString(2, username + "%");
+            stmt.setString(2, "%" + username + "%");
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next())
