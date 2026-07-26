@@ -82,8 +82,9 @@ public class SceneManager {
         }
     }
 
-    public static void goToLogin() {
-        switchScene("/com/store/views/loginview.fxml", "Login");
+    public static void logOut() {
+        SessionManager.clear();
+        goBack();
     }
 
     public static void goToDashboard() {

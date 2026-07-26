@@ -36,8 +36,7 @@ public class DashboardController {
 
     @FXML
     public void logOut() {
-        SessionManager.clear();
-        SceneManager.goBack();
+        SceneManager.logOut();
     }
 
     @FXML

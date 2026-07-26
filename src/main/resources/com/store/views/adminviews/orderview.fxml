@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="616.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label alignment="CENTER" layoutX="1.0" layoutY="24.0" prefHeight="36.0" prefWidth="860.0" text="ORDERS">
+         <font>
+            <Font name="System Bold Italic" size="25.0" />
+         </font>
+      </Label>
+      <Button layoutX="27.0" layoutY="29.0" mnemonicParsing="false" text="Go Back" />
+      <TreeTableView layoutX="27.0" layoutY="75.0" prefHeight="493.0" prefWidth="808.0">
+        <columns>
+          <TreeTableColumn prefWidth="75.0" text="Order Id" />
+          <TreeTableColumn prefWidth="89.0" text="Customer Id" />
+            <TreeTableColumn prefWidth="127.0" text="Customer Name" />
+            <TreeTableColumn prefWidth="93.0" text="Address" />
+            <TreeTableColumn prefWidth="93.0" text="Total Price" />
+            <TreeTableColumn prefWidth="93.0" text="Bought At" />
+            <TreeTableColumn prefWidth="93.0" text="OrderStatus" />
+            <TreeTableColumn prefWidth="75.0" text="Items" />
+        </columns>
+      </TreeTableView>
+   </children>
+</AnchorPane>

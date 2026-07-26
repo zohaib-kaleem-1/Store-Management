@@ -5,16 +5,16 @@ import java.util.List;
 
 public class Order {
     private int orderId;
-    private String customerName;
     private int customerId;
+    private String customerName;
     private int totalPrice;
     private Timestamp bought_at;
-    private List<Item> itemList;
+    private List<OrderItem> itemList;
     private String orderStatus;
     private String address;
 
     // when user buys something
-    public Order(int customerId, String customerName, int totalPrice, List<Item> itemList, String orderStatus,
+    public Order(int customerId, String customerName, int totalPrice, List<OrderItem> itemList, String orderStatus,
             String address) {
         this.customerId = customerId;
         this.customerName = customerName;
@@ -25,7 +25,7 @@ public class Order {
     }
 
     // when loading data from database
-    public Order(int orderId, int customerId, String customerName, int totalPrice, List<Item> itemList,
+    public Order(int orderId, int customerId, String customerName, int totalPrice, List<OrderItem> itemList,
             Timestamp bought_at, String orderStatus, String address) {
         this.customerId = customerId;
         this.customerName = customerName;
@@ -50,7 +50,7 @@ public class Order {
         return customerName;
     }
 
-    public List<Item> getItemList() {
+    public List<OrderItem> getItemList() {
         return itemList;
     }
 
@@ -74,7 +74,7 @@ public class Order {
         this.customerName = customerName;
     }
 
-    public void setItemList(List<Item> itemList) {
+    public void setItemList(List<OrderItem> itemList) {
         this.itemList = itemList;
     }
 
