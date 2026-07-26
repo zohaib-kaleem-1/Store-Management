@@ -75,8 +75,8 @@ public class CartDAO {
 
         try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.setInt(2, quantity);
+            stmt.setInt(1, quantity);
+            stmt.setInt(2, id);
 
             return stmt.executeUpdate() == 1 ? true : false;
         }
@@ -89,7 +89,7 @@ public class CartDAO {
      * @return true if item was removed from the cart
      * @throws SQLException
      */
-    public boolean removeCart(int id) throws SQLException {
+    public boolean removeItemFromCart(int id) throws SQLException {
         String sql = "DELETE from cart WHERE cartid = ?;";
         try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {

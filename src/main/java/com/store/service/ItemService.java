@@ -30,10 +30,6 @@ public class ItemService {
         return itemDAO.listItems(itemName, limit, pageIndex);
     }
 
-    public List<Item> displayAvailableItems() throws SQLException {
-        return itemDAO.listAvailableItems();
-    }
-
     public boolean increaseQuantity(Connection conn, int id, int quantity) throws SQLException {
         return itemDAO.increaseQuantity(conn, id, quantity);
     }

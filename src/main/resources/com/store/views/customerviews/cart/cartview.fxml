@@ -35,6 +35,7 @@
         <ButtonBar layoutX="33.0" layoutY="93.0" prefHeight="40.0" prefWidth="775.0">
             <buttons>
                 <TextField fx:id="searchItemNameField" prefHeight="26.0" promptText="Search By Item Name" />
+            <Button minWidth="65.0" mnemonicParsing="false" onAction="#updateItem" prefHeight="26.0" text="Update Item" />
             <Button minWidth="65.0" mnemonicParsing="false" onAction="#buyItems" prefHeight="26.0" text="Buy Items" />
             </buttons>
         </ButtonBar>

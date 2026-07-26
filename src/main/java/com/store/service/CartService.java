@@ -21,8 +21,8 @@ public class CartService {
         return cartDAO.updateQuantity(c.getId(), c.getQuantity());
     }
 
-    public boolean removeCart(int id) throws SQLException {
-        return cartDAO.removeCart(id);
+    public boolean removeItemFromCart(int id) throws SQLException {
+        return cartDAO.removeItemFromCart(id);
     }
 
     public List<CartItem> listFromCartByCustomerId(int customerId, String itemName, int limit, int pageIndex)

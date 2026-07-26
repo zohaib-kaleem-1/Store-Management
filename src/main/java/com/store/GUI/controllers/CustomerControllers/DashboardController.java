@@ -12,7 +12,7 @@ public class DashboardController {
 
     @FXML
     public void goToViewCart() {
-        SceneManager.switchScene("/com/store/views/customerviews/cartview.fxml", "My Cart");
+        SceneManager.switchScene("/com/store/views/customerviews/cart/cartview.fxml", "My Cart");
     }
 
     @FXML

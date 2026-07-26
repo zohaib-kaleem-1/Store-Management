@@ -85,7 +85,6 @@ public class SceneManager {
     public static void logOut() {
         SessionManager.clear();
         goBack();
-        goBack();
     }
 
     public static void goToDashboard() {

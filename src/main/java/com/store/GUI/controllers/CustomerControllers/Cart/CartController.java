@@ -106,6 +106,19 @@ public class CartController {
     }
 
     @FXML
+    public void updateItem() {
+        ObservableList<CartItem> selectedItem = itemTable.getSelectionModel().getSelectedItems();
+
+        if (selectedItem == null || selectedItem.isEmpty()) {
+            MessageUtil.showError("Cart Manager", "No items selected yet");
+            return;
+        }
+
+        SceneManager.switchScene("/com/store/views/customerviews/cart/updatecartview.fxml", "Cart Manager",
+                selectedItem.get(0));
+    }
+
+    @FXML
     public void goBack() {
         SceneManager.goBack();
     }

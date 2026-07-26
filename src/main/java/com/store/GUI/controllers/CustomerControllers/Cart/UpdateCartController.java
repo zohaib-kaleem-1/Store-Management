@@ -2,10 +2,8 @@ package com.store.GUI.controllers.CustomerControllers.Cart;
 
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
-import com.store.Util.SessionManager;
 import com.store.Util.ValidationUtil;
 import com.store.model.CartItem;
-import com.store.model.Item;
 import com.store.service.CartService;
 
 import javafx.fxml.FXML;
@@ -46,34 +44,71 @@ public class UpdateCartController implements SceneManager.DataReceiver<CartItem>
     public void setData(CartItem data) {
         try {
             if (data == null)
-                MessageUtil.showError("Buy Item Manager", "Could Not Load Item Data");
+                MessageUtil.showError("Cart Manager", "Could Not Load Item Data");
 
-            currentItemToCart = data;
+            itemToUpdate = data;
             updateFields();
         } catch (Exception e) {
-            MessageUtil.showError("Buy Item Manager", e.getMessage());
+            MessageUtil.showError("Cart Manager", e.getMessage());
         }
     }
 
     private void updateFields() {
-        itemNameField.setText(currentItemToCart.getName());
-        priceField.setText(String.valueOf(currentItemToCart.getPrice()));
-        quantityInStoreField.setText(String.valueOf(currentItemToCart.getQuantity()));
-
+        itemNameField.setText(itemToUpdate.getItemName());
+        priceField.setText(String.valueOf(itemToUpdate.getPriceOfEachItem()));
+        quantityInStoreField.setText(String.valueOf(itemToUpdate.getQuantityInStore()));
+        quantityField.setText(String.valueOf(itemToUpdate.getQuantity()));
     }
 
     private void updateTotalPrice() {
         try {
+            if (quantityField.getText().isEmpty())
+                return;
+
             int quantiy = ValidationUtil.validateIntInput(quantityField.getText());
-            int quantityInStore = currentItemToCart.getQuantity();
+            int quantityInStore = itemToUpdate.getQuantityInStore();
 
             if (quantityInStore < quantiy)
                 throw new Exception("Quanity must be less than or equal to quantity in store");
+
             int price = Integer.parseInt(priceField.getText());
             int totalPrice = quantiy * price;
             totalPriceField.setText(String.valueOf(totalPrice));
         } catch (Exception e) {
-            MessageUtil.showError("Buy Item Manager", e.getMessage());
+            MessageUtil.showError("Cart Manager", e.getMessage());
+        }
+    }
+
+    @FXML
+    public void save() {
+        try {
+            int quantity = ValidationUtil.validateIntInput(quantityField.getText());
+            if (quantity > itemToUpdate.getQuantityInStore())
+                throw new Exception("Quantity Must be less then or equal to quantity in store");
+
+            itemToUpdate.setQuantity(quantity);
+            if (new CartService().updateCart(itemToUpdate)) {
+                MessageUtil.showMessage("Cart Manager", "Cart Item Updated successfully.");
+                goBack();
+            } else {
+                MessageUtil.showError("Cart Manager", "Could not delete");
+            }
+        } catch (Exception e) {
+            MessageUtil.showError("Cart Manager", e.getMessage());
+        }
+    }
+
+    @FXML
+    public void delete() {
+        try {
+            if (new CartService().removeItemFromCart(itemToUpdate.getId())) {
+                MessageUtil.showMessage("Cart Manager", "Item removed successfully from cart.");
+                goBack();
+            } else {
+                MessageUtil.showError("Cart Manager", "Could not remove item from cart");
+            }
+        } catch (Exception e) {
+            MessageUtil.showError("Cart Manager", e.getMessage());
         }
     }
 }
