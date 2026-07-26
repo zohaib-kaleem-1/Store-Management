@@ -23,6 +23,7 @@ public class SceneManager {
             history.push(new SceneHistoryNode(fxmlPath, title));
         } catch (Exception e) {
             MessageUtil.showError("Scene Manager", e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -84,7 +85,8 @@ public class SceneManager {
 
     public static void logOut() {
         SessionManager.clear();
-        goBack();
+        history.clear();
+        switchScene("/com/store/views/loginview.fxml", "Login");
     }
 
     public static void goToDashboard() {

@@ -126,5 +126,7 @@ public class CartController {
     @FXML
     public void buyItems() {
         System.out.println("Item Bought");
+
+        // TODO: BUY ITEMS
     }
 }

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
 import com.store.Util.SessionManager;
+import com.store.model.User;
 import com.store.service.UserService;
 
 import javafx.fxml.FXML;
@@ -35,17 +36,27 @@ public class LoginController {
     private ComboBox<String> roleComboBox;
 
     @FXML
+    private Button createAccountButton;
+
+    @FXML
     /**
      * initialize the controllers
      * add on action listener
      */
     public void initialize() {
         roleComboBox.getItems().addAll("Admin", "Customer");
-        roleComboBox.setValue("Admin");
+        roleComboBox.setValue("Customer");
 
         submitButton.setOnAction(event -> loginVerify());
         usernameField.setOnAction(event -> loginVerify());
         passwordField.setOnAction(event -> loginVerify());
+
+        roleComboBox.valueProperty().addListener(event -> {
+            if (roleComboBox.getValue().toLowerCase().matches("admin"))
+                createAccountButton.setVisible(false);
+            else
+                createAccountButton.setVisible(true);
+        });
     }
 
     /**
@@ -87,6 +98,17 @@ public class LoginController {
         } catch (SQLException e) {
             MessageUtil.showError("Password Verification", e.getMessage());
         }
+    }
+
+    @FXML
+    public void resetPassword() {
+        SceneManager.switchScene("/com/store/views/resetpassword/verifycredentialview.fxml", "Reset Password");
+    }
+
+    @FXML
+    public void createAccount() {
+        SceneManager.switchScene("/com/store/views/adminviews/manageuser/addupdateuserview.fxml", "Register Customer",
+                new User("", "", "", "", "", "customer"));
 
     }
 }

@@ -14,7 +14,6 @@
             <Font name="System Bold Italic" size="30.0" />
          </font>
       </Label>
-      <Button layoutX="29.0" layoutY="42.0" mnemonicParsing="false" onAction="#goBack" text="Go Back" />
       <Label layoutX="29.0" layoutY="123.0" prefHeight="33.0" prefWidth="123.0" text="Name">
          <font>
             <Font size="20.0" />
@@ -40,6 +39,7 @@
             <Font size="20.0" />
          </font>
       </Label>
+      <Button layoutX="29.0" layoutY="42.0" mnemonicParsing="false" onAction="#goBack" text="Go Back" />
       <TextField fx:id="nameField" layoutX="327.0" layoutY="118.0" promptText="Name">
          <font>
             <Font size="20.0" />
@@ -50,6 +50,11 @@
             <Font size="20.0" />
          </font>
       </TextField>
+      <PasswordField fx:id="passwordField" layoutX="327.0" layoutY="244.0" prefHeight="43.0" prefWidth="248.0" promptText="Password">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </PasswordField>
       <TextField fx:id="emailField" layoutX="327.0" layoutY="308.0" promptText="Email">
          <font>
             <Font size="20.0" />
@@ -60,11 +65,6 @@
             <Font size="20.0" />
          </font>
       </TextField>
-      <PasswordField fx:id="passwordField" layoutX="327.0" layoutY="244.0" prefHeight="43.0" prefWidth="248.0" promptText="Password">
-         <font>
-            <Font size="17.0" />
-         </font>
-      </PasswordField>
       <Button fx:id="deleteButton" layoutX="28.0" layoutY="453.0" mnemonicParsing="false" onAction="#delete" text="Delete">
          <font>
             <Font size="20.0" />
