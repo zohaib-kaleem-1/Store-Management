@@ -18,7 +18,7 @@
                 <Font size="40.0" />
             </font>
         </Label>
-        <TableView fx:id="itemTable" layoutX="34.0" layoutY="146.0" prefHeight="510.0" prefWidth="775.0">
+        <TableView fx:id="itemTable" layoutX="34.0" layoutY="146.0" prefHeight="509.0" prefWidth="775.0">
             <columns>
                 <TableColumn fx:id="nameColumn" minWidth="8.0" prefWidth="210.0" text="Item Name" />
                 <TableColumn fx:id="priceColumn" minWidth="0.0" prefWidth="105.0" text="Price" />
@@ -39,6 +39,11 @@
             <Button minWidth="65.0" mnemonicParsing="false" onAction="#buyItems" prefHeight="26.0" text="Buy Items" />
             </buttons>
         </ButtonBar>
-        <ComboBox fx:id="rowCountComboBox" layoutX="734.0" layoutY="676.0" prefHeight="26.0" prefWidth="74.0" />
+        <ComboBox fx:id="rowCountComboBox" layoutX="734.0" layoutY="665.0" prefHeight="26.0" prefWidth="74.0" />
+      <Label fx:id="totalPriceLabel" layoutX="38.0" layoutY="669.0" prefHeight="40.0" prefWidth="187.0" text="Total Price">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>

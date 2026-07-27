@@ -133,12 +133,12 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
     @FXML
     public void updateUser() {
         ObservableList<User> userToUpdate = userTable.getSelectionModel().getSelectedItems();
-        
-        if(userToUpdate == null || userToUpdate.isEmpty()){
+
+        if (userToUpdate == null || userToUpdate.isEmpty()) {
             MessageUtil.showError("User Manager", "No Item Selected");
             return;
         }
-        
+
         SceneManager.switchScene("/com/store/views/adminviews/manageuser/addupdateuserview.fxml", "Update " + role,
                 userToUpdate.get(0));
 
@@ -146,7 +146,6 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
 
     @Override
     public void setData(String data) {
-        System.out.println("data is called");
         this.role = data;
         pageTitleLabel.setText("Manage " + role);
         addUserButton.setText("Add " + role);

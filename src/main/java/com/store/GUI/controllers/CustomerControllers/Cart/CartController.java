@@ -2,6 +2,7 @@ package com.store.GUI.controllers.CustomerControllers.Cart;
 
 import java.sql.SQLException;
 
+import com.store.Transaction.Transaction;
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
 import com.store.Util.SessionManager;
@@ -12,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -33,6 +35,9 @@ public class CartController {
     private TableColumn<CartItem, String> quantityInStoreColumn;
     @FXML
     private TableColumn<CartItem, String> totalPriceColumn;
+
+    @FXML
+    private Label totalPriceLabel;
 
     @FXML
     private Pagination pagination;
@@ -76,6 +81,7 @@ public class CartController {
 
         updatePageCount();
         fetchData();
+        updateTotalPrice();
 
         itemTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
@@ -125,8 +131,22 @@ public class CartController {
 
     @FXML
     public void buyItems() {
-        System.out.println("Item Bought");
+        try {
+            if (Transaction.buyItem("Lahore"))
+                MessageUtil.showMessage("Cart Manager", "Items bought successfully.");
+            goBack();
+        } catch (Exception e) {
+            MessageUtil.showError("Cart Data Reading error", e.getMessage());
+        }
+    }
 
-        // TODO: BUY ITEMS
+    private void updateTotalPrice() {
+        int totalPrice = 0;
+
+        for (CartItem i : itemList) {
+            totalPrice += i.getTotalPrice();
+        }
+
+        totalPriceLabel.setText("Total Price: " + totalPrice);
     }
 }

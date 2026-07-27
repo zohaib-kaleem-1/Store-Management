@@ -68,15 +68,10 @@ public class AddUpdateUserController implements SceneManager.DataReceiver<User> 
             String email = emailField.getText();
             String contact = contactField.getText();
 
-            System.out.println("Name: " + name);
-            System.out.println("Email: " + email);
-            System.out.println("Contact: " + contact);
-
             ValidationUtil.validateName(name);
             ValidationUtil.validateMail(email);
             ValidationUtil.validateContact(contact);
 
-            System.out.println("save callled");
             if (mode.matches("add")) {
                 username = usernameField.getText();
                 ValidationUtil.validateUsername(username, role);

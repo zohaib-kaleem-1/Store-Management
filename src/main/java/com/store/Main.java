@@ -2,6 +2,7 @@ package com.store;
 
 import com.store.Util.SceneManager;
 import com.store.Util.SessionManager;
+import com.store.model.User;
 import com.store.service.UserService;
 
 import javafx.application.Application;

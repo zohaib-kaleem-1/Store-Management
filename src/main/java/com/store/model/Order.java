@@ -7,7 +7,7 @@ public class Order {
     private int orderId;
     private int customerId;
     private String customerName;
-    private int totalPrice;
+    private int totalPriceOfAllItem;
     private Timestamp bought_at;
     private List<OrderItem> itemList;
     private String orderStatus;
@@ -18,7 +18,7 @@ public class Order {
             String address) {
         this.customerId = customerId;
         this.customerName = customerName;
-        this.totalPrice = totalPrice;
+        this.totalPriceOfAllItem = totalPrice;
         this.itemList = itemList;
         this.orderStatus = orderStatus;
         this.address = address;
@@ -29,7 +29,7 @@ public class Order {
             Timestamp bought_at, String orderStatus, String address) {
         this.customerId = customerId;
         this.customerName = customerName;
-        this.totalPrice = totalPrice;
+        this.totalPriceOfAllItem = totalPrice;
         this.itemList = itemList;
         this.orderId = orderId;
         this.bought_at = bought_at;
@@ -58,8 +58,8 @@ public class Order {
         return orderId;
     }
 
-    public int getTotalPrice() {
-        return totalPrice;
+    public int getTotalPriceOfAllItem() {
+        return totalPriceOfAllItem;
     }
 
     public void setBought_at(Timestamp bought_at) {
@@ -82,8 +82,8 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public void setTotalPrice(int totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setTotalPriceOfAllItem(int totalPriceOfAllItem) {
+        this.totalPriceOfAllItem = totalPriceOfAllItem;
     }
 
     public String getAddress() {

@@ -13,41 +13,6 @@ import com.store.model.Order;
 import com.store.model.OrderItem;
 
 public class OrderDAO {
-    public List<Order> listOrder() throws SQLException {
-        List<Order> orderList = new ArrayList<>();
-
-        String sql = """
-                SELECT
-                	O.ORDERID,
-                	O.USERID,
-                	O.ADDRESS,
-                	O.TOTALPRICE,
-                	O.ORDERSTATUS,
-                	O.BOUGHT_AT,
-                	U.NAME
-                FROM
-                	ORDERS O
-                	JOIN USERS U ON U.USERID = O.USERID;
-                                """;
-
-        try (Connection conn = Database.getConnection();
-                Statement stmt = conn.createStatement()) {
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-                orderList.add(new Order(rs.getInt("orderid"), rs.getInt("userid"), rs.getString("name"),
-                        rs.getInt("totalPrice"), null, rs.getTimestamp("bought_at"), rs.getString("orderstatus"),
-                        rs.getString("address")));
-            }
-
-            for (Order i : orderList) {
-                i.setItemList(getItemListByOrderId(i.getOrderId()));
-            }
-        }
-
-        return orderList;
-    }
-
     private List<OrderItem> getItemListByOrderId(int id) throws SQLException {
         List<OrderItem> itemList = new ArrayList<>();
         String sql = """
@@ -57,7 +22,7 @@ public class OrderDAO {
                 	OI.PRICEOFSINGLEITEM,
                 	OI.ITEMID, I.ITEMNAME
                 FROM
-                	ORDERITEM OI
+                	ORDERITEMS OI
                 	JOIN ITEMS I ON I.ITEMID = OI.ITEMID
                 WHERE
                 	OI.ORDERID = ?;
@@ -75,5 +40,146 @@ public class OrderDAO {
         }
 
         return itemList;
+    }
+
+    public int getRowCountForUser(int customerId, String orderStatus) throws SQLException {
+        String sql = """
+                SELECT count(orderid) FROM orders WHERE userid = ? AND orderStatus ILIKE ?
+                """;
+
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, customerId);
+            stmt.setString(2, "%" + orderStatus + "%");
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next())
+                return rs.getInt("count");
+            return 0;
+        }
+    }
+
+    public int getRowCount(String orderStatus) throws SQLException {
+        String sql = """
+                SELECT count(orderid) FROM orders WHERE orderStatus ILIKE ?
+                """;
+
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + orderStatus + "%");
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next())
+                return rs.getInt("count");
+            return 0;
+        }
+    }
+
+    public List<Order> listOrderByCustomerId(int userId, String orderStatus, int limit, int pageIndex)
+            throws SQLException {
+        List<Order> orderList = new ArrayList<>();
+
+        String sql = """
+                SELECT
+                	ORDERID,
+                	ADDRESS,
+                	TOTALPRICE,
+                	ORDERSTATUS,
+                	BOUGHT_AT
+                FROM
+                	ORDERS
+                WHERE
+                    userid = ?
+                    AND orderstatus ILIKE ?
+                ORDER BY orderid
+                LIMIT ?
+                OFFSET ?;
+                                """;
+
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+            stmt.setString(2, "%" + orderStatus + "%");
+            stmt.setInt(3, limit);
+            stmt.setInt(4, pageIndex * limit);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                orderList.add(new Order(rs.getInt("orderid"), userId, "",
+                        rs.getInt("totalPrice"), null, rs.getTimestamp("bought_at"), rs.getString("orderstatus"),
+                        rs.getString("address")));
+            }
+
+            for (Order i : orderList) {
+                i.setItemList(getItemListByOrderId(i.getOrderId()));
+            }
+        }
+
+        return orderList;
+    }
+
+    public List<Order> listOrder(String orderStatus, int limit, int pageIndex)
+            throws SQLException {
+        List<Order> orderList = new ArrayList<>();
+
+        String sql = """
+                SELECT
+                	O.ORDERID,
+                    O.USERID,
+                	O.ADDRESS,
+                	O.TOTALPRICE,
+                	O.ORDERSTATUS,
+                	O.BOUGHT_AT,
+                    U.name
+                FROM
+                	ORDERS O
+                JOIN USERS U ON U.USERID = O.USERID
+                WHERE
+                    orderstatus ILIKE ?
+                ORDER BY orderid
+                LIMIT ?
+                OFFSET ?
+                                """;
+
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, "%" + orderStatus + "%");
+            stmt.setInt(2, limit);
+            stmt.setInt(3, pageIndex * limit);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                orderList.add(new Order(rs.getInt("orderid"), rs.getInt("userid"), rs.getString("name"),
+                        rs.getInt("totalPrice"), null, rs.getTimestamp("bought_at"), rs.getString("orderstatus"),
+                        rs.getString("address")));
+            }
+
+            for (Order i : orderList) {
+                i.setItemList(getItemListByOrderId(i.getOrderId()));
+            }
+        }
+
+        return orderList;
+    }
+
+    public boolean updateOrderStatus(int orderId, String status) throws SQLException {
+        String sql = """
+                UPDATE ORDERS
+                SET orderstatus = ?
+                WHERE orderid = ?;
+                """;
+
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setInt(2, orderId);
+            return stmt.executeUpdate() == 1 ? true : false;
+        }
     }
 }

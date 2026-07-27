@@ -1,7 +1,9 @@
-package com.store.GUI.controllers.AdminControllers;
+package com.store.GUI.controllers.CustomerControllers;
 
+import java.io.ObjectOutput;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.store.Transaction.Transaction;
 import com.store.Util.MessageUtil;
@@ -20,6 +22,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 
 public class OrderController {
@@ -30,9 +33,6 @@ public class OrderController {
     private ComboBox<String> orderStatusComboBox;
 
     @FXML
-    private ComboBox<String> updateOrderStatusCombobox;
-
-    @FXML
     private ComboBox<Integer> rowCountComboBox;
 
     @FXML
@@ -40,12 +40,6 @@ public class OrderController {
 
     @FXML
     private TreeTableColumn<Object, Integer> orderIdColumn;
-
-    @FXML
-    private TreeTableColumn<Object, Integer> customerIdColumn;
-
-    @FXML
-    private TreeTableColumn<Object, String> customerNameColumn;
     @FXML
     private TreeTableColumn<Object, Timestamp> boughtAtColumn;
     @FXML
@@ -67,6 +61,7 @@ public class OrderController {
 
     private ObservableList<Order> orderList = FXCollections.observableArrayList();
     private OrderService orderService = new OrderService();
+    private int currentUserId = SessionManager.getUser().getId();
 
     @FXML
     public void goBack() {
@@ -77,8 +72,6 @@ public class OrderController {
     public void initialize() {
         // Setup columns
         orderIdColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("orderId"));
-        customerIdColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("customerId"));
-        customerNameColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("customerName"));
         boughtAtColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("bought_at"));
         addressColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("address"));
         orderStatusColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("orderStatus"));
@@ -99,7 +92,6 @@ public class OrderController {
 
         // OrderStatus
         orderStatusComboBox.getItems().addAll("All Orders", "pending", "ready", "shipped", "delivered");
-        updateOrderStatusCombobox.getItems().addAll("pending", "ready", "shipped", "delivered");
 
         // default value
         orderStatusComboBox.setValue("All Orders");
@@ -132,7 +124,8 @@ public class OrderController {
                     ? ""
                     : orderStatusComboBox.getValue();
 
-            orderList.addAll(orderService.listOrder(
+            orderList.addAll(orderService.listOrderByCustomerId(
+                    currentUserId,
                     orderStatusToShow,
                     rowCountComboBox.getValue(),
                     pagination.getCurrentPageIndex()));
@@ -150,7 +143,7 @@ public class OrderController {
             String orderStatusToShow = orderStatusComboBox.getValue().matches("All Orders") ? ""
                     : orderStatusComboBox.getValue();
 
-            int totalRows = orderService.getRowCount(orderStatusToShow);
+            int totalRows = orderService.getRowCountForUser(currentUserId, orderStatusToShow);
 
             int pageLimit = rowCountComboBox.getValue();
             int pageCount = (int) Math.ceil((float) totalRows / (float) pageLimit);
@@ -162,24 +155,18 @@ public class OrderController {
     }
 
     @FXML
-    public void updateStatus() {
+    public void cancelOrder() {
         try {
             TreeItem<Object> selected = orderTable.getSelectionModel().getSelectedItem();
             if (selected != null && selected.getValue() instanceof Order) {
                 Order order = (Order) selected.getValue();
-
-                String newStatus = updateOrderStatusCombobox.getValue();
-
-                if (newStatus == null || newStatus.isEmpty())
-                    throw new Exception("Please select any order");
-
-                if (newStatus.matches(order.getOrderStatus()))
-                    throw new Exception("Please choose any new status not the old one");
-
-                if (orderService.updateOrderStatus(order.getOrderId(), newStatus)) {
-                    MessageUtil.showMessage("Order Manager", "Status updated successfully.");
-                    fetchData();
-                }
+                if (order.getOrderStatus().matches("pending")) {
+                    if (Transaction.cancelOrder(order.getOrderId())) {
+                        MessageUtil.showMessage("Order Manager", "Order cancelled successfully.");
+                        fetchData();
+                    }
+                } else
+                    MessageUtil.showError("Order Manager", "Too Late to cancel order");
 
             } else
                 throw new Exception("Please Select any order");
