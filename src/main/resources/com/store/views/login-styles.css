@@ -1,0 +1,91 @@
+/* ==================== COMBOBOX STYLES ==================== */
+
+/* Main ComboBox styling */
+.combo-box {
+  -fx-background-color: rgba(255, 255, 255, 0.08);
+  -fx-background-radius: 8;
+  -fx-border-radius: 8;
+  -fx-border-color: rgba(255, 255, 255, 0.15);
+  -fx-border-width: 1.5;
+  -fx-padding: 0 10;
+  -fx-text-fill: white;
+}
+
+/* ComboBox text field (display area) */
+.combo-box .text-field {
+  -fx-text-fill: white;
+  -fx-prompt-text-fill: #a0a5b5;
+  -fx-background-color: transparent;
+}
+
+/* ComboBox list cell (items in dropdown) */
+.combo-box .list-cell {
+  -fx-text-fill: white;
+  -fx-background-color: #2b2e4a;
+  -fx-padding: 8 10;
+  -fx-font-size: 14px;
+}
+
+/* ComboBox list cell on hover */
+.combo-box .list-cell:hover {
+  /* -fx-background-color: #3b82f6; */
+  -fx-text-fill: white;
+}
+
+/* ComboBox list cell when selected */
+.combo-box .list-cell:selected {
+  /* -fx-background-color: #2563eb; */
+  -fx-text-fill: white;
+}
+
+/* ComboBox dropdown list view */
+.combo-box .list-view {
+  -fx-background-color: #2b2e4a;
+  -fx-border-color: rgba(255, 255, 255, 0.15);
+  -fx-border-radius: 8;
+  -fx-background-radius: 8;
+}
+
+/* ComboBox popup (the dropdown container) */
+.combo-box .combo-box-popup .list-view {
+  -fx-background-color: #2b2e4a;
+  -fx-border-color: rgba(255, 255, 255, 0.2);
+  -fx-border-radius: 8;
+  -fx-background-radius: 8;
+}
+
+/* ComboBox arrow button */
+.combo-box .arrow-button {
+  -fx-background-color: rgba(255, 255, 255, 0.08);
+  -fx-background-radius: 0 8 8 0;
+}
+
+/* ComboBox arrow */
+.combo-box .arrow {
+  -fx-background-color: white;
+}
+
+/* ComboBox when focused */
+.combo-box:focused {
+  -fx-border-color: #3b82f6;
+  -fx-border-width: 2;
+}
+
+/* ==================== BUTTON STYLES ==================== */
+
+/* Login Button */
+.login-button {
+  -fx-background-color: linear-gradient(to right, #2563eb, #3b82f6);
+  -fx-background-radius: 8;
+  -fx-cursor: hand;
+  -fx-font-weight: bold;
+  -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.4), 15, 0, 0, 8);
+  -fx-text-fill: white;
+}
+
+/* Login Button hover effect - subtle shadow and scale */
+.login-button:hover {
+  -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.6), 20, 0, 0, 10);
+  -fx-scale-x: 1.02;
+  -fx-scale-y: 1.02;
+}

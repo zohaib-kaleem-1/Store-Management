@@ -9,8 +9,8 @@ import com.store.model.User;
 import com.store.service.UserService;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
@@ -22,9 +22,8 @@ import javafx.scene.control.TextField;
  * Handles username password input and verification
  */
 public class LoginController {
-
     @FXML
-    private Button submitButton;
+    private ComboBox<String> roleComboBox;
 
     @FXML
     private TextField usernameField;
@@ -33,10 +32,7 @@ public class LoginController {
     private PasswordField passwordField;
 
     @FXML
-    private ComboBox<String> roleComboBox;
-
-    @FXML
-    private Button createAccountButton;
+    private Hyperlink registerUserLink;
 
     @FXML
     /**
@@ -47,22 +43,24 @@ public class LoginController {
         roleComboBox.getItems().addAll("Admin", "Customer");
         roleComboBox.setValue("Customer");
 
-        submitButton.setOnAction(event -> loginVerify());
-        usernameField.setOnAction(event -> loginVerify());
-        passwordField.setOnAction(event -> loginVerify());
-
         roleComboBox.valueProperty().addListener(event -> {
-            if (roleComboBox.getValue().toLowerCase().matches("admin"))
-                createAccountButton.setVisible(false);
-            else
-                createAccountButton.setVisible(true);
+            updateCreateAccountButtonView();
         });
+
+        updateCreateAccountButtonView();
+    }
+
+    private void updateCreateAccountButtonView() {
+        if (roleComboBox.getValue().toLowerCase().matches("admin"))
+            registerUserLink.setVisible(false);
+        else
+            registerUserLink.setVisible(true);
     }
 
     /**
      * Validate user login credentails
      */
-    public void loginVerify() {
+    public void login() {
         String username = usernameField.getText();
         String password = passwordField.getText();
         String role = roleComboBox.getValue();
@@ -106,7 +104,7 @@ public class LoginController {
     }
 
     @FXML
-    public void createAccount() {
+    public void registerUser() {
         SceneManager.switchScene("/com/store/views/adminviews/manageuser/addupdateuserview.fxml", "Register Customer",
                 new User("", "", "", "", "", "customer"));
 

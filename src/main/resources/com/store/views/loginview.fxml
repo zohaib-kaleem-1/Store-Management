@@ -1,35 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="509.0" prefWidth="582.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.GUI.controllers.LoginController">
-   <children>
-      <Text fontSmoothingType="LCD" layoutX="1.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login Form" textAlignment="CENTER" wrappingWidth="582.0">
-         <font>
-            <Font size="48.0" />
-         </font>
-      </Text>
-      <ComboBox fx:id="roleComboBox" layoutX="161.0" layoutY="161.0" prefHeight="26.0" prefWidth="262.0" />
-      <TextField fx:id="usernameField" layoutX="160.0" layoutY="212.0" prefHeight="26.0" prefWidth="262.0" promptText="Username">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </TextField>
-      <PasswordField fx:id="passwordField" layoutX="160.0" layoutY="271.0" prefHeight="26.0" prefWidth="262.0" promptText="Password">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </PasswordField>
-      <Button layoutX="235.0" layoutY="331.0" mnemonicParsing="false" onAction="#resetPassword" text="Reset Password" />
-      <Button layoutX="237.0" layoutY="365.0" mnemonicParsing="false" fx:id="createAccountButton" onAction="#createAccount" text="Create Account" />
-      <Button layoutX="434.0" layoutY="433.0" mnemonicParsing="false" fx:id="submitButton" prefHeight="41.0" prefWidth="114.0" text="Submit">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
-   </children>
-</AnchorPane>
+<BorderPane prefHeight="650.0" prefWidth="550.0" 
+            style="-fx-background-color: linear-gradient(to bottom right, #1a1c29, #2b2e4a);" 
+            stylesheets="@login-styles.css"
+            xmlns="http://javafx.com/javafx/22" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.store.GUI.controllers.LoginController">
+   <!-- ==================== TOP HEADER ==================== -->
+   <top>
+      <VBox spacing="5" style="-fx-padding: 20 25 10 25; -fx-background-color: rgba(0,0,0,0.2);">
+         <HBox alignment="CENTER_LEFT" prefHeight="48.0" prefWidth="551.0" spacing="15">
+            <Label alignment="CENTER" prefHeight="48.0" prefWidth="518.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Store Management System" textFill="#e0e4f0" />
+         </HBox>
+         <Separator style="-fx-background-color: rgba(255,255,255,0.1);" />
+      </VBox>
+   </top>
+   <!-- ==================== CENTER CONTENT ==================== -->
+   <center>
+      <VBox alignment="CENTER" maxWidth="440" minWidth="380" spacing="20.0" style="-fx-background-color: rgba(0,0,0,0);" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+         </padding>
+         <VBox.margin>
+            <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+         </VBox.margin>
+         <!-- Form Title -->
+         <Text fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Login Form" textAlignment="CENTER" wrappingWidth="350.0">
+            <font>
+               <Font size="36.0" />
+            </font>
+         </Text>
+         <Label style="-fx-font-size: 14px;" text="Sign in to access your dashboard" textFill="#a0a5b5" />
+         <Separator prefWidth="300" style="-fx-background-color: rgba(255,255,255,0.1);" />
+         <!-- User Type Selection -->
+         <VBox spacing="8.0" style="-fx-padding: 5 0 0 0;">
+            <Label style="-fx-font-size: 13px; -fx-font-weight: bold;" text="👤 Select User Type" textFill="#c5c9d6" />
+            <ComboBox fx:id="roleComboBox" maxWidth="1.7976931348623157E308" prefHeight="40.0" promptText="Select Role" />
+         </VBox>
+         <!-- Username Field -->
+         <VBox spacing="8.0">
+            <Label style="-fx-font-size: 13px; -fx-font-weight: bold;" text="📧 Username" textFill="#c5c9d6" />
+            <TextField fx:id="usernameField" prefHeight="40.0" promptText="Enter your username" style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-text-inner-color: white; -fx-prompt-text-fill: #80869a; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-padding: 0 15;">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextField>
+         </VBox>
+         <!-- Password Field -->
+         <VBox spacing="8.0">
+            <Label style="-fx-font-size: 13px; -fx-font-weight: bold;" text="🔒 Password" textFill="#c5c9d6" />
+            <PasswordField fx:id="passwordField" prefHeight="40.0" promptText="Enter your password" style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-text-inner-color: white; -fx-prompt-text-fill: #80869a; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-padding: 0 15;">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </PasswordField>
+         </VBox>
+         <!-- Extra Options -->
+         <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 5 0 0 0;">
+            <Hyperlink fx:id="registerUserLink" onAction="#registerUser" style="-fx-underline: false; -fx-font-size: 13px; -fx-cursor: hand;" text="Register New User" textFill="#4d9fff" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Hyperlink onAction="#resetPassword" style="-fx-underline: false; -fx-font-size: 13px; -fx-cursor: hand;" text="Forgot Password?" textFill="#4d9fff" />
+         </HBox>
+         <!-- Submit Button -->
+         <Button maxWidth="1.7976931348623157E308" 
+                 onAction="#login" 
+                 prefHeight="45.0" 
+                 styleClass="login-button" 
+                 text="Submit" 
+                 textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="18.0" />
+            </font>
+            <VBox.margin>
+               <Insets top="5.0" />
+            </VBox.margin>
+         </Button>
+      </VBox>
+   </center>
+   <!-- ==================== BOTTOM FOOTER ==================== -->
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" spacing="20" style="-fx-padding: 15 25 15 25; -fx-background-color: rgba(0,0,0,0.2);">
+         <Label style="-fx-font-size: 12px;" text="Version 2.0" textFill="#6c728f" />
+         <Region HBox.hgrow="ALWAYS" />
+         <Hyperlink style="-fx-underline: false; -fx-font-size: 12px; -fx-cursor: hand;" text="Privacy Policy" textFill="#6c728f" />
+         <Label text="|" textFill="#6c728f" />
+         <Hyperlink style="-fx-underline: false; -fx-font-size: 12px; -fx-cursor: hand;" text="Terms" textFill="#6c728f" />
+      </HBox>
+   </bottom>
+</BorderPane>
