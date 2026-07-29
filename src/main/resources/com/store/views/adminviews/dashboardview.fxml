@@ -1,56 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="705.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.GUI.controllers.AdminControllers.DashboardController">
-   <children>
-      <Label contentDisplay="CENTER" layoutY="18.0" prefHeight="45.0" prefWidth="715.0" style="-fx-alignment: center;" text="Admin Menu" textAlignment="CENTER">
-         <font>
-            <Font name="System Bold Italic" size="40.0" />
-         </font>
-      </Label>
-      <Button layoutX="61.0" layoutY="126.0" mnemonicParsing="false" onAction="#goToManageAdminView" prefHeight="33.0" prefWidth="227.0" text="Manage Admin">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
-      <Button layoutX="61.0" layoutY="191.0" mnemonicParsing="false" onAction="#goToManageCustomerView" prefHeight="33.0" prefWidth="227.0" text="Manage Customer">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
-      <Button layoutX="61.0" layoutY="260.0" mnemonicParsing="false" onAction="#goToManageItemView" prefHeight="33.0" prefWidth="227.0" text="Manage Item">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
-      <Button layoutX="423.0" layoutY="191.0" mnemonicParsing="false" onAction="#goToManageAccountView" prefHeight="33.0" prefWidth="227.0" text="Manage Account">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
-      <Button layoutX="477.0" layoutY="392.0" mnemonicParsing="false" onAction="#logOut" prefHeight="43.0" prefWidth="173.0" text="Log Out">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
-      <Button layoutX="423.0" layoutY="126.0" mnemonicParsing="false" onAction="#goToOrderView" prefHeight="33.0" prefWidth="227.0" text="View Order">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
-      <Button layoutX="61.0" layoutY="324.0" mnemonicParsing="false" onAction="#viewBalance" prefHeight="33.0" prefWidth="227.0" text="View Balance">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
-      <Button layoutX="423.0" layoutY="260.0" mnemonicParsing="false" onAction="#goToChangePasswordView" prefHeight="33.0" prefWidth="227.0" text="Change Password">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
-   </children>
-</AnchorPane>
+<?import javafx.scene.text.Text?>
+<BorderPane prefHeight="650.0" prefWidth="700.0" style="-fx-background-color: linear-gradient(to bottom right, #1a1c29, #2b2e4a);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.GUI.controllers.AdminControllers.DashboardController">
+   <!-- ==================== TOP HEADER ==================== -->
+   <top>
+      <VBox spacing="5" style="-fx-padding: 20 25 10 25; -fx-background-color: rgba(0,0,0,0.2);">
+         <HBox alignment="CENTER_LEFT" spacing="15">
+            <Label alignment="CENTER" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Store Management System" textFill="#e0e4f0" />
+            <Region HBox.hgrow="ALWAYS" />
+         </HBox>
+         <Separator style="-fx-background-color: rgba(255,255,255,0.1);" />
+      </VBox>
+   </top>
+   <!-- ==================== CENTER CONTENT ==================== -->
+   <center>
+      <VBox alignment="CENTER" spacing="20" style="-fx-padding: 30 50 30 50; -fx-background-color: rgba(0,0,0,0);" BorderPane.alignment="CENTER">
+         <Text fill="WHITE" fontSmoothingType="LCD" text="Admin Dashboard" textAlignment="CENTER">
+            <font>
+               <Font size="32.0" />
+            </font>
+         </Text>
+         <Label style="-fx-font-size: 14px;" text="Manage your store operations from here" textFill="#a0a5b5" />
+         <Separator prefWidth="400" style="-fx-background-color: rgba(255,255,255,0.1);" />
+         <!-- Dashboard Grid -->
+         <GridPane hgap="20.0" maxWidth="600.0" style="-fx-padding: 10 0 0 0;" vgap="15.0">
+            <padding>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+            <!-- Row 0 -->
+            <Button maxWidth="1.7976931348623157E308" onAction="#goToManageAdminView" prefHeight="50.0" style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-cursor: hand; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);" text="👥 Manage Admins" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button maxWidth="1.7976931348623157E308" onAction="#goToOrderView" prefHeight="50.0" style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-cursor: hand; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);" text="📦 View Orders" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <!-- Row 1 -->
+            <Button maxWidth="1.7976931348623157E308" onAction="#goToManageCustomerView" prefHeight="50.0" style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-cursor: hand; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);" text="👤 Manage Customers" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button  maxWidth="1.7976931348623157E308" onAction="#goToManageAccountView" prefHeight="50.0" style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-cursor: hand; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);" text="💰 Manage Accounts" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <!-- Row 2 -->
+            <Button maxWidth="1.7976931348623157E308" onAction="#goToManageItemView" prefHeight="50.0" style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-cursor: hand; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);" text="📦 Manage Items" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="2">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button onAction="#viewBalance" maxWidth="1.7976931348623157E308" prefHeight="50.0" style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-cursor: hand; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);" text="💳 View Balance" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <!-- Row 3 - Full Width Buttons -->
+            <Button onAction="#goToChangePasswordView" maxWidth="1.7976931348623157E308" prefHeight="45.0" style="-fx-background-color: rgba(77, 159, 255, 0.15); -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #4d9fff; -fx-border-width: 1.5; -fx-cursor: hand; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(77, 159, 255, 0.2), 10, 0, 0, 5);" text="🔑 Change Password" textFill="WHITE" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin>
+            </Button>
+            <!-- Row 4 - Logout Button -->
+            <Button maxWidth="1.7976931348623157E308" onAction="#logOut" prefHeight="45.0" style="-fx-background-color: rgba(244, 67, 54, 0.15); -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #f44336; -fx-border-width: 1.5; -fx-cursor: hand; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(244, 67, 54, 0.2), 10, 0, 0, 5);" text="🚪 Log Out" textFill="WHITE" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="4">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets top="10.0" />
+               </GridPane.margin>
+            </Button>
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
+         </GridPane>
+      </VBox>
+   </center>
+   <!-- ==================== BOTTOM FOOTER ==================== -->
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" spacing="20" style="-fx-padding: 15 25 15 25; -fx-background-color: rgba(0,0,0,0.2);">
+         <Label style="-fx-font-size: 12px;" text="🟢 Session Active" textFill="#4caf50" />
+         <Region HBox.hgrow="ALWAYS" />
+         <Label style="-fx-font-size: 12px;" text="Version 2.0" textFill="#6c728f" />
+         <Label text="|" textFill="#6c728f" />
+         <Label style="-fx-font-size: 12px;" text="Logged in as: " textFill="#6c728f" />
+         <Label style="-fx-font-size: 12px;" text="admin" textFill="#4d9fff" />
+      </HBox>
+   </bottom>
+</BorderPane>

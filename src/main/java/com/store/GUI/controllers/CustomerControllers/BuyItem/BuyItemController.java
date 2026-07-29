@@ -2,15 +2,21 @@ package com.store.GUI.controllers.CustomerControllers.BuyItem;
 
 import java.sql.SQLException;
 
+import com.store.GUI.controllers.CustomerControllers.Cart.CartController;
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
+import com.store.Util.SessionManager;
 import com.store.model.Item;
+import com.store.service.CartService;
+import com.store.service.CustomerService;
 import com.store.service.ItemService;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.CustomMenuItem;
+import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -39,6 +45,12 @@ public class BuyItemController {
 
     @FXML
     private ComboBox<Integer> rowCountComboBox;
+
+    @FXML
+    private Label cartCountLabel;
+
+    @FXML
+    private Label balanceLabel;
 
     ObservableList<Item> itemList = FXCollections.observableArrayList();
     ItemService itemService = new ItemService();
@@ -76,9 +88,28 @@ public class BuyItemController {
         itemTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
 
+    @FXML
+    public void searchItems() {
+        updatePageCount();
+        fetchData();
+    }
+
+    @FXML
+    public void clearSearch() {
+        searchItemNameField.setText("");
+        updatePageCount();
+        fetchData();
+    }
+
     private void fetchData() {
-        itemList.clear();
         try {
+            // Get cart count
+            cartCountLabel.setText(String.valueOf(new CartService().getRowCount(SessionManager.getUser().getId(), "")));
+
+            // Get Balance
+            balanceLabel.setText(String.valueOf(new CustomerService().getBalance(SessionManager.getUser().getId())));
+
+            itemList.clear();
             itemList.addAll(itemService.display(
                     searchItemNameField.getText() != null ? searchItemNameField.getText().trim() : "",
                     rowCountComboBox.getValue(), pagination.getCurrentPageIndex()));

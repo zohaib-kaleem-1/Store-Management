@@ -87,6 +87,8 @@ public class CartController {
     }
 
     private void fetchData() {
+        // Update cart count
+
         itemList.clear();
         try {
             itemList.addAll(cartService.listFromCartByCustomerId(SessionManager.getUser().getId(),
@@ -148,5 +150,16 @@ public class CartController {
         }
 
         totalPriceLabel.setText("Total Price: " + totalPrice);
+    }
+
+    @FXML
+    public void clearCart() {
+        try {
+            if (new CartService().clearCart(SessionManager.getUser().getId()))
+                MessageUtil.showMessage("Cart Manager", "Cart Cleared successfully successfully.");
+            goBack();
+        } catch (Exception e) {
+            MessageUtil.showError("Cart Data Reading error", e.getMessage());
+        }
     }
 }
