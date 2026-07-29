@@ -174,7 +174,7 @@ public class CartDAO {
      * @param customerId id of user whose cart is to be cleared
      * @throws SQLException
      */
-    public boolean removeCartByUserId(int customerId) throws SQLException {
+    public boolean clearCart(int customerId) throws SQLException {
         String sql = "DELETE from cart WHERE userid = ?;";
         try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {

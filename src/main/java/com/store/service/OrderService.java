@@ -13,13 +13,13 @@ public class OrderService {
         return orderDAO.getRowCount(orderStatusToShow);
     }
 
-    public int getRowCountForUser(int customerId, String orderStatusToShow) throws SQLException {
-        return orderDAO.getRowCountForUser(customerId, orderStatusToShow);
+    public int getRowCountForUser(int customerId, String orderStatusToShow, String orderId) throws SQLException {
+        return orderDAO.getRowCountForUser(customerId, orderStatusToShow, orderId);
     }
 
-    public List<Order> listOrderByCustomerId(int userId, String orderStatus, int limit, int pageIndex)
+    public List<Order> listOrderByCustomerId(int userId, String orderId, String orderStatus, int limit, int pageIndex)
             throws SQLException {
-        return orderDAO.listOrderByCustomerId(userId, orderStatus, limit, pageIndex);
+        return orderDAO.listOrderByCustomerId(userId, orderId, orderStatus, limit, pageIndex);
     }
 
     public List<Order> listOrder(String orderStatus, int limit, int pageIndex)
@@ -29,5 +29,9 @@ public class OrderService {
 
     public boolean updateOrderStatus(int orderid, String orderStatus) throws SQLException {
         return orderDAO.updateOrderStatus(orderid, orderStatus);
+    }
+
+    public int getTotalSpent(int userId) throws SQLException {
+        return orderDAO.getTotalSpent(userId);
     }
 }

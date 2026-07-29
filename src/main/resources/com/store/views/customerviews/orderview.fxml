@@ -42,7 +42,7 @@
             <HBox spacing="15" alignment="CENTER_LEFT" 
                   style="-fx-background-color: rgba(255, 255, 255, 0.05); -fx-background-radius: 12; -fx-padding: 12 18; -fx-border-radius: 12; -fx-border-color: rgba(255, 255, 255, 0.08); -fx-border-width: 1;">
                 <Label text="🔍" textFill="#a0a5b5" style="-fx-font-size: 16px;"/>
-                <TextField fx:id="searchField" promptText="Search by Order ID or Item..." prefHeight="36.0" prefWidth="220.0"
+                <TextField fx:id="searchField" promptText="Search by Order ID" prefHeight="36.0" prefWidth="220.0"
                            style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-text-inner-color: white; -fx-prompt-text-fill: #80869a; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-padding: 0 15; -fx-font-size: 13px;"/>
                 <Separator orientation="VERTICAL" prefHeight="30" style="-fx-background-color: rgba(255,255,255,0.1);"/>
                 <Label text="📊 Status:" textFill="#c5c9d6" style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
@@ -50,10 +50,6 @@
                           promptText="All Orders"
                           style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-text-fill: white; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-padding: 0 10; -fx-font-size: 13px;"/>
                 <Separator orientation="VERTICAL" prefHeight="30" style="-fx-background-color: rgba(255,255,255,0.1);"/>
-                <Label text="📅 Date:" textFill="#c5c9d6" style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
-                <ComboBox fx:id="dateFilterComboBox" prefWidth="130.0" prefHeight="36.0"
-                          promptText="All Time"
-                          style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-text-fill: white; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-padding: 0 10; -fx-font-size: 13px;"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <!-- Action Buttons -->
                 <Button onAction="#viewOrderDetails" 

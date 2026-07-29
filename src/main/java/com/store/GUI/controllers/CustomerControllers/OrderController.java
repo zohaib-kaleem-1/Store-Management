@@ -1,9 +1,9 @@
 package com.store.GUI.controllers.CustomerControllers;
 
-import java.io.ObjectOutput;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.store.Transaction.Transaction;
 import com.store.Util.MessageUtil;
@@ -16,28 +16,41 @@ import com.store.service.OrderService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
-public class OrderController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class OrderController implements Initializable {
+
+    // FXML Fields
+    @FXML
+    private TextField searchField;
+
+    @FXML
+    private Label statusLabel;
+
     @FXML
     private Pagination pagination;
-
     @FXML
     private ComboBox<String> orderStatusComboBox;
-
     @FXML
     private ComboBox<Integer> rowCountComboBox;
-
     @FXML
     private TreeTableView<Object> orderTable;
 
+    // TreeTableColumns for Order
     @FXML
     private TreeTableColumn<Object, Integer> orderIdColumn;
     @FXML
@@ -45,92 +58,122 @@ public class OrderController {
     @FXML
     private TreeTableColumn<Object, String> addressColumn;
     @FXML
-    private TreeTableColumn<Object, String> orderStatusColumn;
+    private TreeTableColumn<Object, String> statusColumn;
     @FXML
-    private TreeTableColumn<Object, Integer> totalPriceColumn;
+    private TreeTableColumn<Object, Double> totalPriceColumn;
+
+    // TreeTableColumns for OrderItem
     @FXML
     private TreeTableColumn<Object, Integer> itemIdColumn;
     @FXML
     private TreeTableColumn<Object, String> itemNameColumn;
     @FXML
-    private TreeTableColumn<Object, Integer> priceColumn;
+    private TreeTableColumn<Object, Double> priceColumn;
     @FXML
     private TreeTableColumn<Object, Integer> quantityColumn;
     @FXML
-    private TreeTableColumn<Object, Integer> subtotalColumn;
+    private TreeTableColumn<Object, Double> subtotalColumn;
 
+    // Summary Labels
+    @FXML
+    private Label totalOrdersLabel;
+    @FXML
+    private Label totalItemsLabel;
+    @FXML
+    private Label totalRevenueLabel;
+
+    // Service and Data
     private ObservableList<Order> orderList = FXCollections.observableArrayList();
     private OrderService orderService = new OrderService();
     private int currentUserId = SessionManager.getUser().getId();
 
-    @FXML
-    public void goBack() {
-        SceneManager.goBack();
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setupTableColumns();
+        setupComboBoxes();
+        setupSearchListener();
+        updatePageCount();
+        fetchData();
+
+        // Enable single selection
+        orderTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
 
-    @FXML
-    public void initialize() {
-        // Setup columns
+    private void setupTableColumns() {
+        // Order level columns
         orderIdColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("orderId"));
-        boughtAtColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("bought_at"));
+        boughtAtColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("boughtAt"));
         addressColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("address"));
-        orderStatusColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("orderStatus"));
+        statusColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("orderStatus"));
         totalPriceColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("totalPriceOfAllItem"));
 
-        // ===== ORDERITEM COLUMNS (Child Level) =====
+        // OrderItem level columns
         itemIdColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("itemId"));
         itemNameColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("itemName"));
         priceColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("price"));
         quantityColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("quantity"));
         subtotalColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("totalPrice"));
+    }
 
-        // rows per page
-        rowCountComboBox.getItems().addAll(20, 30, 50, 100);
-
-        // default number of rows
+    private void setupComboBoxes() {
+        // Rows per page
+        rowCountComboBox.getItems().addAll(5, 10, 20, 30, 50, 100);
         rowCountComboBox.setValue(20);
 
-        // OrderStatus
-        orderStatusComboBox.getItems().addAll("All Orders", "pending", "ready", "shipped", "delivered");
-
-        // default value
+        // Order Status options
+        orderStatusComboBox.getItems().addAll("All Orders", "pending", "ready", "shipped", "delivered", "cancelled");
         orderStatusComboBox.setValue("All Orders");
 
-        orderStatusComboBox.valueProperty().addListener(event -> {
+        // Add listeners
+        orderStatusComboBox.valueProperty().addListener((obs, old, newVal) -> {
             updatePageCount();
             fetchData();
         });
 
-        rowCountComboBox.valueProperty().addListener(event -> {
+        rowCountComboBox.valueProperty().addListener((obs, old, newVal) -> {
             updatePageCount();
             fetchData();
         });
 
-        pagination.currentPageIndexProperty().addListener(event -> {
+        pagination.currentPageIndexProperty().addListener((obs, old, newVal) -> {
             fetchData();
         });
+    }
 
-        updatePageCount();
-        fetchData();
-
-        orderTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+    private void setupSearchListener() {
+        searchField.textProperty().addListener((obs, old, newVal) -> {
+            updatePageCount();
+            fetchData();
+        });
     }
 
     private void fetchData() {
         orderList.clear();
 
         try {
-            String orderStatusToShow = orderStatusComboBox.getValue().equals("All Orders")
+            String orderStatus = orderStatusComboBox.getValue().equals("All Orders")
                     ? ""
                     : orderStatusComboBox.getValue();
 
+            String orderId = searchField.getText() == null || searchField.getText().isEmpty()
+                    ? ""
+                    : searchField.getText();
+
+            int pageSize = rowCountComboBox.getValue();
+            int pageIndex = pagination.getCurrentPageIndex();
+
+            // Fetch orders with pagination
             orderList.addAll(orderService.listOrderByCustomerId(
                     currentUserId,
-                    orderStatusToShow,
-                    rowCountComboBox.getValue(),
-                    pagination.getCurrentPageIndex()));
+                    orderId,
+                    orderStatus,
+                    pageSize,
+                    pageIndex));
 
             buildTreeTable();
+            updateSummary();
+
+            statusLabel.setText("Orders loaded successfully.");
 
         } catch (SQLException e) {
             MessageUtil.showError("Order Data Reading Error", e.getMessage());
@@ -140,38 +183,24 @@ public class OrderController {
 
     private void updatePageCount() {
         try {
-            String orderStatusToShow = orderStatusComboBox.getValue().matches("All Orders") ? ""
+            String orderStatus = orderStatusComboBox.getValue().equals("All Orders")
+                    ? ""
                     : orderStatusComboBox.getValue();
 
-            int totalRows = orderService.getRowCountForUser(currentUserId, orderStatusToShow);
+            String orderId = searchField.getText() == null || searchField.getText().isEmpty()
+                    ? ""
+                    : searchField.getText();
+
+            int totalRows = orderService.getRowCountForUser(currentUserId, orderStatus, orderId);
 
             int pageLimit = rowCountComboBox.getValue();
             int pageCount = (int) Math.ceil((float) totalRows / (float) pageLimit);
-            pagination.setPageCount(pageCount);
+
+            pagination.setPageCount(pageCount > 0 ? pageCount : 1);
             pagination.setCurrentPageIndex(0);
-        } catch (Exception e) {
-            MessageUtil.showError("Manage Item", e.getMessage());
-        }
-    }
 
-    @FXML
-    public void cancelOrder() {
-        try {
-            TreeItem<Object> selected = orderTable.getSelectionModel().getSelectedItem();
-            if (selected != null && selected.getValue() instanceof Order) {
-                Order order = (Order) selected.getValue();
-                if (order.getOrderStatus().matches("pending")) {
-                    if (Transaction.cancelOrder(order.getOrderId())) {
-                        MessageUtil.showMessage("Order Manager", "Order cancelled successfully.");
-                        fetchData();
-                    }
-                } else
-                    MessageUtil.showError("Order Manager", "Too Late to cancel order");
-
-            } else
-                throw new Exception("Please Select any order");
         } catch (Exception e) {
-            MessageUtil.showError("Order", e.getMessage());
+            MessageUtil.showError("Error", e.getMessage());
         }
     }
 
@@ -184,7 +213,7 @@ public class OrderController {
         for (Order order : orderList) {
             // Create order node
             TreeItem<Object> orderNode = new TreeItem<>(order);
-            orderNode.setExpanded(false); // Start collapsed
+            orderNode.setExpanded(false);
 
             // Add order items as child nodes
             if (order.getItemList() != null && !order.getItemList().isEmpty()) {
@@ -201,10 +230,144 @@ public class OrderController {
         orderTable.setRoot(root);
         orderTable.setShowRoot(false);
 
-        // Expand the first order if there are orders
+        // Auto-expand first order if any
         if (!root.getChildren().isEmpty()) {
             root.getChildren().get(0).setExpanded(true);
         }
     }
 
+    private void updateSummary() {
+        int totalOrders = orderList.size();
+        int totalItems = 0;
+        double totalRevenue = 0.0;
+
+        for (Order order : orderList) {
+            if (order.getItemList() != null) {
+                totalItems += order.getItemList().size();
+            }
+            totalRevenue += order.getTotalPriceOfAllItem();
+        }
+
+        totalOrdersLabel.setText(String.valueOf(totalOrders));
+        totalItemsLabel.setText(String.valueOf(totalItems));
+        totalRevenueLabel.setText(String.format("$%.2f", totalRevenue));
+    }
+
+    @FXML
+    public void goBack() {
+        SceneManager.goBack();
+    }
+
+    @FXML
+    public void refreshOrders() {
+        fetchData();
+        MessageUtil.showMessage("Refresh", "Orders refreshed successfully!");
+    }
+
+    @FXML
+    public void cancelOrder() {
+        try {
+            TreeItem<Object> selectedItem = orderTable.getSelectionModel().getSelectedItem();
+
+            if (selectedItem == null || !(selectedItem.getValue() instanceof Order)) {
+                MessageUtil.showError("Cancel Order", "Please select an order to cancel");
+                return;
+            }
+
+            Order order = (Order) selectedItem.getValue();
+
+            // Check if order can be cancelled
+            if (!order.getOrderStatus().equalsIgnoreCase("pending")) {
+                MessageUtil.showError("Cancel Order",
+                        "Cannot cancel this order. Only pending orders can be cancelled.");
+                return;
+            }
+
+            // Show confirmation dialog
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Cancel Order");
+            alert.setHeaderText("Confirm Cancellation");
+            alert.setContentText("Are you sure you want to cancel Order #" + order.getOrderId() + "?");
+
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    try {
+                        if (Transaction.cancelOrder(order.getOrderId())) {
+                            MessageUtil.showMessage("Order Manager", "Order cancelled successfully!");
+                            refreshOrders();
+                        }
+                    } catch (Exception e) {
+                        MessageUtil.showError("Order Manager", e.getMessage());
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            MessageUtil.showError("Order Error", e.getMessage());
+        }
+    }
+
+    @FXML
+    public void viewOrderDetails() {
+        try {
+            TreeItem<Object> selectedItem = orderTable.getSelectionModel().getSelectedItem();
+
+            if (selectedItem == null) {
+                MessageUtil.showError("View Details", "Please select an order to view details");
+                return;
+            }
+
+            Object value = selectedItem.getValue();
+
+            if (value instanceof Order) {
+                Order order = (Order) value;
+                // Show order details
+                showOrderDetailsDialog(order);
+            } else if (value instanceof OrderItem) {
+                OrderItem item = (OrderItem) value;
+                // Find the parent order
+                TreeItem<Object> parent = selectedItem.getParent();
+                if (parent != null && parent.getValue() instanceof Order) {
+                    Order order = (Order) parent.getValue();
+                    showOrderDetailsDialog(order);
+                }
+            }
+
+        } catch (Exception e) {
+            MessageUtil.showError("View Details", e.getMessage());
+        }
+    }
+
+    private void showOrderDetailsDialog(Order order) {
+        StringBuilder details = new StringBuilder();
+        details.append("Order Details\n");
+        details.append("=============\n\n");
+        details.append("Order ID: #").append(order.getOrderId()).append("\n");
+        details.append("Date: ").append(formatTimestamp(order.getBought_at())).append("\n");
+        details.append("Status: ").append(order.getOrderStatus()).append("\n");
+        details.append("Address: ").append(order.getAddress()).append("\n");
+        details.append("Total: $").append(String.format("%.2f", order.getTotalPriceOfAllItem())).append("\n\n");
+        details.append("Items:\n");
+        details.append("------\n");
+
+        if (order.getItemList() != null) {
+            for (OrderItem item : order.getItemList()) {
+                details.append("- ").append(item.getItemName())
+                        .append(" x").append(item.getQuantity())
+                        .append(" ($").append(String.format("%.2f", item.getPrice()))
+                        .append(" each) = $").append(String.format("%.2f", item.getTotalPrice()))
+                        .append("\n");
+            }
+        }
+
+        MessageUtil.showMessage("Order Details", details.toString());
+    }
+
+    private String formatTimestamp(Timestamp timestamp) {
+        if (timestamp == null)
+            return "N/A";
+        LocalDateTime dateTime = timestamp.toLocalDateTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return dateTime.format(formatter);
+    }
 }

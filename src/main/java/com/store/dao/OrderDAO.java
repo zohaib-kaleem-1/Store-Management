@@ -42,15 +42,16 @@ public class OrderDAO {
         return itemList;
     }
 
-    public int getRowCountForUser(int customerId, String orderStatus) throws SQLException {
+    public int getRowCountForUser(int customerId, String orderStatus, String orderId) throws SQLException {
         String sql = """
-                SELECT count(orderid) FROM orders WHERE userid = ? AND orderStatus ILIKE ?
+                SELECT count(orderid) FROM orders WHERE userid = ? AND orderStatus ILIKE ? AND CAST (orderid AS TEXT) LIKE ?
                 """;
 
         try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, customerId);
             stmt.setString(2, "%" + orderStatus + "%");
+            stmt.setString(3, "%" + orderId + "%");
 
             ResultSet rs = stmt.executeQuery();
 
@@ -77,7 +78,7 @@ public class OrderDAO {
         }
     }
 
-    public List<Order> listOrderByCustomerId(int userId, String orderStatus, int limit, int pageIndex)
+    public List<Order> listOrderByCustomerId(int userId, String orderId, String orderStatus, int limit, int pageIndex)
             throws SQLException {
         List<Order> orderList = new ArrayList<>();
 
@@ -93,6 +94,7 @@ public class OrderDAO {
                 WHERE
                     userid = ?
                     AND orderstatus ILIKE ?
+                    AND CAST(orderId AS TEXT) ILIKE ?
                 ORDER BY orderid
                 LIMIT ?
                 OFFSET ?;
@@ -105,6 +107,7 @@ public class OrderDAO {
             stmt.setString(2, "%" + orderStatus + "%");
             stmt.setInt(3, limit);
             stmt.setInt(4, pageIndex * limit);
+            stmt.setString(5, "%" + orderId + "%");
 
             ResultSet rs = stmt.executeQuery();
 
@@ -180,6 +183,26 @@ public class OrderDAO {
             stmt.setString(1, status);
             stmt.setInt(2, orderId);
             return stmt.executeUpdate() == 1 ? true : false;
+        }
+    }
+
+    public int getTotalSpent(int orderId) throws SQLException {
+        String sql = """
+                SELECT totalprice FROM ORDERS
+                WHERE orderid = ?;
+                """;
+
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, orderId);
+
+            ResultSet rs = stmt.executeQuery();
+            int totalPrice = 0;
+            while (rs.next()) {
+                totalPrice += rs.getInt("totalprice");
+            }
+
+            return totalPrice;
         }
     }
 }

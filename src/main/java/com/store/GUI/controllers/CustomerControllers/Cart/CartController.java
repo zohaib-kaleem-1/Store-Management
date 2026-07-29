@@ -46,6 +46,9 @@ public class CartController {
     private TextField searchItemNameField;
 
     @FXML
+    private Label cartCountLabel;
+
+    @FXML
     private ComboBox<Integer> rowCountComboBox;
 
     ObservableList<CartItem> itemList = FXCollections.observableArrayList();
@@ -87,10 +90,11 @@ public class CartController {
     }
 
     private void fetchData() {
-        // Update cart count
-
-        itemList.clear();
         try {
+            // Update cart count
+            cartCountLabel.setText(String.valueOf(new CartService().getRowCount(SessionManager.getUser().getId(), "")));
+
+            itemList.clear();
             itemList.addAll(cartService.listFromCartByCustomerId(SessionManager.getUser().getId(),
                     searchItemNameField.getText().trim(), rowCountComboBox.getValue(),
                     pagination.getCurrentPageIndex()));

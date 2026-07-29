@@ -33,4 +33,8 @@ public class CartService {
     public int getRowCount(int customerId, String itemName) throws SQLException {
         return cartDAO.getRowCount(customerId, itemName);
     }
+
+    public boolean clearCart(int userid) throws SQLException {
+        return cartDAO.clearCart(userid);
+    }
 }
