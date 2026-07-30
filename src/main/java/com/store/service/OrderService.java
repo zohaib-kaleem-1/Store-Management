@@ -34,4 +34,8 @@ public class OrderService {
     public int getTotalSpent(int userId) throws SQLException {
         return orderDAO.getTotalSpent(userId);
     }
+
+    public double getTotalRevenue() throws SQLException {
+        return orderDAO.getTotalRevenue();
+    }
 }

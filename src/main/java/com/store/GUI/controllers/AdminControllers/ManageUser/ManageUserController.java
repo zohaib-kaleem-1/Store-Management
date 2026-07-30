@@ -1,11 +1,13 @@
 package com.store.GUI.controllers.AdminControllers.ManageUser;
 
+import com.store.model.Item;
 import com.store.model.User;
 
 import java.sql.SQLException;
 
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
+import com.store.service.ItemService;
 import com.store.service.UserService;
 
 import javafx.collections.FXCollections;
@@ -50,6 +52,9 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
 
     @FXML
     private Label pageTitleLabel;
+
+    @FXML
+    private Label statusLabel;
 
     @FXML
     private TextField searchUsernameField;
@@ -100,8 +105,11 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
             userList.addAll(adminService.getAllUserByRole(
                     searchUsernameField.getText() != null ? searchUsernameField.getText().trim() : "", role,
                     rowCountComboBox.getValue(), pagination.getCurrentPageIndex()));
+
+            statusLabel.setText("Data loaded successfully.");
         } catch (SQLException e) {
             MessageUtil.showError("User Data Reading error", e.getMessage());
+            statusLabel.setText("Error loading data.");
         }
 
         userTable.setItems(userList);
@@ -153,5 +161,27 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
 
         updatePageCount();
         fetchData();
+    }
+
+    @FXML
+    public void refreshUsers() {
+        fetchData();
+    }
+
+    @FXML
+    public void removeUsers() {
+        try {
+            ObservableList<User> selectedUser = userTable.getSelectionModel().getSelectedItems();
+
+            if (selectedUser == null || selectedUser.isEmpty())
+                MessageUtil.showError("User Manager", "No users selected yet");
+
+            new UserService().removeUser(selectedUser.get(0).getUsername(), selectedUser.get(0).getRole());
+
+            MessageUtil.showMessage("User Manager", "User removed successfully.");
+            refreshUsers();
+        } catch (Exception e) {
+            MessageUtil.showError("User Manager", e.getMessage());
+        }
     }
 }

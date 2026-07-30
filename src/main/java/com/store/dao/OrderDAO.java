@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,6 +194,24 @@ public class OrderDAO {
         try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, orderId);
+
+            ResultSet rs = stmt.executeQuery();
+            int totalPrice = 0;
+            while (rs.next()) {
+                totalPrice += rs.getInt("totalprice");
+            }
+
+            return totalPrice;
+        }
+    }
+
+    public int getTotalRevenue() throws SQLException {
+        String sql = """
+                SELECT totalprice FROM ORDERS;
+                """;
+
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             ResultSet rs = stmt.executeQuery();
             int totalPrice = 0;

@@ -3,10 +3,8 @@ package com.store.GUI.controllers.AdminControllers;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import com.store.Transaction.Transaction;
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
-import com.store.Util.SessionManager;
 import com.store.model.Order;
 import com.store.model.OrderItem;
 import com.store.service.OrderService;
@@ -15,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
@@ -64,6 +63,15 @@ public class OrderController {
     private TreeTableColumn<Object, Integer> quantityColumn;
     @FXML
     private TreeTableColumn<Object, Integer> subtotalColumn;
+
+    @FXML
+    private Label totalOrdersLabel;
+    @FXML
+    private Label totalRevenueLabel;
+    @FXML
+    private Label totalItemsLabel;
+    @FXML
+    private Label statusLabel;
 
     private ObservableList<Order> orderList = FXCollections.observableArrayList();
     private OrderService orderService = new OrderService();
@@ -128,6 +136,8 @@ public class OrderController {
         orderList.clear();
 
         try {
+            totalOrdersLabel.setText(String.valueOf(new OrderService().getRowCount("")));
+            totalRevenueLabel.setText(String.valueOf(new OrderService().getTotalRevenue()));
             String orderStatusToShow = orderStatusComboBox.getValue().equals("All Orders")
                     ? ""
                     : orderStatusComboBox.getValue();
@@ -220,4 +230,8 @@ public class OrderController {
         }
     }
 
+    @FXML
+    public void refreshOrders() {
+        fetchData();
+    }
 }

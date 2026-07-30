@@ -1,47 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TreeTableColumn?>
 <?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1059.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.GUI.controllers.AdminControllers.OrderController">
+<AnchorPane prefHeight="765.0" prefWidth="1059.0" style="-fx-background-color: linear-gradient(to bottom right, #1a1c29, #2b2e4a);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label alignment="CENTER" layoutY="24.0" prefHeight="36.0" prefWidth="1059.0" text="Orders">
-         <font>
-            <Font name="System Bold Italic" size="25.0" />
-         </font>
-      </Label>
-      <Button layoutX="14.0" layoutY="29.0" mnemonicParsing="false" onAction="#goBack" text="Go Back" />
-      <ButtonBar layoutX="14.0" layoutY="66.0" prefHeight="40.0" prefWidth="1032.0">
-         <buttons>
-            <ComboBox fx:id="updateOrderStatusCombobox" prefWidth="150.0" promptText="New Status" />
-            <Button mnemonicParsing="false" onAction="#updateStatus" text="Update Status" />
-            <ComboBox fx:id="orderStatusComboBox" prefWidth="150.0" />
-         </buttons>
-      </ButtonBar>
-      <TreeTableView fx:id="orderTable" layoutX="14.0" layoutY="106.0" prefHeight="580.0" prefWidth="1032.0">
+      <!-- ==================== TOP HEADER ==================== -->
+      <VBox layoutX="0.0" layoutY="0.0" prefWidth="1059.0" spacing="5" style="-fx-padding: 15 25 10 25; -fx-background-color: rgba(0,0,0,0.2);">
+         <HBox alignment="CENTER_LEFT" spacing="15">
+            <Button prefHeight="35.0" style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-text-fill: #c5c9d6; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-cursor: hand; -fx-padding: 0 20; -fx-font-weight: bold; -fx-font-size: 14px;" text="← Go Back" />
+            <Label style="-fx-font-size: 28px;" text="📦" />
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Order Management" textFill="#e0e4f0" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button prefHeight="35.0" style="-fx-background-color: rgba(52, 152, 219, 0.2); -fx-text-fill: #3498db; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #3498db; -fx-border-width: 1.5; -fx-cursor: hand; -fx-padding: 0 20; -fx-font-weight: bold; -fx-font-size: 14px;" text="🔄 Refresh" />
+         </HBox>
+         <Separator style="-fx-background-color: rgba(255,255,255,0.1);" />
+      </VBox>
+      <!-- ==================== FILTER AND ACTION BAR ==================== -->
+      <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="80.0" prefHeight="55.0" prefWidth="1032.0" spacing="15" style="-fx-background-color: rgba(255, 255, 255, 0.05); -fx-background-radius: 12; -fx-padding: 12 18; -fx-border-radius: 12; -fx-border-color: rgba(255, 255, 255, 0.08); -fx-border-width: 1;">
+         <Label style="-fx-font-weight: bold; -fx-font-size: 13px;" text="📊 Status Filter:" textFill="#c5c9d6" />
+         <ComboBox fx:id="orderStatusComboBox" prefHeight="36.0" prefWidth="150.0" promptText="All Orders" style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-text-fill: white; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-padding: 0 10; -fx-font-size: 13px;" />
+         <Separator orientation="VERTICAL" prefHeight="30" style="-fx-background-color: rgba(255,255,255,0.1);" />
+         <Label style="-fx-font-weight: bold; -fx-font-size: 13px;" text="✏️ Update Status:" textFill="#c5c9d6" />
+         <ComboBox fx:id="updateOrderStatusCombobox" prefHeight="36.0" prefWidth="150.0" promptText="Select Status" style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-text-fill: white; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-padding: 0 10; -fx-font-size: 13px;" />
+         <Button prefHeight="36.0" style="-fx-background-color: linear-gradient(to right, #f39c12, #e67e22); -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-size: 13px; -fx-padding: 0 20; -fx-effect: dropshadow(three-pass-box, rgba(243, 156, 18, 0.3), 10, 0, 0, 5);" text="📝 Update" />
+      </HBox>
+      <!-- ==================== TABLE VIEW ==================== -->
+      <TreeTableView fx:id="orderTable" layoutX="14.0" layoutY="145.0" prefHeight="530.0" prefWidth="1032.0" style="-fx-background-color: rgba(255, 255, 255, 0.05); -fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: rgba(255, 255, 255, 0.08); -fx-border-width: 1;">
          <columns>
-            <TreeTableColumn fx:id="orderIdColumn" prefWidth="75.0" text="Order Id" />
-            <TreeTableColumn fx:id="customerIdColumn" prefWidth="94.0" text="Customer Id" />
+            <TreeTableColumn fx:id="orderIdColumn" prefWidth="75.0" text="Order ID" />
+            <TreeTableColumn fx:id="customerIdColumn" prefWidth="94.0" text="Customer ID" />
             <TreeTableColumn fx:id="customerNameColumn" prefWidth="140.0" text="Customer Name" />
             <TreeTableColumn fx:id="boughtAtColumn" prefWidth="106.0" text="Bought At" />
             <TreeTableColumn fx:id="addressColumn" prefWidth="74.0" text="Address" />
-            <TreeTableColumn fx:id="orderStatusColumn" prefWidth="97.0" text="Order Status" />
+            <TreeTableColumn fx:id="orderStatusColumn" prefWidth="97.0" text="Status" />
             <TreeTableColumn fx:id="totalPriceColumn" prefWidth="86.0" text="Total Price" />
             <TreeTableColumn fx:id="itemIdColumn" prefWidth="65.0" text="Item ID" />
             <TreeTableColumn fx:id="itemNameColumn" prefWidth="91.0" text="Item Name" />
             <TreeTableColumn fx:id="priceColumn" prefWidth="63.0" text="Price" />
-            <TreeTableColumn fx:id="quantityColumn" prefWidth="68.0" text="Quantity" />
-            <TreeTableColumn fx:id="subtotalColumn" prefWidth="72.0" text="Subtotal" />
+            <TreeTableColumn fx:id="quantityColumn" prefWidth="56.0" text="Qty" />
+            <TreeTableColumn fx:id="subtotalColumn" prefWidth="84.0" text="Subtotal" />
          </columns>
       </TreeTableView>
-      <Pagination fx:id="pagination" layoutX="14.0" layoutY="692.0" prefHeight="48.0" prefWidth="1032.0" />
-      <ComboBox fx:id="rowCountComboBox" layoutX="970.0" layoutY="692.0" prefHeight="26.0" prefWidth="75.0" />
+      <!-- ==================== BOTTOM CONTROLS ==================== -->
+      <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="685.0" prefHeight="35.0" prefWidth="1032.0" spacing="15" style="-fx-background-color: rgba(255, 255, 255, 0.05); -fx-background-radius: 12; -fx-padding: 10 18; -fx-border-radius: 12; -fx-border-color: rgba(255, 255, 255, 0.08); -fx-border-width: 1;" AnchorPane.bottomAnchor="10.0">
+         <!-- ==================== STATUS LABEL ==================== -->
+         <Label fx:id="statusLabel" prefHeight="52.0" prefWidth="88.0" style="-fx-font-size: 12px; -fx-font-weight: bold;" text="✅ Ready" textFill="#4caf50" />
+         <VBox spacing="2">
+            <VBox spacing="2">
+               <children>
+                  <Label style="-fx-font-size: 12px;" text="Total Orders:" textFill="#a0a5b5" />
+                  <Label fx:id="totalOrdersLabel" prefHeight="18.0" prefWidth="76.0" style="-fx-font-size: 13px; -fx-font-weight: bold;" text="0" textFill="#3498db" />
+               </children>
+            </VBox>
+         </VBox>
+         <Separator orientation="VERTICAL" prefHeight="25" style="-fx-background-color: rgba(255,255,255,0.1);" />
+         <VBox spacing="2">
+            <children>
+               <VBox spacing="2">
+                  <children>
+                     <Label style="-fx-font-size: 12px;" text="Total Revenue" textFill="#08eb6a" />
+                     <Label fx:id="totalRevenueLabel" prefHeight="18.0" prefWidth="76.0" style="-fx-font-size: 13px; -fx-font-weight: bold;" text="0" textFill="#34d977" />
+                  </children>
+               </VBox>
+            </children>
+         </VBox>
+         <Region HBox.hgrow="ALWAYS" />
+         <Label style="-fx-font-size: 12px;" text="Rows:" textFill="#a0a5b5" />
+         <ComboBox fx:id="rowCountComboBox" prefHeight="30.0" prefWidth="75.0" promptText="10" style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-text-fill: white; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-font-size: 13px;" />
+         <Pagination fx:id="pagination" maxPageIndicatorCount="5" prefHeight="30.0" prefWidth="250.0" style="-fx-background-color: transparent;">
+            <HBox.margin>
+               <Insets />
+            </HBox.margin></Pagination>
+      </HBox>
    </children>
 </AnchorPane>
