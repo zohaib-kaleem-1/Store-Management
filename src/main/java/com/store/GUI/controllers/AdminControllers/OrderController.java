@@ -172,7 +172,7 @@ public class OrderController {
     }
 
     @FXML
-    public void updateStatus() {
+    public void updateOrderStatus() {
         try {
             TreeItem<Object> selected = orderTable.getSelectionModel().getSelectedItem();
             if (selected != null && selected.getValue() instanceof Order) {
@@ -233,5 +233,6 @@ public class OrderController {
     @FXML
     public void refreshOrders() {
         fetchData();
+        MessageUtil.showMessage("Order Manager", "Data refreshed");
     }
 }

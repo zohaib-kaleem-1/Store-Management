@@ -2,7 +2,6 @@ package com.store.GUI.controllers.CustomerControllers.BuyItem;
 
 import java.sql.SQLException;
 
-import com.store.GUI.controllers.CustomerControllers.Cart.CartController;
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
 import com.store.Util.SessionManager;
@@ -15,7 +14,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.SelectionMode;

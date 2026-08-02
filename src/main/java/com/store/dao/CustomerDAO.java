@@ -26,7 +26,7 @@ public class CustomerDAO {
                     INSERT INTO customerBalance (userid, balance) VALUES (?, 0.00);
                     """;
             try (PreparedStatement stmt1 = conn.prepareStatement(sql)) {
-
+                stmt1.setInt(1, userid);
                 stmt1.execute();
             }
 

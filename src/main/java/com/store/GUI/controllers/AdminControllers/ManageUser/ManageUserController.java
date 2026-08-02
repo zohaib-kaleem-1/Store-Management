@@ -1,13 +1,11 @@
 package com.store.GUI.controllers.AdminControllers.ManageUser;
 
-import com.store.model.Item;
 import com.store.model.User;
 
 import java.sql.SQLException;
 
 import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
-import com.store.service.ItemService;
 import com.store.service.UserService;
 
 import javafx.collections.FXCollections;

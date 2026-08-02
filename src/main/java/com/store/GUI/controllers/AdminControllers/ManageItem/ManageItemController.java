@@ -123,8 +123,10 @@ public class ManageItemController {
     private void goToUpdateItem() {
         ObservableList<Item> selectedItem = itemTable.getSelectionModel().getSelectedItems();
 
-        if (selectedItem == null || selectedItem.isEmpty())
+        if (selectedItem == null || selectedItem.isEmpty()) {
             MessageUtil.showError("Item Update Manager", "No item selected yet");
+            return;
+        }
 
         SceneManager.switchScene("/com/store/views/adminviews/manageitem/addupdateitemview.fxml", "Update Item",
                 selectedItem.get(0));

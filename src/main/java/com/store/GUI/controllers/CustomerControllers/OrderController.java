@@ -32,9 +32,7 @@ import javafx.scene.control.ButtonType;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class OrderController implements Initializable {
-
-    // FXML Fields
+public class OrderController {
     @FXML
     private TextField searchField;
 
@@ -87,8 +85,8 @@ public class OrderController implements Initializable {
     private OrderService orderService = new OrderService();
     private int currentUserId = SessionManager.getUser().getId();
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    public void initialize() {
         setupTableColumns();
         setupComboBoxes();
         setupSearchListener();
@@ -141,7 +139,7 @@ public class OrderController implements Initializable {
     }
 
     private void setupSearchListener() {
-        searchField.textProperty().addListener((obs, old, newVal) -> {
+        searchField.textProperty().addListener((event) -> {
             updatePageCount();
             fetchData();
         });
@@ -229,11 +227,6 @@ public class OrderController implements Initializable {
         // Set root and hide it
         orderTable.setRoot(root);
         orderTable.setShowRoot(false);
-
-        // Auto-expand first order if any
-        if (!root.getChildren().isEmpty()) {
-            root.getChildren().get(0).setExpanded(true);
-        }
     }
 
     private void updateSummary() {

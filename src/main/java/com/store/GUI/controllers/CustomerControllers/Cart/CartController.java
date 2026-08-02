@@ -147,13 +147,13 @@ public class CartController {
     }
 
     private void updateTotalPrice() {
-        int totalPrice = 0;
+        double totalPrice = 0;
 
         for (CartItem i : itemList) {
             totalPrice += i.getTotalPrice();
         }
 
-        totalPriceLabel.setText("Total Price: " + totalPrice);
+        totalPriceLabel.setText(String.valueOf(totalPrice));
     }
 
     @FXML
