@@ -92,7 +92,7 @@ public class UserDAO {
                 FROM
                 	USERS
                 WHERE
-                	USERNAME ILIKE ?
+                	name ILIKE ?
                 	AND ROLE = ?
                 ORDER BY
                 	USERID
@@ -190,7 +190,7 @@ public class UserDAO {
                 FROM
                 	USERS
                 WHERE
-                	ROLE = ? and username ILIKE ?;
+                	ROLE = ? and name ILIKE ?;
                                 """;
 
         try (Connection conn = Database.getConnection();

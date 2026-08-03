@@ -60,14 +60,15 @@ public class OrderDAO {
         }
     }
 
-    public int getRowCount(String orderStatus) throws SQLException {
+    public int getRowCount(String orderStatus, String username) throws SQLException {
         String sql = """
-                SELECT count(orderid) FROM orders WHERE orderStatus ILIKE ?
+                SELECT count(orderid) FROM orders o join users u on u.userid = o.userid WHERE orderStatus ILIKE ? AND u.name ILIKE ?;
                 """;
 
         try (Connection conn = Database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, "%" + orderStatus + "%");
+            stmt.setString(2, "%" + username + "%");
 
             ResultSet rs = stmt.executeQuery();
 
@@ -104,9 +105,9 @@ public class OrderDAO {
 
             stmt.setInt(1, userId);
             stmt.setString(2, "%" + orderStatus + "%");
-            stmt.setInt(3, limit);
-            stmt.setInt(4, pageIndex * limit);
-            stmt.setString(5, "%" + orderId + "%");
+            stmt.setString(3, "%" + orderId + "%");
+            stmt.setInt(4, limit);
+            stmt.setInt(5, pageIndex * limit);
 
             ResultSet rs = stmt.executeQuery();
 
@@ -124,7 +125,7 @@ public class OrderDAO {
         return orderList;
     }
 
-    public List<Order> listOrder(String orderStatus, int limit, int pageIndex)
+    public List<Order> listOrder(String username, String orderStatus, int limit, int pageIndex)
             throws SQLException {
         List<Order> orderList = new ArrayList<>();
 
@@ -141,7 +142,8 @@ public class OrderDAO {
                 	ORDERS O
                 JOIN USERS U ON U.USERID = O.USERID
                 WHERE
-                    orderstatus ILIKE ?
+                    o.orderstatus ILIKE ?
+                    AND u.name ILIKE ?
                 ORDER BY orderid
                 LIMIT ?
                 OFFSET ?
@@ -151,8 +153,9 @@ public class OrderDAO {
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, "%" + orderStatus + "%");
-            stmt.setInt(2, limit);
-            stmt.setInt(3, pageIndex * limit);
+            stmt.setString(2, "%" + username + "%");
+            stmt.setInt(3, limit);
+            stmt.setInt(4, pageIndex * limit);
 
             ResultSet rs = stmt.executeQuery();
 

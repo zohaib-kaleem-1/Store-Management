@@ -137,8 +137,10 @@ public class ManageItemController {
         try {
             ObservableList<Item> selectedItem = itemTable.getSelectionModel().getSelectedItems();
 
-            if (selectedItem == null || selectedItem.isEmpty())
+            if (selectedItem == null || selectedItem.isEmpty()) {
                 MessageUtil.showError("Item Update Manager", "No item selected yet");
+                return;
+            }
 
             new ItemService().removeItem(selectedItem.get(0).getId());
 

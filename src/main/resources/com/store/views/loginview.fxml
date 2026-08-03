@@ -15,9 +15,10 @@
 <?import javafx.scene.text.Text?>
 <BorderPane prefHeight="650.0" prefWidth="550.0" 
             style="-fx-background-color: linear-gradient(to bottom right, #1a1c29, #2b2e4a);" 
-            stylesheets="@login-styles.css"
+            stylesheets="@/com/store/styles/login-styles.css"
             xmlns="http://javafx.com/javafx/22" 
             xmlns:fx="http://javafx.com/fxml/1" 
+
             fx:controller="com.store.GUI.controllers.LoginController">
    <!-- ==================== TOP HEADER ==================== -->
    <top>

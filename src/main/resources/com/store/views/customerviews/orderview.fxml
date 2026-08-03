@@ -5,12 +5,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeTableColumn?>
 <?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="765.0" prefWidth="1059.0" style="-fx-background-color: linear-gradient(to bottom right, #1a1c29, #2b2e4a);" stylesheets="@/com/store/styles/view-style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.GUI.controllers.CustomerControllers.OrderController">
     <children>
         <!-- ==================== TOP HEADER ==================== -->
@@ -26,10 +28,15 @@
         </VBox>
         <!-- ==================== FILTER AND ACTION BAR ==================== -->
         <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="80.0" prefHeight="55.0" prefWidth="1032.0" spacing="15" style="-fx-background-color: rgba(255, 255, 255, 0.05); -fx-background-radius: 12; -fx-padding: 12 18; -fx-border-radius: 12; -fx-border-color: rgba(255, 255, 255, 0.08); -fx-border-width: 1;">
+            <TextField fx:id="searchField" prefHeight="35.0" promptText="🔍 Search by order id..." style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-text-fill: white; -fx-prompt-text-fill: #80869a; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-padding: 0 15;">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </TextField>
             <Label style="-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #c5c9d6;" text="📊 Status Filter:" />
             <ComboBox fx:id="orderStatusComboBox" prefHeight="36.0" prefWidth="150.0" promptText="All Orders" style="-fx-background-color: rgba(255, 255, 255, 0.08); -fx-text-fill: white; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-width: 1.5; -fx-padding: 0 10; -fx-font-size: 13px;" />
             <Separator orientation="VERTICAL" prefHeight="30" style="-fx-background-color: rgba(255,255,255,0.1);" />
-            <Button onAction="#updateOrderStatus" prefHeight="36.0" style="-fx-background-color: linear-gradient(to right, #f39c12, #e67e22); -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-size: 13px; -fx-padding: 0 20; -fx-effect: dropshadow(three-pass-box, rgba(243, 156, 18, 0.3), 10, 0, 0, 5);" text="Cancel Order" />
+            <Button onAction="#cancelOrder" prefHeight="36.0" style="-fx-background-color: linear-gradient(to right, #f39c12, #e67e22); -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-size: 13px; -fx-padding: 0 20; -fx-effect: dropshadow(three-pass-box, rgba(243, 156, 18, 0.3), 10, 0, 0, 5);" text="Cancel Order" />
         </HBox>
         <!-- ==================== TABLE VIEW ==================== -->
         <TreeTableView fx:id="orderTable" layoutX="14.0" layoutY="145.0" prefHeight="530.0" prefWidth="1032.0" style="-fx-background-color: rgba(255, 255, 255, 0.05); -fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: rgba(255, 255, 255, 0.08); -fx-border-width: 1;">

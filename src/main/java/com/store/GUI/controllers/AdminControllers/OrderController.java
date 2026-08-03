@@ -16,6 +16,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
@@ -72,6 +73,8 @@ public class OrderController {
     private Label totalItemsLabel;
     @FXML
     private Label statusLabel;
+    @FXML
+    private TextField searchField;
 
     private ObservableList<Order> orderList = FXCollections.observableArrayList();
     private OrderService orderService = new OrderService();
@@ -126,6 +129,11 @@ public class OrderController {
             fetchData();
         });
 
+        searchField.textProperty().addListener(event -> {
+            updatePageCount();
+            fetchData();
+        });
+
         updatePageCount();
         fetchData();
 
@@ -136,13 +144,18 @@ public class OrderController {
         orderList.clear();
 
         try {
-            totalOrdersLabel.setText(String.valueOf(new OrderService().getRowCount("")));
             totalRevenueLabel.setText(String.valueOf(new OrderService().getTotalRevenue()));
             String orderStatusToShow = orderStatusComboBox.getValue().equals("All Orders")
                     ? ""
                     : orderStatusComboBox.getValue();
 
+            String orderId = searchField.getText() == null || searchField.getText().isEmpty()
+                    ? ""
+                    : searchField.getText();
+
+            totalOrdersLabel.setText(String.valueOf(new OrderService().getRowCount(orderStatusToShow, orderId)));
             orderList.addAll(orderService.listOrder(
+                    orderId,
                     orderStatusToShow,
                     rowCountComboBox.getValue(),
                     pagination.getCurrentPageIndex()));
@@ -159,8 +172,11 @@ public class OrderController {
         try {
             String orderStatusToShow = orderStatusComboBox.getValue().matches("All Orders") ? ""
                     : orderStatusComboBox.getValue();
+            String orderId = searchField.getText() == null || searchField.getText().isEmpty()
+                    ? ""
+                    : searchField.getText();
 
-            int totalRows = orderService.getRowCount(orderStatusToShow);
+            int totalRows = orderService.getRowCount(orderStatusToShow, orderId);
 
             int pageLimit = rowCountComboBox.getValue();
             int pageCount = (int) Math.ceil((float) totalRows / (float) pageLimit);
@@ -181,7 +197,7 @@ public class OrderController {
                 String newStatus = updateOrderStatusCombobox.getValue();
 
                 if (newStatus == null || newStatus.isEmpty())
-                    throw new Exception("Please select any order");
+                    throw new Exception("Please select any order status");
 
                 if (newStatus.matches(order.getOrderStatus()))
                     throw new Exception("Please choose any new status not the old one");

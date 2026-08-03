@@ -139,8 +139,10 @@ public class BuyItemController {
     public void addToCart() {
         ObservableList<Item> selectedItem = itemTable.getSelectionModel().getSelectedItems();
 
-        if (selectedItem == null || selectedItem.isEmpty())
+        if (selectedItem == null || selectedItem.isEmpty()) {
             MessageUtil.showError("Item Update Manager", "No item selected yet");
+            return;
+        }
 
         SceneManager.switchScene("/com/store/views/customerviews/buyitem/buyitemdialogue.fxml", "Buy Item Dialogue",
                 selectedItem.get(0));

@@ -55,7 +55,7 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
     private Label statusLabel;
 
     @FXML
-    private TextField searchUsernameField;
+    private TextField searchNameField;
 
     @FXML
     private ComboBox<Integer> rowCountComboBox;
@@ -84,7 +84,7 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
             fetchData();
         });
 
-        searchUsernameField.textProperty().addListener(event -> {
+        searchNameField.textProperty().addListener(event -> {
             updatePageCount();
             fetchData();
         });
@@ -101,7 +101,7 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
         try {
             UserService adminService = new UserService();
             userList.addAll(adminService.getAllUserByRole(
-                    searchUsernameField.getText() != null ? searchUsernameField.getText().trim() : "", role,
+                    searchNameField.getText() != null ? searchNameField.getText().trim() : "", role,
                     rowCountComboBox.getValue(), pagination.getCurrentPageIndex()));
 
             statusLabel.setText("Data loaded successfully.");
@@ -115,7 +115,7 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
 
     private void updatePageCount() {
         try {
-            int totalRows = userService.getRowCount(searchUsernameField.getText(), role);
+            int totalRows = userService.getRowCount(searchNameField.getText(), role);
             int pageLimit = rowCountComboBox.getValue();
             int pageCount = (int) Math.ceil((float) totalRows / (float) pageLimit);
             pagination.setPageCount(pageCount);
@@ -141,7 +141,7 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
         ObservableList<User> userToUpdate = userTable.getSelectionModel().getSelectedItems();
 
         if (userToUpdate == null || userToUpdate.isEmpty()) {
-            MessageUtil.showError("User Manager", "No Item Selected");
+            MessageUtil.showError("User Manager", "No User Selected");
             return;
         }
 
@@ -171,8 +171,10 @@ public class ManageUserController implements SceneManager.DataReceiver<String> {
         try {
             ObservableList<User> selectedUser = userTable.getSelectionModel().getSelectedItems();
 
-            if (selectedUser == null || selectedUser.isEmpty())
+            if (selectedUser == null || selectedUser.isEmpty()) {
                 MessageUtil.showError("User Manager", "No users selected yet");
+                return;
+            }
 
             new UserService().removeUser(selectedUser.get(0).getUsername(), selectedUser.get(0).getRole());
 

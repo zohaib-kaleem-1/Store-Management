@@ -9,8 +9,8 @@ import com.store.model.Order;
 public class OrderService {
     OrderDAO orderDAO = new OrderDAO();
 
-    public int getRowCount(String orderStatusToShow) throws SQLException {
-        return orderDAO.getRowCount(orderStatusToShow);
+    public int getRowCount(String orderStatusToShow, String orderId) throws SQLException {
+        return orderDAO.getRowCount(orderStatusToShow, orderId);
     }
 
     public int getRowCountForUser(int customerId, String orderStatusToShow, String orderId) throws SQLException {
@@ -22,9 +22,9 @@ public class OrderService {
         return orderDAO.listOrderByCustomerId(userId, orderId, orderStatus, limit, pageIndex);
     }
 
-    public List<Order> listOrder(String orderStatus, int limit, int pageIndex)
+    public List<Order> listOrder(String orderId, String orderStatus, int limit, int pageIndex)
             throws SQLException {
-        return orderDAO.listOrder(orderStatus, limit, pageIndex);
+        return orderDAO.listOrder(orderId, orderStatus, limit, pageIndex);
     }
 
     public boolean updateOrderStatus(int orderid, String orderStatus) throws SQLException {
