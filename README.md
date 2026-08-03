@@ -1,7 +1,3 @@
-Here's a **professional, beautiful README** for your Store Management System. I've designed it to be both informative and visually appealing, making your project stand out on GitHub.
-
----
-
 # 🏪 Store Management System
 
 > A comprehensive JavaFX desktop application for managing retail store operations with PostgreSQL database
@@ -26,7 +22,6 @@ Here's a **professional, beautiful README** for your Store Management System. I'
 - [Usage](#-usage)
 - [Screenshots](#-screenshots)
 - [Security Features](#-security-features)
-- [API Reference](#-api-reference)
 - [Contributing](#-contributing)
 - [License](#-license)
 - [Contact](#-contact)
@@ -86,12 +81,12 @@ Here's a **professional, beautiful README** for your Store Management System. I'
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  Java 17                │  Core language                   │
-│  PostgreSQL 14+         │  Production-ready database       │
-│  BCrypt                │  Password hashing                │
-│  JDBC                  │  Database connectivity           │
-│  Maven                 │  Build automation                │
-│  SLF4J + Logback       │  Logging framework              │
+│  Java 17                │  Core language                    │
+│  PostgreSQL 14+         │  Production-ready database        │
+│  BCrypt                 │  Password hashing                 │
+│  JDBC                   │  Database connectivity            │
+│  Maven                  │  Build automation                 │
+│  SLF4J + Logback        │  Logging framework                │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -99,10 +94,10 @@ Here's a **professional, beautiful README** for your Store Management System. I'
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  JavaFX 17              │  UI framework                   │
-│  FXML                   │  UI layout markup              │
-│  CSS                    │  Styling                        │
-│  Scene Manager          │  Navigation management         │
+│  JavaFX 17              │  UI framework                     │
+│  FXML                   │  UI layout markup                 │
+│  CSS                    │  Styling                          │
+│  Scene Manager          │  Navigation management            │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -115,19 +110,19 @@ The application follows a **clean layered architecture** with clear separation o
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                    PRESENTATION LAYER                        │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
-│  │   Controllers │  │     FXML     │  │     CSS      │      │
-│  └──────────────┘  └──────────────┘  └──────────────┘      │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐        │
+│  │  Controllers │  │     FXML     │  │     CSS      │        │
+│  └──────────────┘  └──────────────┘  └──────────────┘        │
 ├──────────────────────────────────────────────────────────────┤
 │                    SERVICE LAYER                             │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
-│  │  UserService │  │  ItemService │  │ OrderService │      │
-│  └──────────────┘  └──────────────┘  └──────────────┘      │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐        │
+│  │  UserService │  │  ItemService │  │ OrderService │        │
+│  └──────────────┘  └──────────────┘  └──────────────┘        │
 ├──────────────────────────────────────────────────────────────┤
 │                     DATA ACCESS LAYER                        │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
-│  │   UserDAO    │  │   ItemDAO    │  │   OrderDAO   │      │
-│  └──────────────┘  └──────────────┘  └──────────────┘      │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐        │
+│  │   UserDAO    │  │   ItemDAO    │  │   OrderDAO   │        │
+│  └──────────────┘  └──────────────┘  └──────────────┘        │
 ├──────────────────────────────────────────────────────────────┤
 │                    DATABASE LAYER                            │
 │  ┌────────────────────────────────────────────────────────┐  │
@@ -290,20 +285,12 @@ mvn clean compile
 #### 5️⃣ Run the Application
 
 ```bash
-mvn exec:java -Dexec.mainClass="com.store.Main"
+mvn javafx:run
 ```
 
 ---
 
 ## 🚀 Usage
-
-### Login Credentials
-
-| Role         | Username   | Password       | Note                         |
-| ------------ | ---------- | -------------- | ---------------------------- |
-| **Admin**    | `admin`    | `Admin@123`    | Full system access           |
-| **Customer** | `customer` | `Customer@123` | Limited to shopping features |
-
 ### Navigation Flow
 
 ```
@@ -318,13 +305,13 @@ mvn exec:java -Dexec.mainClass="com.store.Main"
      ┌───────────────────────┐
      │     DASHBOARD         │
      │  ┌─────────────────┐  │
-     │  │ Admin View       │  │  ──► User Management
-     │  │ ├─ Manage Users  │  │  ──► Item Management
-     │  │ ├─ Manage Items  │  │  ──► View Orders
-     │  │ └─ View Orders   │  │
+     │  │ Admin View      │  │  ──► User Management
+     │  │ ├─ Manage Users │  │  ──► Item Management
+     │  │ ├─ Manage Items │  │  ──► View Orders
+     │  │ └─ View Orders  │  │
      │  └─────────────────┘  │
      │  ┌─────────────────┐  │
-     │  │ Customer View    │  │  ──► Browse Items
+     │  │ Customer View   │  │  ──► Browse Items
      │  │ ├─ Shop Items   │  │  ──► Cart Management
      │  │ ├─ Cart         │  │  ──► Place Order
      │  │ └─ My Orders    │  │  ──► Order History
@@ -401,37 +388,6 @@ try {
 
 ---
 
-## 📊 API Reference
-
-### Service Layer Methods
-
-#### UserService
-
-| Method                                  | Description         | Returns   |
-| --------------------------------------- | ------------------- | --------- |
-| `verifyLogin(username, password, role)` | Authenticate user   | `boolean` |
-| `getUserByUsername(username, role)`     | Fetch user details  | `User`    |
-| `createUser(user)`                      | Register new user   | `boolean` |
-| `updateUser(user)`                      | Update user profile | `boolean` |
-| `deleteUser(id)`                        | Remove user         | `boolean` |
-
-#### ItemService
-
-| Method              | Description     | Returns      |
-| ------------------- | --------------- | ------------ |
-| `addItem(item)`     | Add new product | `boolean`    |
-| `updateItem(item)`  | Update product  | `boolean`    |
-| `deleteItem(id)`    | Remove product  | `boolean`    |
-| `searchItems(name)` | Search products | `List<Item>` |
-
-#### CartService
-
-| Method                           | Description     | Returns   |
-| -------------------------------- | --------------- | --------- |
-| `addToCart(itemId, userId, qty)` | Add to cart     | `boolean` |
-| `updateCart(cartItem)`           | Update quantity | `boolean` |
-| `clearCart(userId)`              | Empty cart      | `boolean` |
-
 ---
 
 ## 🤝 Contributing
@@ -474,7 +430,7 @@ in the Software without restriction...
 **Zohaib Kaleem**
 
 [![GitHub](https://img.shields.io/badge/GitHub-zohaib--kaleem--1-181717?style=for-the-badge&logo=github)](https://github.com/zohaib-kaleem-1)
-[![Email](https://img.shields.io/badge/Email-zohaib.kaleem%40example.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:zohaib.kaleem@example.com)
+[![Email](https://img.shields.io/badge/Email-zohaibkaleem130@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:zohaibkaleem130@gmail.com)
 
 ---
 
@@ -490,7 +446,7 @@ in the Software without restriction...
 ## 📊 Project Status
 
 ![Development](https://img.shields.io/badge/Development-Active-brightgreen?style=for-the-badge)
-![Version](https://img.shields.io/badge/Version-1.0.0-blue?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-2.1.0-blue?style=for-the-badge)
 ![Coverage](https://img.shields.io/badge/Coverage-85%25-yellow?style=for-the-badge)
 
 ---
@@ -500,19 +456,3 @@ in the Software without restriction...
 </div>
 
 ---
-
-## 📁 File Structure for README Images
-
-Create a `screenshots` folder in your project root:
-
-```
-Store-Management/
-├── screenshots/
-│   ├── login.png
-│   ├── admin-dashboard.png
-│   ├── customer-dashboard.png
-│   ├── cart.png
-│   └── order.png
-├── src/
-└── README.md
-```
