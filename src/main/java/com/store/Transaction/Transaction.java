@@ -158,7 +158,6 @@ public class Transaction {
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, orderId);
             stmt.executeUpdate();
-            System.out.println("updated item quantity");
 
             // update account balance
             sql = """
@@ -167,7 +166,6 @@ public class Transaction {
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, orderId);
             stmt.executeUpdate();
-            System.out.println("updated balance");
 
             // delete order from order table
             sql = """
@@ -176,7 +174,6 @@ public class Transaction {
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, orderId);
             stmt.executeUpdate();
-            System.out.println("update order");
 
             conn.commit();
             return true;

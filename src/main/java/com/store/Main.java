@@ -1,5 +1,6 @@
 package com.store;
 
+import com.store.Util.MessageUtil;
 import com.store.Util.SceneManager;
 
 import javafx.application.Application;
@@ -17,7 +18,7 @@ public class Main extends Application {
             // switch to login view
             SceneManager.logOut();
         } catch (Exception e) {
-            e.printStackTrace();
+            MessageUtil.showError("Scene Laoder", e.getMessage());
         }
     }
 

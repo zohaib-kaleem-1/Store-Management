@@ -2,6 +2,8 @@ package com.store.db;
 
 import java.sql.*;
 
+import com.store.Util.MessageUtil;
+
 /**
  * 
  * Database
@@ -22,7 +24,7 @@ public class Database {
             try {
                 conn.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                MessageUtil.showError("Database Loader", e.getMessage());
             }
         }
     }

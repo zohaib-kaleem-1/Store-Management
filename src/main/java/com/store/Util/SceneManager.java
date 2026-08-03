@@ -23,7 +23,6 @@ public class SceneManager {
             history.push(new SceneHistoryNode(fxmlPath, title));
         } catch (Exception e) {
             MessageUtil.showError("Scene Manager", e.getMessage());
-            e.printStackTrace();
         }
     }
 

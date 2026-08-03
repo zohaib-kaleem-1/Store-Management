@@ -170,7 +170,6 @@ public class OrderController {
 
         } catch (SQLException e) {
             MessageUtil.showError("Order Data Reading Error", e.getMessage());
-            e.printStackTrace();
         }
     }
 
